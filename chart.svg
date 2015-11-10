@@ -1,0 +1,78 @@
+<svg height="646px" width="646px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+	<!--year squares in the first quadrant, first row--> 
+	<rect x="10" y="10" height="60" width="60" fill="white" />
+	<rect x="72" y="10" height="60" width="60" fill="white" />
+	<rect x="134" y="10" height="60" width="60" fill="white" />
+	<rect x="196" y="10" height="60" width="60" fill="white" />
+	<rect x="258" y="10" height="60" width="60" fill="white" />
+
+	<!--type squares, year 1 row 1-->
+
+	<!--testing onmouseover, onmouseout, onclick, all work -->
+	<rect x="10" y="10" height="20" width="20" fill="blue" class="type" id="yr1type1"
+		onmouseover="this.style['fill'] = 'yellow';"
+		onmouseout="this.style['fill'] = 'blue';"
+		onclick="this.style['fill'] = 'green';"
+	/>
+
+	<!--testing only onclick, works to change color--> 
+	<rect x="30" y="10" height="20" width="20" fill="yellow" class="type" id="yr1type2"
+		onclick="this.style['fill'] = 'green';"
+
+	/>
+	<!--//with the onclick, error appears: "changeColor is not defined"
+		might should be using an eventListener, but the bigger problem is that it's not linking
+		to the script.js file right now, might be something special with svg + javascript, idk-->
+	<rect x="50" y="10" height="20" width="20" fill="blue" class="type" id="yr1type3"
+		onclick="changeColor"/>
+
+	<!--other squares, with no interaction, currently only acting as a visual reference -->
+
+	<!--type squares, year 1 row 2-->
+	<rect x="10" y="30" height="20" width="20" fill="yellow" class="type" id="yr1type4"/>
+	<rect x="30" y="30" height="20" width="20" fill="blue" class="type" id="yr1type5"/>
+	<rect x="50" y="30" height="20" width="20" fill="yellow" class="type" id="yr1type6"/>
+
+	<!--type squares, year 1 row 3-->
+	<rect x="10" y="50" height="20" width="20" fill="blue" class="type" id="yr1type7"/>
+	<rect x="30" y="50" height="20" width="20" fill="yellow" class="type" id="yr1type8"/>
+	<rect x="50" y="50" height="20" width="20" fill="blue" class="type" id="yr1type9"/>						
+
+	<!--year squares in the first quadrant, second row--> 
+	<rect x="10" y="72" height="60" width="60" fill="white" />
+	<rect x="72" y="72" height="60" width="60" fill="white" />
+	<rect x="134" y="72" height="60" width="60" fill="white" />
+	<rect x="196" y="72" height="60" width="60" fill="white" />
+	<rect x="258" y="72" height="60" width="60" fill="white" />
+
+	<!--year squares in the first quadrant, third row--> 
+	<rect x="10" y="134" height="60" width="60" fill="white" />
+	<rect x="72" y="134" height="60" width="60" fill="white" />
+	<rect x="134" y="134" height="60" width="60" fill="white" />
+	<rect x="196" y="134" height="60" width="60" fill="white" />
+	<rect x="258" y="134" height="60" width="60" fill="white" />
+
+	<!--year squares in the first quadrant, third row--> 
+	<rect x="10" y="196" height="60" width="60" fill="white" />
+	<rect x="72" y="196" height="60" width="60" fill="white" />
+	<rect x="134" y="196" height="60" width="60" fill="white" />
+	<rect x="196" y="196" height="60" width="60" fill="white" />
+	<rect x="258" y="196" height="60" width="60" fill="white" />
+
+	<!--year squares in the first quadrant, third row--> 
+	<rect x="10" y="258" height="60" width="60" fill="white" />
+	<rect x="72" y="258" height="60" width="60" fill="white" />
+	<rect x="134" y="258" height="60" width="60" fill="white" />
+	<rect x="196" y="258" height="60" width="60" fill="white" />
+	<rect x="258" y="258" height="60" width="60" fill="white" />
+
+	<!--year squares in the second quadrant, first row-->
+	<rect x="330" y="10" height="60" width="60" fill="white" />
+	<rect x="392" y="10" height="60" width="60" fill="white" />
+	<rect x="454" y="10" height="60" width="60" fill="white" />
+	<rect x="516" y="10" height="60" width="60" fill="white" />
+	<rect x="578" y="10" height="60" width="60" fill="white" />
+
+
+</svg>
