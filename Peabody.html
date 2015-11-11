@@ -8,6 +8,8 @@
 <!-- 		<link rel="javascript" href="js/script.js">
  -->	    
  		<!--<script xlink:href="js/script.js"></script>-->
+ 		<!--<script src = "js/svg.min.js"></script> not actually using this. just something to think about. didn't see immediate benefits-->
+ 		<script src = "js/jquery-1.11.3.min.js"></script>
  		<script src="js/script.js" type="text/javascript"></script>
  		<link rel = "stylesheet" href = "css/bootstrap.min.css">
 	    <link href='http://fonts.googleapis.com/css?family=Oswald:400,700,300|Open+Sans:400,600' rel='stylesheet' type='text/css'>
@@ -28,7 +30,7 @@
 			<div class = "row">
 				<div class="col-md-4">
 				</div>
-				<div class="col-md-8">
+				<div id="gridContainer" class="col-md-8">
 <!-- 					<object id="svgObject" width="646" height="646" type="image/svg+xml" data="chart.svg"></object>
  -->					<svg width="646" height="646" id="main">
 						<!--height&width are at 630 to allow for black background with 46px total of margins, 10px on either end and in the middle, +2px at 8 times to allow for space in between each year square -->
