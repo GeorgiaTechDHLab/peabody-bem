@@ -56,6 +56,7 @@ $( document ).ready(function() { //had to use jquery because my
         var svg = document.createSvg("svg");//creates svg inside of parent html element
         svg.setAttribute("width", pixelsPerSide);
         svg.setAttribute("height", pixelsPerSide);
+        svg.setAttribute("fill", "purple");
         
         for(var i = 0; i < boxesPerSide; i++) {
             for(var j = 0; j < boxesPerSide; j++) {
@@ -66,8 +67,11 @@ $( document ).ready(function() { //had to use jquery because my
               box.setAttribute("width", size);
               box.setAttribute("height", size);
               box.setAttribute("stroke", "black");
+              box.setAttribute("stroke-width", "2");
               box.setAttribute("fill", "white");
-              box.setAttribute("id", "b" + number); 
+              box.setAttribute("id", "b" + number); //"b" + 
+              console.log(number); //prints 0-224 four times, for each quadrant
+              box.addEventListener("click", function(){console.log(number)}); //id ends up always being 224 ... which is correct 
               box.classList.add("square"); 
               //is it possible to add custom attributes of a rectangle? like country or historical event...
               g.appendChild(box);
@@ -86,11 +90,25 @@ $( document ).ready(function() { //had to use jquery because my
         return svg;
     };
     
+   //EP original 
+ //    var container = document.getElementById("gridContainer");
+ //    container.appendChild(makeGrid(5, 50, 315)); //makes one 5x5 quadrant with boxes 50 px wide inside a 315x315 viewport
+ //    container.appendChild(makeGrid(5, 50, 315));
+	// container.appendChild(makeGrid(5, 50, 315));
+ //    container.appendChild(makeGrid(5, 50, 315));
+
+ 	//CF modified size, only year squares 
+ //    var container = document.getElementById("gridContainer");
+ //    container.appendChild(makeGrid(5, 60, 315)); //makes one 5x5 quadrant with boxes 60 px wide inside a 315x315 viewport
+ //    container.appendChild(makeGrid(5, 60, 315));
+	// container.appendChild(makeGrid(5, 60, 315));
+ //    container.appendChild(makeGrid(5, 60, 315)); 
+
+ 	//for 
     var container = document.getElementById("gridContainer");
-    container.appendChild(makeGrid(5, 50, 315)); //makes one 5x5 quadrant with boxes 50 px wide inside a 315x315 viewport
-    container.appendChild(makeGrid(5, 50, 315));
-	container.appendChild(makeGrid(5, 50, 315));
-    container.appendChild(makeGrid(5, 50, 315));
-    
+    container.appendChild(makeGrid(15, 20, 315)); //makes one 15x15 quadrant with boxes 20 px wide inside a 315x315 viewport
+    container.appendChild(makeGrid(15, 20, 315));
+	container.appendChild(makeGrid(15, 20, 315));
+    container.appendChild(makeGrid(15, 20, 315)); 
 
  });
