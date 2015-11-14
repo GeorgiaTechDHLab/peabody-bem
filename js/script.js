@@ -1,3 +1,5 @@
+//TODO: 9 squares, change the way ID's are assigned, split into triangles
+//idea: have an object with attributes rect, num clicks,
 $( document ).ready(function() { //had to use jquery because my 
 	//document.getElementByID was being called before the ID in the document was created
 	//but now we can just use jquery syntax instead of doc.getelementbyid
@@ -11,6 +13,8 @@ $( document ).ready(function() { //had to use jquery because my
 	var clicksEP; //same purpose as clicks.
 	clicksEP = 0;
 
+	//array of group elements that represent one year bounding box
+	var yearBoxes =[];
 
 	//function to change the content of the square, to either new color, split color, or no color
 	function changeSquare(){
@@ -50,10 +54,10 @@ $( document ).ready(function() { //had to use jquery because my
         return this.createElementNS(svgNS, tagName);
     };
     
-    var makeGrid = function(boxesPerSide, size, pixelsPerSide, parent) {
+    var makeGrid = function(boxesPerSide, size, pixelsPerSide, strokeWidth) {
     	//size = width/height of one box
     	//pixelsPerSide = width/height of viewport
-        var svg = document.createSvg("svg");//creates svg inside of parent html element
+        var svg = document.createSvg("svg");
         svg.setAttribute("width", pixelsPerSide);
         svg.setAttribute("height", pixelsPerSide);
         svg.setAttribute("fill", "purple");
@@ -61,16 +65,17 @@ $( document ).ready(function() { //had to use jquery because my
         for(var i = 0; i < boxesPerSide; i++) {
             for(var j = 0; j < boxesPerSide; j++) {
               var g = document.createSvg("g");
+              yearBoxes.push(g);
               g.setAttribute("transform", ["translate(", i*size, ",", j*size, ")"].join(""));
               var number = boxesPerSide * i + j; //keeps track of which number box we are on so we can give the boxes an id
               var box = document.createSvg("rect");
               box.setAttribute("width", size);
               box.setAttribute("height", size);
               box.setAttribute("stroke", "black");
-              box.setAttribute("stroke-width", "2");
+              box.setAttribute("stroke-width",strokeWidth); //having issues with the stroke
               box.setAttribute("fill", "white");
               box.setAttribute("id", "b" + number); //"b" + 
-              console.log(number); //prints 0-224 four times, for each quadrant
+              //console.log(number); //prints 0-224 four times, for each quadrant
               box.addEventListener("click", function(){console.log(number)}); //id ends up always being 224 ... which is correct 
               box.classList.add("square"); 
               //is it possible to add custom attributes of a rectangle? like country or historical event...
@@ -91,24 +96,17 @@ $( document ).ready(function() { //had to use jquery because my
     };
     
    //EP original 
- //    var container = document.getElementById("gridContainer");
- //    container.appendChild(makeGrid(5, 50, 315)); //makes one 5x5 quadrant with boxes 50 px wide inside a 315x315 viewport
- //    container.appendChild(makeGrid(5, 50, 315));
-	// container.appendChild(makeGrid(5, 50, 315));
- //    container.appendChild(makeGrid(5, 50, 315));
-
- 	//CF modified size, only year squares 
- //    var container = document.getElementById("gridContainer");
- //    container.appendChild(makeGrid(5, 60, 315)); //makes one 5x5 quadrant with boxes 60 px wide inside a 315x315 viewport
- //    container.appendChild(makeGrid(5, 60, 315));
-	// container.appendChild(makeGrid(5, 60, 315));
- //    container.appendChild(makeGrid(5, 60, 315)); 
-
- 	//for 
     var container = document.getElementById("gridContainer");
-    container.appendChild(makeGrid(15, 20, 315)); //makes one 15x15 quadrant with boxes 20 px wide inside a 315x315 viewport
-    container.appendChild(makeGrid(15, 20, 315));
-	container.appendChild(makeGrid(15, 20, 315));
-    container.appendChild(makeGrid(15, 20, 315)); 
+    container.appendChild(makeGrid(5, 50, 315, 2)); //makes one 5x5 quadrant with boxes 50 px wide inside a 315x315 viewport
+    container.appendChild(makeGrid(5, 50, 315, 2));
+	container.appendChild(makeGrid(5, 50, 315, 2));
+    container.appendChild(makeGrid(5, 50, 315, 2));
+    $.each(yearBoxes,function(i,obj){
+    	obj.appendChild(makeGrid(3,obj.childNodes[0].getAttribute("width")/3,50,0));
+    });
+
+    //NOTE: now the yearBoxes array has all the year groups, plus all the sets of 9 svg groups after that since makeGrid has yearBoxes.push
+    //maybe use this array (or an array) to assign ids?
+
 
  });
