@@ -1,3 +1,20 @@
-.square{
-	
+
+
+
+/*can't? select year individually */
+.year{
+	stroke-width: 2px;
+/*	stroke: blue;
+*/}
+
+/*can select all elements in #year*/
+#year1 *{
+
+	fill:pink;
+}
+
+
+/*can select individual elements*/
+#r1, #r7{
+	fill:green;
 }
