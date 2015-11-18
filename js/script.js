@@ -67,6 +67,7 @@ $( document ).ready(function() { //had to use jquery because my
         return this.createElementNS(svgNS, tagName);
   };
 
+//TODO: pass in currentID for year
     var makeGrid2 = function(boxesPerSide, size, pixelsPerSide, strokeWidth){
 
       //whole svg 
@@ -127,7 +128,7 @@ $( document ).ready(function() { //had to use jquery because my
             }
                   yearBox.appendChild(type);
               }
-              yearBox.setAttribute("transform", ["translate(", j*size, ",", i*size, ")"].join("")); //need to offset so you can see bkg and not use stroke
+              yearBox.setAttribute("transform", ["translate(", j*size + j*8, ",", i*size + i*8, ")"].join("")); //offset to see bkg
               
             }
         }
