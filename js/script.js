@@ -176,23 +176,6 @@ $( document ).ready(function() { //had to use jquery because my
         return svg;
     };
     
-   //EP original 
-    // var container = document.getElementById("gridContainer");
-    // container.appendChild(makeGrid(5, 60, 320, 2)); //makes one 5x5 quadrant with boxes 60 px wide inside a 320x320 viewport
-    // container.appendChild(makeGrid(5, 60, 320, 2));
-    // container.appendChild(makeGrid(5, 60, 320, 2));
-    // container.appendChild(makeGrid(5, 60, 320, 2));
-    //100 year boxes 
-    // console.log("yearBoxes length: ");
-    // console.log(yearBoxes.length);
-    $.each(yearBoxes,function(i,obj){
-      obj.appendChild(makeGrid(3,obj.childNodes[0].getAttribute("width")/3,60,0));
-    });
-    //1000 year boxes 
-    // console.log("yearBoxes length: ");
-    // console.log(yearBoxes.length);
-    //NOTE: now the yearBoxes array has all the year groups, plus all the sets of 9 svg groups after that since makeGrid has yearBoxes.push
-    //maybe use this array (or an array) to assign ids?
 
     var container2 = document.getElementById("gridContainer2");
     container2.appendChild(makeGrid2(5, 60, 320, 2)); //makes one 5x5 quadrant with boxes 60 px wide inside a 320x320 viewport
