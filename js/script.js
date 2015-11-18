@@ -177,9 +177,9 @@ $( document ).ready(function() { //had to use jquery because my
     };
     
 
-    var container2 = document.getElementById("gridContainer2");
+    var container2 = document.getElementById("gridContainer");
     container2.appendChild(makeGrid2(5, 60, 320, 2)); //makes one 5x5 quadrant with boxes 60 px wide inside a 320x320 viewport
-    // $("gridContainer2").append(makeGrid2(5, 60, 320, 2));
+    // $("gridContainer").append(makeGrid2(5, 60, 320, 2));
 
     //any style or attribute applied to a year will filter to the types that make it up
     $.each(yearBoxes,function(i,obj){ //do this after ALL grids are created
