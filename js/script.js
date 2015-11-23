@@ -7,7 +7,7 @@ $( document ).ready(function() { //had to use jquery because my
   }
 
    //currColor will be to hold whatever color the user clicks on to use
-  var currColor = black;
+  var currColor = "yellow";
 
   //clicks is a tracker of the number of times svg is clicked, to rotate through solid color, split color, no color
   var clicks;
@@ -29,30 +29,26 @@ $( document ).ready(function() { //had to use jquery because my
 
 
 
-function screenCoordsForRect(rect, svg){ //function to get screen coordinates of svg rect
-  var pt  = svg.createSVGPoint();
-  var corners = {};
-  var matrix  = rect.getScreenCTM();
-  pt.x = rect.x.animVal.value;
-  pt.y = rect.y.animVal.value;
-  corners.nw = pt.matrixTransform(matrix);
-  pt.x += rect.width.animVal.value;
-  corners.ne = pt.matrixTransform(matrix);
-  pt.y += rect.height.animVal.value;
-  corners.se = pt.matrixTransform(matrix);
-  pt.x -= rect.width.animVal.value;
-  corners.sw = pt.matrixTransform(matrix);
-  return corners; //returns A JavaScript object with four properties, each of which is an SVG Point with x,y coordinates
-}
-
   function changeSquare(element){
+    var w = element.getAttribute('width');
+    var t = element.getAttribute('transform');
     if(clicksEP == 0){
       clicksEP = 1;
       element.setAttribute("fill","maroon");
-    }else if(clicksEP == 1){
+    }else if(clicksEP == 1){ //draw triangle using currColor
       clicksEP = 2;
-      //TODO: triangles
-      //turn rect into triangle: make the rect have no fill, then draw triangle using currColor
+      //create the polygon svg element
+      var triangle = document.createSvg("polygon");
+      //create a string of the triangle's coordinates
+      var pts =  "0,0 " + "0," + w + " " + w + "," + w;
+      //specify coordinates
+      triangle.setAttribute("points", pts);
+      //translate the triangle by the same amount that the typerect has been translated
+      triangle.setAttribute("transform", t);
+      //change color
+      triangle.setAttribute('fill', currColor);
+      //set triangle's parent as yearbox
+      element.parentNode.appendChild(triangle);
     }else{ //if clicks == 2
       clicksEP = 0;
       element.setAttribute("fill","white");
@@ -111,6 +107,14 @@ function screenCoordsForRect(rect, svg){ //function to get screen coordinates of
                 yearBox.setAttribute("id", "year" + currYearID);
                 currYearID = currYearID + 1;
                 maing.appendChild(yearBox);
+                yearBox.addEventListener( //adds event listener to each yearBox
+                "click",
+                function(e){
+                    {
+                        changeSquare(e.target); //the target is the individual type box
+                    }
+                },
+                 false);
               for(var numType = 0; numType < 9; numType++){ //for 9 times, create a type square and append to current year box
                 var type = document.createSvg("rect");
               type.setAttribute("id", "type" + numType); //each type square has an ID according to its type: 0-8
@@ -133,15 +137,6 @@ function screenCoordsForRect(rect, svg){ //function to get screen coordinates of
               
             }
         }
-        maing.addEventListener( //adds event listener to group of yearboxes
-            "click",
-            function(e){
-                {
-                    changeSquare(e.target); //the target is the individual type box
-                    console.log(screenCoordsForRect(document.getElementById(e.target.id),svg)); //gets coordinates for rectangle that was clicked. assumes what you clicked is a valid rect
-                }
-            },
-            false);
 
       return svg;
     }
