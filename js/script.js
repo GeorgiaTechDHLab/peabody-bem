@@ -1,4 +1,3 @@
-//TODO: 9 squares, change the way ID's are assigned, split into triangles
 //idea: have an object with attributes rect, num clicks,
 $( document ).ready(function() { //had to use jquery because my 
   //document.getElementByID was being called before the ID in the document was created
@@ -8,7 +7,7 @@ $( document ).ready(function() { //had to use jquery because my
   }
 
    //currColor will be to hold whatever color the user clicks on to use
-  var currColor;
+  var currColor = "yellow";
 
   //clicks is a tracker of the number of times svg is clicked, to rotate through solid color, split color, no color
   var clicks;
@@ -29,30 +28,27 @@ $( document ).ready(function() { //had to use jquery because my
   var rect = [];
 
 
-  //function to change the content of the square, to either new color, split color, or no color
-  function changeSquare(){
-    if(clicks == 0){
-      clicks = 1;
-      document.getElementById("yr1type3").setAttribute("class","turquoise");
-    }else if(clicks == 1){
-      clicks = 2;
-      //this should really be the square split into triangles, need to figure out how to do that 
-      document.getElementById("yr1type3").setAttribute("class","maroon");
-      //clicks == 2
-    }else{
-      clicks = 0;
-      document.getElementById("yr1type3").setAttribute("class","white");
-    }
-  }
 
   function changeSquare(element){
+    var w = element.getAttribute('width');
+    var t = element.getAttribute('transform');
     if(clicksEP == 0){
       clicksEP = 1;
-      element.setAttribute("fill","blue");
-    }else if(clicksEP == 1){
-      clicksEP = 2;
-      //this should really be the square split into triangles, need to figure out how to do that 
       element.setAttribute("fill","maroon");
+    }else if(clicksEP == 1){ //draw triangle using currColor
+      clicksEP = 2;
+      //create the polygon svg element
+      var triangle = document.createSvg("polygon");
+      //create a string of the triangle's coordinates
+      var pts =  "0,0 " + "0," + w + " " + w + "," + w;
+      //specify coordinates
+      triangle.setAttribute("points", pts);
+      //translate the triangle by the same amount that the typerect has been translated
+      triangle.setAttribute("transform", t);
+      //change color
+      triangle.setAttribute('fill', currColor);
+      //set triangle's parent as yearbox
+      element.parentNode.appendChild(triangle);
     }else{ //if clicks == 2
       clicksEP = 0;
       element.setAttribute("fill","white");
@@ -67,7 +63,7 @@ $( document ).ready(function() { //had to use jquery because my
         return this.createElementNS(svgNS, tagName);
   };
 
-    var makeGrid2 = function(boxesPerSide, size, pixelsPerSide, strokeWidth){
+    var makeGrid2 = function(boxesPerSide, size, pixelsPerSide, currYearID){
 
       //whole svg 
       var svg = document.createSvg("svg");
@@ -106,10 +102,19 @@ $( document ).ready(function() { //had to use jquery because my
             for(var j = 0; j < boxesPerSide; j++) {
               var numYear = boxesPerSide * i + j; //which number year box we're on
               var yearBox = document.createSvg("g");
-              yearBox.setAttribute("width", size);
+                yearBox.setAttribute("width", size);
                 yearBox.setAttribute("height", size);
-                yearBoxes.push(yearBox); //use this array to assign ID 0-99
+                yearBox.setAttribute("id", "year" + currYearID);
+                currYearID = currYearID + 1;
                 maing.appendChild(yearBox);
+                yearBox.addEventListener( //adds event listener to each yearBox
+                "click",
+                function(e){
+                    {
+                        changeSquare(e.target); //the target is the individual type box
+                    }
+                },
+                 false);
               for(var numType = 0; numType < 9; numType++){ //for 9 times, create a type square and append to current year box
                 var type = document.createSvg("rect");
               type.setAttribute("id", "type" + numType); //each type square has an ID according to its type: 0-8
@@ -125,66 +130,25 @@ $( document ).ready(function() { //had to use jquery because my
             else if(numType == 6 || numType == 7 || numType == 8){
                 type.setAttribute("transform", ["translate(" + (numType-6) * size/3,2*(size/3) + ")"]);
             }
+            //any style or attribute applied to a year will filter to the types that make it up
                   yearBox.appendChild(type);
-              }
-              yearBox.setAttribute("transform", ["translate(", j*size, ",", i*size, ")"].join("")); //need to offset so you can see bkg and not use stroke
+              } //end for loop
+              yearBox.setAttribute("transform", ["translate(", j*size + j*8, ",", i*size + i*8, ")"].join("")); //offset to see bkg
               
             }
         }
 
       return svg;
     }
-    
-    var makeGrid = function(boxesPerSide, size, pixelsPerSide, strokeWidth) {
-      //size = width/height of one box
-      //pixelsPerSide = width/height of viewport
-        var svg = document.createSvg("svg");
-        svg.setAttribute("width", pixelsPerSide);
-        svg.setAttribute("height", pixelsPerSide);
-        // svg.setAttribute("x", "10");//top&left stroke displayed while bottom&right no longer displayed
-        // svg.setAttribute("y", "10");
-        
-        for(var i = 0; i < boxesPerSide; i++) {
-            for(var j = 0; j < boxesPerSide; j++) {
-              var g = document.createSvg("g"); //attach svg to html page 
-              yearBoxes.push(g); //make 3x3 boxes 
-              g.setAttribute("transform", ["translate(", i*size, ",", j*size, ")"].join("")); //+10 to offset origin/first x&y coordinate, but then bug in 9 squares
-              var number = boxesPerSide * i + j; //keeps track of which number box we are on so we can give the boxes an id //can add +1 so natural counting starting at 1
-              var box = document.createSvg("rect");
-              box.setAttribute("width", size);
-              box.setAttribute("height", size);
-              box.setAttribute("stroke", "black");
-              box.setAttribute("stroke-width",strokeWidth); //having issues with the stroke
-              box.setAttribute("fill", "white");
-              box.setAttribute("id", "b" + number); //"b" + 
-              // console.log(number); //prints 0-224 four times, for each quadrant //now prints out 0-8 for each type within year 
-              // box.addEventListener("click", function(){console.log(typeID)}); //id ends up always being 224 //now 8 ... which is correct 
-              box.classList.add("square"); 
-              g.appendChild(box);
-              svg.appendChild(g);
-            }  
-        }
 
-        svg.addEventListener( //adds event listener to each yearBox
-            "click",
-            function(e){
-                if($.inArray("square", $(event.target)[0].classList) != -1){
-                    changeSquare(e.target); //the target is the individual type box
-                }
-            },
-            false);
-        return svg;
-    };
     
 
-    var container2 = document.getElementById("gridContainer2");
-    container2.appendChild(makeGrid2(5, 60, 320, 2)); //makes one 5x5 quadrant with boxes 60 px wide inside a 320x320 viewport
-    // $("gridContainer2").append(makeGrid2(5, 60, 320, 2));
+    var container2 = document.getElementById("gridContainer");
+    container2.appendChild(makeGrid2(5, 60, 340, 0)); //makes one 5x5 quadrant with boxes 60 px wide inside a 340x340 viewport
+    container2.appendChild(makeGrid2(5, 60, 340, 25));
+    container2.appendChild(makeGrid2(5, 60, 340, 50));
+    container2.appendChild(makeGrid2(5, 60, 340, 75));
 
-    //any style or attribute applied to a year will filter to the types that make it up
-    $.each(yearBoxes,function(i,obj){ //do this after ALL grids are created
-      obj.setAttribute("id","year" + i);
-    });
 
 
  });
