@@ -1,4 +1,3 @@
-//idea: have an object with attributes rect, num squareState,
 $( document ).ready(function() { //had to use jquery because my 
   //document.getElementByID was being called before the ID in the document was created
   //but now we can just use jquery syntax instead of doc.getelementbyid
@@ -9,7 +8,7 @@ $( document ).ready(function() { //had to use jquery because my
    //currColor will be to hold whatever color the user squareState on to use
   var currColor = "blue";
 
-  //prevColor will hold whatever the previous color was
+  //prevColor will hold whatever the previous color of the square was
   var prevColor = "";
 
   //squareState keeps track of the current state of the square (whether it is empty, solid, split)
@@ -29,93 +28,77 @@ $( document ).ready(function() { //had to use jquery because my
   var rect = [];
 
 
-
+  /*function changes type square based on current square state and color. currently states are identified by number, could have 
+  better-named string variables but doesn't matter*/
   function changeSquare(element){
     var w = element.getAttribute('width');
     var t = element.getAttribute('transform');
 
-    //case 1: square has not been filled, fill it with current color
+    //create the polygon svg elements for the triangle overlay 
+    var triangle = document.createSvg("polygon");  //triangle order 1
+    var triangle2 = document.createSvg("polygon"); //triangle order 2
+
+    /*case 1: square is empty, fill it with current color*/
     if(element.getAttribute("squareState") == "0"){
       console.log("squareState == 0");
 
-      //fill square with currColor
-      element.setAttribute("fill",currColor);
+      element.setAttribute("fill", currColor); //fill square with currColor
 
-      //change squareState, 1=filled with color
-      element.setAttribute("squareState","1");
+      prevColor = element.getAttribute("fill"); //store previous color
+
+      element.setAttribute("squareState","1"); //change squareState, 1=filled with color
 
 
-    //case 2: square is already filled with color, split it with current color
+    /*case 2: square is already filled with color, split it with current color*/
     }else if(element.getAttribute("squareState") == "1" ){
       console.log("squareState == 1");
 
-      //split square with currColor
-      element.setAttribute("fill", "currColor");
+      
+      var pts =  "0,0 " + "0," + w + " " + w + "," + w; //create a string of the triangle's coordinates
 
-      //create the polygon svg element
-      var triangle = document.createSvg("polygon");
-      //create a string of the triangle's coordinates
-      var pts =  "0,0 " + "0," + w + " " + w + "," + w;
-      //give id
-      triangle.setAttribute("id", "tri");
-      //specify coordinates
-      triangle.setAttribute("points", pts);
-      //translate the triangle by the same amount that the typerect has been translated
-      triangle.setAttribute("transform", t);
-      //change color
-      triangle.setAttribute('fill', currColor);
-
- 
-      //set triangle's parent as yearbox
-      element.parentNode.appendChild(triangle);
-
-      //get the triangle into a variable 
-      var tri = document.getElementById("tri");
-
-      //I tried adding an event listener to the triangle and things got weird:
-      // //make sure squareState still changes when triangle part is clicked on 
-      // tri.addEventListener("click", function(e){ {
-      //   console.log("clicked on tri");
-      //   // changeSquare(e.target); //the target is the individual type box
-      //   element.setAttribute("squareState","2");
-
-      // } }, false);
-
-      //I also tried this, things got weird: 
-      // triangle.setAttribute("squareState","2");
-
+      triangle.setAttribute("id", "tri"+element.getAttribute("id")+element.parentNode.getAttribute("id")); //give id, format is "tritype#year#"
+      triangle.setAttribute("points", pts); //specify coordinates
+      triangle.setAttribute("transform", t); //translate the triangle by the same amount that the typerect has been translated
+      triangle.setAttribute('fill', currColor); //change color
+      triangle.setAttribute("pointer-events","none"); //make the triangle "unclickable" so whatever else is underneath it is clicked on 
+     
+      element.parentNode.appendChild(triangle); //set triangle's parent as yearbox
+     
       element.setAttribute("squareState","2");
 
-    //case 3: square is already split with color one way, split it the other way 
-    //**this is not correct yet, it should swap the triangles from the last statement
-    //**Lauren didn't request this but I think it is necessary for some of the chart possibilites 
+    /*case 3: square is already split with color one way, split it the other way*/
+    //Lauren didn't request this but I think it is necessary for some of the chart possibilites 
     }else if(element.getAttribute("squareState") == "2"){   
       console.log("squareState == 2");
 
-      //get the triangle into a variable 
-      var tri = document.getElementById("tri");
-      //for testing
-      element.setAttribute("fill", "purple");
+      //remove triangle to add 
+      var triRemoved = document.getElementById("tri"+element.getAttribute("id")+element.parentNode.getAttribute("id"));
+      element.parentNode.removeChild(triRemoved);
 
+      /*set up second triangle to be opposite of previous triangle*/
+      var pts =  "0,0 " + w + ",0" + " " + w + "," + w; //create a string of the triangle's coordinates
+      triangle2.setAttribute("id", "tri"+element.getAttribute("id")+element.parentNode.getAttribute("id")); //give id, format is "tritype#year#"
+      triangle2.setAttribute("points", pts); //specify coordinates
+      triangle2.setAttribute("transform", t); //translate the triangle by the same amount that the typerect has been translated
+      triangle2.setAttribute('fill', currColor); //change color
+      triangle2.setAttribute("pointer-events","none"); //make the triangle "unclickable" so whatever else is underneath it is clicked on 
 
-      element.setAttribute("squareState","3");
+      element.parentNode.appendChild(triangle2); //set triangle's parent as yearbox
+
+      element.setAttribute("fill", prevColor); //change type square color
+
+      element.setAttribute("squareState","3"); 
     }
 
     //case 4: square is split with color the second way, fill it with current color
     else if(element.getAttribute("squareState") == "3"){   
       console.log("squareState == 3");
-      element.setAttribute("fill", "green");
-
-
-      //remove triangle from document, this needs to happen so the square can revert to one color 
-      var tri = document.getElementById("tri");
-      if(tri.parentNode){
-        tri.parentNode.removeChild(tri);
-      }
-
-
       element.setAttribute("fill", currColor);
 
+
+      /*remove triangle so it can be a solid square again*/
+      var triRemoved2 = document.getElementById("tri"+element.getAttribute("id")+element.parentNode.getAttribute("id"));
+      element.parentNode.removeChild(triRemoved2);
 
       element.setAttribute("squareState","4");
     }
@@ -127,7 +110,6 @@ $( document ).ready(function() { //had to use jquery because my
       element.setAttribute("fill","white");
 
       element.setAttribute("squareState","0");
-
     }
 
     //if it's not 0,1,2,3,4, we have a problem...it's usually been null 
@@ -140,7 +122,7 @@ $( document ).ready(function() { //had to use jquery because my
 
   //this function is used as the short form for: document.createElementNS("http://www.w3.org/2000/svg", "tagname");
   //which is how you make an svg using javascript
-   document.createSvg = function(tagName) {
+  document.createSvg = function(tagName) {
         var svgNS = "http://www.w3.org/2000/svg";
         return this.createElementNS(svgNS, tagName);
   };
@@ -288,14 +270,14 @@ $( document ).ready(function() { //had to use jquery because my
 
     
 
-    var container = document.getElementById("gridContainer");
-    container.appendChild(makeGrid(5, 60, 340, 0)); //makes one 5x5 quadrant with boxes 60 px wide inside a 340x340 viewport
-    container.appendChild(makeGrid(5, 60, 340, 25));
-    container.appendChild(makeGrid(5, 60, 340, 50));
-    container.appendChild(makeGrid(5, 60, 340, 75));
+  var container = document.getElementById("gridContainer");
+  container.appendChild(makeGrid(5, 60, 350, 0)); //makes one 5x5 quadrant with boxes 60 px wide inside a 340x340 viewport
+  container.appendChild(makeGrid(5, 60, 350, 25));
+  container.appendChild(makeGrid(5, 60, 350, 50));
+  container.appendChild(makeGrid(5, 60, 350, 75));
 
-    var cpContainer = document.getElementById("colorPalette");
-    cpContainer.appendChild(makeColorPalette()); //make a color palette with 4 colors
+  var cpContainer = document.getElementById("colorPalette");
+  cpContainer.appendChild(makeColorPalette()); //make a color palette with 4 colors
 
 
 
