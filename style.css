@@ -1,0 +1,36 @@
+.typeSquare:hover{
+
+/*background does not work because the squares are rectangles with a white fill, created in javascript, there is no background*/
+/*	background: blue;
+*/	
+
+/*the outline doesn't outline the entire square because the squares are drawn with javascript and have no extra pixels in between, 
+so sometimes the white squares overlap the blue outline because there is no room for the outline display*/
+/*	outline: 1px solid blue;
+*/	
+
+/*same reason it doesn't work?*/
+/*	-webkit-box-shadow:inset 0px 10px 0px 10px black inset;
+    -moz-box-shadow:inset 0px 10px 0px 10px black inset;
+    box-shadow:inset 0px 10px 0px 10px black inset;*/
+
+
+	/*problem: painted color doesn't appear until hover is removed, would turn gray even when painted */
+	fill: gray;
+}
+
+/*.typeSquareRed:hover{
+	fill: #722712;
+}*/
+
+
+/*styles for showing the selected color in the palette*/
+#color1:hover, #color2:hover, #color3:hover, #color4:hover{
+	outline: 4px solid lightblue;
+	outline-style: double;
+}
+
+.selectedColor{
+	outline: 4px solid lightblue;
+	outline-style: double;
+}
