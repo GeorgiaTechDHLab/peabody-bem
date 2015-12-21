@@ -144,7 +144,7 @@ $( document ).ready(function() { //had to use jquery because my
   var makeColorPalette = function(){
     var svg = document.createSvg("svg");
     svg.setAttribute("width", "300px");
-    svg.setAttribute("height", 4*60);
+    svg.setAttribute("height", 6*60);
 
     var color1 = document.createSvg("rect");
     color1.setAttribute("width", "50px");
@@ -162,6 +162,8 @@ $( document ).ready(function() { //had to use jquery because my
       color2.removeAttribute("class","selectedColor");
       color3.removeAttribute("class","selectedColor");
       color4.removeAttribute("class","selectedColor");
+      color5.removeAttribute("class","selectedColor");
+      color6.removeAttribute("class","selectedColor");
 
       color1.setAttribute("class","selectedColor");
 
@@ -180,6 +182,8 @@ $( document ).ready(function() { //had to use jquery because my
       color1.removeAttribute("class","selectedColor");
       color3.removeAttribute("class","selectedColor");
       color4.removeAttribute("class","selectedColor");
+      color5.removeAttribute("class","selectedColor");
+      color6.removeAttribute("class","selectedColor");
 
       color2.setAttribute("class","selectedColor");
       console.log("currColor is green");
@@ -197,6 +201,8 @@ $( document ).ready(function() { //had to use jquery because my
       color1.removeAttribute("class","selectedColor");
       color2.removeAttribute("class","selectedColor");
       color4.removeAttribute("class","selectedColor");
+      color5.removeAttribute("class","selectedColor");
+      color6.removeAttribute("class","selectedColor");
 
       color3.setAttribute("class","selectedColor");     
       console.log("currColor is blue");
@@ -214,15 +220,62 @@ $( document ).ready(function() { //had to use jquery because my
       color1.removeAttribute("class","selectedColor");
       color2.removeAttribute("class","selectedColor");
       color3.removeAttribute("class","selectedColor");
+      color5.removeAttribute("class","selectedColor");
+      color6.removeAttribute("class","selectedColor");
 
       color4.setAttribute("class","selectedColor");
       console.log("currColor is yellow");
     }}, false);
 
+    var color5 = document.createSvg("rect");
+    color5.setAttribute("width", "50px");
+    color5.setAttribute("height", "50px");
+    color5.setAttribute("x", "5px");
+    color5.setAttribute("y","245px");
+    color5.setAttribute("fill","#cd2904");
+    color5.setAttribute("id","color5");
+    color5.addEventListener("click", function(e){{
+      currColor = "#cd2904";
+      color1.removeAttribute("class","selectedColor");
+      color2.removeAttribute("class","selectedColor");
+      color3.removeAttribute("class","selectedColor");
+      color4.removeAttribute("class","selectedColor");
+      color6.removeAttribute("class","selectedColor");
+
+      color5.setAttribute("class","selectedColor");
+
+      console.log("currColor is red");
+    }}, false);
+
+
+    var color6 = document.createSvg("rect");
+    color6.setAttribute("width", "50px");
+    color6.setAttribute("height", "50px");
+    color6.setAttribute("x", "5px");
+    color6.setAttribute("y","305px");
+    color6.setAttribute("fill","#58705f");
+    color6.setAttribute("id","color6");
+    color6.addEventListener("click", function(e){{
+      currColor = "#58705f";
+      color1.removeAttribute("class","selectedColor");
+      color2.removeAttribute("class","selectedColor");
+      color3.removeAttribute("class","selectedColor");
+      color4.removeAttribute("class","selectedColor");
+      color5.removeAttribute("class","selectedColor");
+
+      color6.setAttribute("class","selectedColor");
+
+      console.log("currColor is blue-green");
+    }}, false);
+
+   
+
     svg.appendChild(color1);
     svg.appendChild(color2);
     svg.appendChild(color3);
     svg.appendChild(color4);
+    svg.appendChild(color5);
+    svg.appendChild(color6);
 
     return svg;
   }
