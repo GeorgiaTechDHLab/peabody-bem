@@ -6,7 +6,7 @@ $( document ).ready(function() { //had to use jquery because my
   }
 
    //currColor will be to hold whatever color the user squareState on to use
-  var currColor = "blue";
+  var currColor = "#722712";
 
   //prevColor will hold whatever the previous color of the square was
   var prevColor = "";
@@ -27,6 +27,7 @@ $( document ).ready(function() { //had to use jquery because my
   //array for all 900 rectangles h
   var rect = [];
 
+  /*if we want to use right-click functionality instead: http://www.sitepoint.com/building-custom-right-click-context-menu-javascript/ */
 
   /*function changes type square based on current square state and color. currently states are identified by number, could have 
   better-named string variables but doesn't matter*/
@@ -38,9 +39,12 @@ $( document ).ready(function() { //had to use jquery because my
     var triangle = document.createSvg("polygon");  //triangle order 1
     var triangle2 = document.createSvg("polygon"); //triangle order 2
 
+
+
+
     /*case 1: square is empty, fill it with current color*/
     if(element.getAttribute("squareState") == "0"){
-      console.log("squareState == 0");
+      console.log("squareState == 1");
 
       element.setAttribute("fill", currColor); //fill square with currColor
 
@@ -48,9 +52,18 @@ $( document ).ready(function() { //had to use jquery because my
 
       element.setAttribute("squareState","1"); //change squareState, 1=filled with color
 
+    /*case 1.5: if the square is already filled with a color and the currColor is the same, make it blank*/
+    }else if(element.getAttribute("squareState") == "1" && element.getAttribute("fill") == currColor){
+      console.log("squareState == 0");
 
+      console.log(element.getAttribute("fill")); 
+      console.log(currColor);
+
+      element.setAttribute("fill", "white");
+      element.setAttribute("squareState","0");
+    
     /*case 2: square is already filled with color, split it with current color*/
-    }else if(element.getAttribute("squareState") == "1" ){
+    }else if(element.getAttribute("squareState") == "1"){
       console.log("squareState == 1");
 
       
@@ -115,7 +128,7 @@ $( document ).ready(function() { //had to use jquery because my
     //if it's not 0,1,2,3,4, we have a problem...it's usually been null 
     else{
       console.log("Houston we have a problem");
-      console.log(element.getAttribute("squareState"));
+      console.log("squareState is " + element.getAttribute("squareState"));
     }
   }
 
@@ -131,55 +144,138 @@ $( document ).ready(function() { //had to use jquery because my
   var makeColorPalette = function(){
     var svg = document.createSvg("svg");
     svg.setAttribute("width", "300px");
-    svg.setAttribute("height", 4*60);
+    svg.setAttribute("height", 6*60);
 
     var color1 = document.createSvg("rect");
     color1.setAttribute("width", "50px");
     color1.setAttribute("height", "50px");
+    color1.setAttribute("x", "5px"); //offset palette squares so selection outline can show
+    color1.setAttribute("y", "5px"); //offset palette squares so selection outline can show
     color1.setAttribute("fill","#722712");
     color1.setAttribute("id","color1");
     color1.addEventListener("click", function(e){{
       currColor = "#722712";
+      //below doesn't work because type is defined in the makeGrid function, and it needs to be (cannot be defined outside of that function)
+      // type.setAttribute("class","typeSquare"); //class for all type squares 
+
+      //there is probably a better way to do the selectedColor with css, but I couldn't get the selection to stick
+      color2.removeAttribute("class","selectedColor");
+      color3.removeAttribute("class","selectedColor");
+      color4.removeAttribute("class","selectedColor");
+      color5.removeAttribute("class","selectedColor");
+      color6.removeAttribute("class","selectedColor");
+
+      color1.setAttribute("class","selectedColor");
+
       console.log("currColor is brick red");
     }}, false);
 
     var color2 = document.createSvg("rect");
     color2.setAttribute("width", "50px");
     color2.setAttribute("height", "50px");
-    color2.setAttribute("y","60px");
+    color2.setAttribute("x", "5px");
+    color2.setAttribute("y","65px");
     color2.setAttribute("fill","#456544");
     color2.setAttribute("id","color2");
     color2.addEventListener("click", function(e){{
       currColor = "#456544";
+      color1.removeAttribute("class","selectedColor");
+      color3.removeAttribute("class","selectedColor");
+      color4.removeAttribute("class","selectedColor");
+      color5.removeAttribute("class","selectedColor");
+      color6.removeAttribute("class","selectedColor");
+
+      color2.setAttribute("class","selectedColor");
       console.log("currColor is green");
     }}, false);
 
     var color3 = document.createSvg("rect");
     color3.setAttribute("width", "50px");
     color3.setAttribute("height", "50px");
-    color3.setAttribute("y","120px");
+    color3.setAttribute("x", "5px");
+    color3.setAttribute("y","125px");
     color3.setAttribute("fill","#3F6869");
     color3.setAttribute("id","color3");
     color3.addEventListener("click", function(e){{
       currColor = "#3F6869";
+      color1.removeAttribute("class","selectedColor");
+      color2.removeAttribute("class","selectedColor");
+      color4.removeAttribute("class","selectedColor");
+      color5.removeAttribute("class","selectedColor");
+      color6.removeAttribute("class","selectedColor");
+
+      color3.setAttribute("class","selectedColor");     
       console.log("currColor is blue");
     }}, false);
 
     var color4 = document.createSvg("rect");
     color4.setAttribute("width", "50px");
     color4.setAttribute("height", "50px");
-    color4.setAttribute("y","180px");
+    color4.setAttribute("x", "5px");
+    color4.setAttribute("y","185px");
     color4.setAttribute("fill","#D98634");
     color4.setAttribute("id","color4");
     color4.addEventListener("click", function(e){{
       currColor = "#D98634";
+      color1.removeAttribute("class","selectedColor");
+      color2.removeAttribute("class","selectedColor");
+      color3.removeAttribute("class","selectedColor");
+      color5.removeAttribute("class","selectedColor");
+      color6.removeAttribute("class","selectedColor");
+
+      color4.setAttribute("class","selectedColor");
       console.log("currColor is yellow");
     }}, false);
+
+    var color5 = document.createSvg("rect");
+    color5.setAttribute("width", "50px");
+    color5.setAttribute("height", "50px");
+    color5.setAttribute("x", "5px");
+    color5.setAttribute("y","245px");
+    color5.setAttribute("fill","#cd2904");
+    color5.setAttribute("id","color5");
+    color5.addEventListener("click", function(e){{
+      currColor = "#cd2904";
+      color1.removeAttribute("class","selectedColor");
+      color2.removeAttribute("class","selectedColor");
+      color3.removeAttribute("class","selectedColor");
+      color4.removeAttribute("class","selectedColor");
+      color6.removeAttribute("class","selectedColor");
+
+      color5.setAttribute("class","selectedColor");
+
+      console.log("currColor is red");
+    }}, false);
+
+
+    var color6 = document.createSvg("rect");
+    color6.setAttribute("width", "50px");
+    color6.setAttribute("height", "50px");
+    color6.setAttribute("x", "5px");
+    color6.setAttribute("y","305px");
+    color6.setAttribute("fill","#58705f");
+    color6.setAttribute("id","color6");
+    color6.addEventListener("click", function(e){{
+      currColor = "#58705f";
+      color1.removeAttribute("class","selectedColor");
+      color2.removeAttribute("class","selectedColor");
+      color3.removeAttribute("class","selectedColor");
+      color4.removeAttribute("class","selectedColor");
+      color5.removeAttribute("class","selectedColor");
+
+      color6.setAttribute("class","selectedColor");
+
+      console.log("currColor is blue-green");
+    }}, false);
+
+   
 
     svg.appendChild(color1);
     svg.appendChild(color2);
     svg.appendChild(color3);
     svg.appendChild(color4);
+    svg.appendChild(color5);
+    svg.appendChild(color6);
 
     return svg;
   }
@@ -196,6 +292,8 @@ $( document ).ready(function() { //had to use jquery because my
     maing.setAttribute("id", "maing");
     maing.setAttribute("width", pixelsPerSide);
     maing.setAttribute("height", pixelsPerSide);
+
+
     // maing.setAttribute("transform", ["translate(60,60)"]); //test if objects are grouped together
 
     //"physical" bg element, this goes on top of "maing", a little redundant but think of it as the physical object in the container
@@ -206,11 +304,6 @@ $( document ).ready(function() { //had to use jquery because my
     bg.setAttribute("height", sizeBG + 50);
     bg.setAttribute("fill","black");
     bg.setAttribute("fill-opacity",".1");
-
-
-    //because it is "g" and not "svg" it isn't actually a "physical" object, 
-    //but a container/grouping for all the types that make up the year
-
 
     //append maing to svg
     svg.appendChild(maing);
@@ -241,20 +334,23 @@ $( document ).ready(function() { //had to use jquery because my
 
 
             var type = document.createSvg("rect");
+            type.setAttribute("class","typeSquare"); //class for all type squares 
             type.setAttribute("id", "type" + numType); //each type square has an ID according to its type: 0-8
             type.setAttribute("width", size/3);
             type.setAttribute("height", size/3);
             type.setAttribute("fill", "white");
             type.setAttribute("squareState","0");
 
+            //0,1,2 are type boxes on row 1
             if(numType == 0 || numType == 1 || numType == 2){
-              type.setAttribute("transform", ["translate(" + (numType) * size/3,0 + ")"]); //moves individual type square
+                                                              //+1 to create margins on the left, 20 and +20 to move squares down
+              type.setAttribute("transform", ["translate(" + (numType + 1) * size/3,20 + ")"]); //moves individual type square
             }
             else if(numType == 3 || numType == 4 || numType == 5){
-                type.setAttribute("transform", ["translate(" + (numType-3) * size/3,size/3 + ")"]);
+                type.setAttribute("transform", ["translate(" + (numType-3 + 1) * size/3,size/3 + 20 + ")"]);
             }
             else if(numType == 6 || numType == 7 || numType == 8){
-                type.setAttribute("transform", ["translate(" + (numType-6) * size/3,2*(size/3) + ")"]);
+                type.setAttribute("transform", ["translate(" + (numType-6 + 1) * size/3,2*(size/3) + 20 +")"]);
             }
 
             //any style or attribute applied to a year will filter to the types that make it up
@@ -271,10 +367,10 @@ $( document ).ready(function() { //had to use jquery because my
     
 
   var container = document.getElementById("gridContainer");
-  container.appendChild(makeGrid(5, 60, 350, 0)); //makes one 5x5 quadrant with boxes 60 px wide inside a 340x340 viewport
-  container.appendChild(makeGrid(5, 60, 350, 25));
-  container.appendChild(makeGrid(5, 60, 350, 50));
-  container.appendChild(makeGrid(5, 60, 350, 75));
+  container.appendChild(makeGrid(5, 60, 368, 0)); //makes one 5x5 quadrant with boxes 60 px wide inside a 368x368 viewport //was 340 & then 350 
+  container.appendChild(makeGrid(5, 60, 368, 25));
+  container.appendChild(makeGrid(5, 60, 368, 50));
+  container.appendChild(makeGrid(5, 60, 368, 75));
 
   var cpContainer = document.getElementById("colorPalette");
   cpContainer.appendChild(makeColorPalette()); //make a color palette with 4 colors
