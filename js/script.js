@@ -5,6 +5,9 @@ $( document ).ready(function() { //had to use jquery because my
     document.getElementById("demo").innerHTML = "Hello World";
   }
 
+  //the number of colors/countries represented
+  var numColors = 6;
+
    //currColor will be to hold whatever color the user squareState on to use
   var currColor = "#722712";
 
@@ -69,7 +72,7 @@ $( document ).ready(function() { //had to use jquery because my
       
       var pts =  "0,0 " + "0," + w + " " + w + "," + w; //create a string of the triangle's coordinates
 
-      triangle.setAttribute("id", "tri"+element.getAttribute("id")+element.parentNode.getAttribute("id")); //give id, format is "tritype#year#"
+      triangle.setAttribute("id", "tri"+element.getAttribute("id")); //give id, format is "tritype#year#"
       triangle.setAttribute("points", pts); //specify coordinates
       triangle.setAttribute("transform", t); //translate the triangle by the same amount that the typerect has been translated
       triangle.setAttribute('fill', currColor); //change color
@@ -85,12 +88,12 @@ $( document ).ready(function() { //had to use jquery because my
       console.log("squareState == 2");
 
       //remove triangle to add 
-      var triRemoved = document.getElementById("tri"+element.getAttribute("id")+element.parentNode.getAttribute("id"));
+      var triRemoved = document.getElementById("tri"+element.getAttribute("id"));
       element.parentNode.removeChild(triRemoved);
 
       /*set up second triangle to be opposite of previous triangle*/
       var pts =  "0,0 " + w + ",0" + " " + w + "," + w; //create a string of the triangle's coordinates
-      triangle2.setAttribute("id", "tri"+element.getAttribute("id")+element.parentNode.getAttribute("id")); //give id, format is "tritype#year#"
+      triangle2.setAttribute("id", "tri"+element.getAttribute("id")); //give id, format is "tritype#year#"
       triangle2.setAttribute("points", pts); //specify coordinates
       triangle2.setAttribute("transform", t); //translate the triangle by the same amount that the typerect has been translated
       triangle2.setAttribute('fill', currColor); //change color
@@ -110,7 +113,7 @@ $( document ).ready(function() { //had to use jquery because my
 
 
       /*remove triangle so it can be a solid square again*/
-      var triRemoved2 = document.getElementById("tri"+element.getAttribute("id")+element.parentNode.getAttribute("id"));
+      var triRemoved2 = document.getElementById("tri"+element.getAttribute("id"));
       element.parentNode.removeChild(triRemoved2);
 
       element.setAttribute("squareState","4");
@@ -164,7 +167,6 @@ $( document ).ready(function() { //had to use jquery because my
       color4.removeAttribute("class","selectedColor");
       color5.removeAttribute("class","selectedColor");
       color6.removeAttribute("class","selectedColor");
-
       color1.setAttribute("class","selectedColor");
 
       console.log("currColor is brick red");
@@ -331,11 +333,12 @@ $( document ).ready(function() { //had to use jquery because my
              false);
           for(var numType = 0; numType < 9; numType++){ //for 9 times, create a type square and append to current year box
 
-
-
             var type = document.createSvg("rect");
+            //any style or attribute applied to a year will filter to the types that make it up
+            yearBox.appendChild(type);
+
             type.setAttribute("class","typeSquare"); //class for all type squares 
-            type.setAttribute("id", "type" + numType); //each type square has an ID according to its type: 0-8
+            type.setAttribute("id", "type" + numType + type.parentNode.getAttribute("id")); //each type square has an ID according to its type: 0-8 AND ALSO ITS YEAR (otherwise it wont be unique)
             type.setAttribute("width", size/3);
             type.setAttribute("height", size/3);
             type.setAttribute("fill", "white");
@@ -353,8 +356,6 @@ $( document ).ready(function() { //had to use jquery because my
                 type.setAttribute("transform", ["translate(" + (numType-6 + 1) * size/3,2*(size/3) + 20 +")"]);
             }
 
-            //any style or attribute applied to a year will filter to the types that make it up
-            yearBox.appendChild(type);
           } //end for loop
           
         yearBox.setAttribute("transform", ["translate(", j*size + j*8, ",", i*size + i*8, ")"].join("")); //offset to see bkg  
@@ -364,7 +365,27 @@ $( document ).ready(function() { //had to use jquery because my
     return svg;
   }
 
-    
+   function generateTimeline(boxesPerSide, startYearID){
+      for(var i = 0; i < boxesPerSide; i++) {
+        for(var j = 0; j < boxesPerSide; j++) {
+          var numYear = boxesPerSide * i + j; //which number year box we're on
+          var startYearID = startYearID + 1;
+          for(var numType = 0; numType < 9; numType++){
+            var typeSquare = document.getElementById("type" + numType + "year" + numYear);
+            //for number of colors
+            for(var numClr = 1; numClr <= numColors; numClr++){
+              if(typeSquare.getAttribute("fill") == document.getElementById("color" + numClr).getAttribute("fill"))
+                {
+                  console.log("someTypeOfEvent for country " + typeSquare.getAttribute("fill"));
+                  //9 if else statements for type of event. to avoid: would be nice to have an added attribute during makeGrid that is eventName
+                }
+            } //end for numClr
+          } //end for numType
+        }
+      }
+  };
+  
+
 
   var container = document.getElementById("gridContainer");
   container.appendChild(makeGrid(5, 60, 368, 0)); //makes one 5x5 quadrant with boxes 60 px wide inside a 368x368 viewport //was 340 & then 350 
@@ -375,6 +396,9 @@ $( document ).ready(function() { //had to use jquery because my
   var cpContainer = document.getElementById("colorPalette");
   cpContainer.appendChild(makeColorPalette()); //make a color palette with 4 colors
 
+  document.getElementById("timelineGen").addEventListener("click", function(){
+    generateTimeline(5,0);
+});
 
 
  });
