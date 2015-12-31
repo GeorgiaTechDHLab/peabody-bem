@@ -270,7 +270,13 @@ $( document ).ready(function() { //had to use jquery because my
       console.log("currColor is blue-green");
     }}, false);
 
-   
+    countries =  {} //global variable mapping color to country
+    countries[color1.getAttribute("fill")] = "country1"; //adding key/value pairs to countries
+    countries[color2.getAttribute("fill")] = "country2"; 
+    countries[color3.getAttribute("fill")] = "country3"; 
+    countries[color4.getAttribute("fill")] = "country4"; 
+    countries[color5.getAttribute("fill")] = "country5"; 
+    countries[color6.getAttribute("fill")] = "country6"; 
 
     svg.appendChild(color1);
     svg.appendChild(color2);
@@ -369,18 +375,20 @@ $( document ).ready(function() { //had to use jquery because my
       for(var i = 0; i < boxesPerSide; i++) {
         for(var j = 0; j < boxesPerSide; j++) {
           var numYear = boxesPerSide * i + j; //which number year box we're on
-          var startYearID = startYearID + 1;
           for(var numType = 0; numType < 9; numType++){
-            var typeSquare = document.getElementById("type" + numType + "year" + numYear);
+            var typeSquare = document.getElementById("type" + numType + "year" + startYearID);
             //for number of colors
             for(var numClr = 1; numClr <= numColors; numClr++){
               if(typeSquare.getAttribute("fill") == document.getElementById("color" + numClr).getAttribute("fill"))
                 {
-                  console.log("someTypeOfEvent for country " + typeSquare.getAttribute("fill"));
+                   if(numType == 0){
+                    console.log("Beginning of war for " + countries[typeSquare.getAttribute("fill")]); //using the color as a key, gets the corresponding country value from countries
+                   }
                   //9 if else statements for type of event. to avoid: would be nice to have an added attribute during makeGrid that is eventName
                 }
             } //end for numClr
           } //end for numType
+          startYearID = startYearID + 1;
         }
       }
   };
@@ -398,6 +406,9 @@ $( document ).ready(function() { //had to use jquery because my
 
   document.getElementById("timelineGen").addEventListener("click", function(){
     generateTimeline(5,0);
+    generateTimeline(5,25);
+    generateTimeline(5,50);
+    generateTimeline(5,75);
 });
 
 
