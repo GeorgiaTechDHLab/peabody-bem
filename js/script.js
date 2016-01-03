@@ -270,6 +270,7 @@ $( document ).ready(function() { //had to use jquery because my
       console.log("currColor is blue-green");
     }}, false);
 
+    //TODO: use actual country names
     countries =  {} //global variable mapping color to country
     countries[color1.getAttribute("fill")] = "country1"; //adding key/value pairs to countries
     countries[color2.getAttribute("fill")] = "country2"; 
@@ -371,20 +372,46 @@ $( document ).ready(function() { //had to use jquery because my
     return svg;
   }
 
+    //currently only accounts for complete squares (not triangles)
    function generateTimeline(boxesPerSide, startYearID){
+    //TODO: account for triangles, include the year
       for(var i = 0; i < boxesPerSide; i++) {
         for(var j = 0; j < boxesPerSide; j++) {
-          var numYear = boxesPerSide * i + j; //which number year box we're on
           for(var numType = 0; numType < 9; numType++){
             var typeSquare = document.getElementById("type" + numType + "year" + startYearID);
             //for number of colors
             for(var numClr = 1; numClr <= numColors; numClr++){
               if(typeSquare.getAttribute("fill") == document.getElementById("color" + numClr).getAttribute("fill"))
                 {
-                   if(numType == 0){
-                    console.log("Beginning of war for " + countries[typeSquare.getAttribute("fill")]); //using the color as a key, gets the corresponding country value from countries
-                   }
+                  var country = countries[typeSquare.getAttribute("fill")];
                   //9 if else statements for type of event. to avoid: would be nice to have an added attribute during makeGrid that is eventName
+                   if(numType == 0){
+                    document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Beginning of war <br>"; //using the color as a key, gets the corresponding country value from countries
+                   }
+                   if(numType == 1){
+                    document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Conquest, annexation, or union <br>"; 
+                   }
+                   if(numType == 2){
+                    document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Loss or disaster <br>";
+                   }
+                   if(numType == 3){
+                    document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Fall of state <br>";
+                   }
+                   if(numType == 4){
+                    document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Foundation or revolution <br>";
+                   }
+                   if(numType == 5){
+                    document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Treaty or sundry <br>";
+                   }
+                   if(numType == 6){
+                    document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Birth of remarkable individual <br>";
+                   }
+                   if(numType == 7){
+                    document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Deed <br>"; 
+                   }
+                   if(numType == 8){
+                    document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Death of remarkable individual <br>";
+                   }
                 }
             } //end for numClr
           } //end for numType
@@ -405,6 +432,7 @@ $( document ).ready(function() { //had to use jquery because my
   cpContainer.appendChild(makeColorPalette()); //make a color palette with 4 colors
 
   document.getElementById("timelineGen").addEventListener("click", function(){
+    document.getElementById("timeline").innerHTML = ""; //clear out any previous timeline
     generateTimeline(5,0);
     generateTimeline(5,25);
     generateTimeline(5,50);
