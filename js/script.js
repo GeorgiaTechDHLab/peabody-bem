@@ -5,6 +5,9 @@ $( document ).ready(function() { //had to use jquery because my
     document.getElementById("demo").innerHTML = "Hello World";
   }
 
+  //the number of colors/countries represented
+  var numColors = 6;
+
    //currColor will be to hold whatever color the user squareState on to use
   var currColor = "#722712";
 
@@ -69,7 +72,7 @@ $( document ).ready(function() { //had to use jquery because my
       
       var pts =  "0,0 " + "0," + w + " " + w + "," + w; //create a string of the triangle's coordinates
 
-      triangle.setAttribute("id", "tri"+element.getAttribute("id")+element.parentNode.getAttribute("id")); //give id, format is "tritype#year#"
+      triangle.setAttribute("id", "tri"+element.getAttribute("id")); //give id, format is "tritype#year#"
       triangle.setAttribute("points", pts); //specify coordinates
       triangle.setAttribute("transform", t); //translate the triangle by the same amount that the typerect has been translated
       triangle.setAttribute('fill', currColor); //change color
@@ -85,12 +88,12 @@ $( document ).ready(function() { //had to use jquery because my
       console.log("squareState == 2");
 
       //remove triangle to add 
-      var triRemoved = document.getElementById("tri"+element.getAttribute("id")+element.parentNode.getAttribute("id"));
+      var triRemoved = document.getElementById("tri"+element.getAttribute("id"));
       element.parentNode.removeChild(triRemoved);
 
       /*set up second triangle to be opposite of previous triangle*/
       var pts =  "0,0 " + w + ",0" + " " + w + "," + w; //create a string of the triangle's coordinates
-      triangle2.setAttribute("id", "tri"+element.getAttribute("id")+element.parentNode.getAttribute("id")); //give id, format is "tritype#year#"
+      triangle2.setAttribute("id", "tri"+element.getAttribute("id")); //give id, format is "tritype#year#"
       triangle2.setAttribute("points", pts); //specify coordinates
       triangle2.setAttribute("transform", t); //translate the triangle by the same amount that the typerect has been translated
       triangle2.setAttribute('fill', currColor); //change color
@@ -110,7 +113,7 @@ $( document ).ready(function() { //had to use jquery because my
 
 
       /*remove triangle so it can be a solid square again*/
-      var triRemoved2 = document.getElementById("tri"+element.getAttribute("id")+element.parentNode.getAttribute("id"));
+      var triRemoved2 = document.getElementById("tri"+element.getAttribute("id"));
       element.parentNode.removeChild(triRemoved2);
 
       element.setAttribute("squareState","4");
@@ -164,7 +167,6 @@ $( document ).ready(function() { //had to use jquery because my
       color4.removeAttribute("class","selectedColor");
       color5.removeAttribute("class","selectedColor");
       color6.removeAttribute("class","selectedColor");
-
       color1.setAttribute("class","selectedColor");
 
       console.log("currColor is brick red");
@@ -268,7 +270,14 @@ $( document ).ready(function() { //had to use jquery because my
       console.log("currColor is blue-green");
     }}, false);
 
-   
+    //TODO: use actual country names
+    countries =  {} //global variable mapping color to country
+    countries[color1.getAttribute("fill")] = "country1"; //adding key/value pairs to countries
+    countries[color2.getAttribute("fill")] = "country2"; 
+    countries[color3.getAttribute("fill")] = "country3"; 
+    countries[color4.getAttribute("fill")] = "country4"; 
+    countries[color5.getAttribute("fill")] = "country5"; 
+    countries[color6.getAttribute("fill")] = "country6"; 
 
     svg.appendChild(color1);
     svg.appendChild(color2);
@@ -331,11 +340,12 @@ $( document ).ready(function() { //had to use jquery because my
              false);
           for(var numType = 0; numType < 9; numType++){ //for 9 times, create a type square and append to current year box
 
-
-
             var type = document.createSvg("rect");
+            //any style or attribute applied to a year will filter to the types that make it up
+            yearBox.appendChild(type);
+
             type.setAttribute("class","typeSquare"); //class for all type squares 
-            type.setAttribute("id", "type" + numType); //each type square has an ID according to its type: 0-8
+            type.setAttribute("id", "type" + numType + type.parentNode.getAttribute("id")); //each type square has an ID according to its type: 0-8 AND ALSO ITS YEAR (otherwise it wont be unique)
             type.setAttribute("width", size/3);
             type.setAttribute("height", size/3);
             type.setAttribute("fill", "white");
@@ -353,8 +363,6 @@ $( document ).ready(function() { //had to use jquery because my
                 type.setAttribute("transform", ["translate(" + (numType-6 + 1) * size/3,2*(size/3) + 20 +")"]);
             }
 
-            //any style or attribute applied to a year will filter to the types that make it up
-            yearBox.appendChild(type);
           } //end for loop
           
         yearBox.setAttribute("transform", ["translate(", j*size + j*8, ",", i*size + i*8, ")"].join("")); //offset to see bkg  
@@ -364,7 +372,55 @@ $( document ).ready(function() { //had to use jquery because my
     return svg;
   }
 
-    
+    //currently only accounts for complete squares (not triangles)
+   function generateTimeline(boxesPerSide, startYearID){
+    //TODO: account for triangles, include the year
+      for(var i = 0; i < boxesPerSide; i++) {
+        for(var j = 0; j < boxesPerSide; j++) {
+          for(var numType = 0; numType < 9; numType++){
+            var typeSquare = document.getElementById("type" + numType + "year" + startYearID);
+            //for number of colors
+            for(var numClr = 1; numClr <= numColors; numClr++){
+              if(typeSquare.getAttribute("fill") == document.getElementById("color" + numClr).getAttribute("fill"))
+                {
+                  var country = countries[typeSquare.getAttribute("fill")];
+                  //9 if else statements for type of event. to avoid: would be nice to have an added attribute during makeGrid that is eventName
+                   if(numType == 0){
+                    document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Beginning of war <br>"; //using the color as a key, gets the corresponding country value from countries
+                   }
+                   if(numType == 1){
+                    document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Conquest, annexation, or union <br>"; 
+                   }
+                   if(numType == 2){
+                    document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Loss or disaster <br>";
+                   }
+                   if(numType == 3){
+                    document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Fall of state <br>";
+                   }
+                   if(numType == 4){
+                    document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Foundation or revolution <br>";
+                   }
+                   if(numType == 5){
+                    document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Treaty or sundry <br>";
+                   }
+                   if(numType == 6){
+                    document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Birth of remarkable individual <br>";
+                   }
+                   if(numType == 7){
+                    document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Deed <br>"; 
+                   }
+                   if(numType == 8){
+                    document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Death of remarkable individual <br>";
+                   }
+                }
+            } //end for numClr
+          } //end for numType
+          startYearID = startYearID + 1;
+        }
+      }
+  };
+  
+
 
   var container = document.getElementById("gridContainer");
   container.appendChild(makeGrid(5, 60, 368, 0)); //makes one 5x5 quadrant with boxes 60 px wide inside a 368x368 viewport //was 340 & then 350 
@@ -375,6 +431,13 @@ $( document ).ready(function() { //had to use jquery because my
   var cpContainer = document.getElementById("colorPalette");
   cpContainer.appendChild(makeColorPalette()); //make a color palette with 4 colors
 
+  document.getElementById("timelineGen").addEventListener("click", function(){
+    document.getElementById("timeline").innerHTML = ""; //clear out any previous timeline
+    generateTimeline(5,0);
+    generateTimeline(5,25);
+    generateTimeline(5,50);
+    generateTimeline(5,75);
+});
 
 
  });
