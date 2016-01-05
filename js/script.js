@@ -30,6 +30,15 @@ $( document ).ready(function() { //had to use jquery because my
   //array for all 900 rectangles h
   var rect = [];
 
+  /*TODO: update chart title based on which event list is active (sample or custom titled)*/
+  function updateChartTitle(element){
+
+    //need title variable from event list
+
+    //#chartTitle is id for title above chart
+
+  }
+
   /*if we want to use right-click functionality instead: http://www.sitepoint.com/building-custom-right-click-context-menu-javascript/ */
 
   /*function changes type square based on current square state and color. currently states are identified by number, could have 
@@ -143,8 +152,40 @@ $( document ).ready(function() { //had to use jquery because my
         return this.createElementNS(svgNS, tagName);
   };
 
+
+  /*TODO: attach label to each color square*/
+
+
+  /*TODO: allow user to customize each label for each color square */
+  var customizeLabel = function(countryLabel){
+
+  }
+
+  /*TODO: allow user to change color for each square */
+  var changeSquareColor = function(squareColor){
+
+  }
+
+  /*TODO: allow user add a color square*/
+  var addColorSquare = function(colorSquare){
+
+  }
+
+  /*TODO: allow user to remove color square*/
+  var removeColorSquare = function(colorSquare){
+
+  }
+
+  /*TODO: "show me the chart indication for the example event", function needs to know: country, year, type of event; 
+  would to pass "element" variable with state set to changeSquare() method*/
+
+
+
+
   //color palette is hardcoded, for now, event listeners change currColor
   var makeColorPalette = function(){
+
+    //svg that contains all of the color squares (and all the space to the right) but not the "Color Palette" title
     var svg = document.createSvg("svg");
     svg.setAttribute("width", "300px");
     svg.setAttribute("height", 6*60);

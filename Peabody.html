@@ -7,6 +7,7 @@
 		<link rel="stylesheet" href="css/svg-style.css">
  		<script src = "js/jquery-1.11.3.min.js"></script>
  		<script src="js/script.js" type="text/javascript"></script>
+ 		<script src="js/bootstrap.min.js" type="text/javascript"></script>
  		<link rel = "stylesheet" href = "css/bootstrap.min.css">
 	    <link href='http://fonts.googleapis.com/css?family=Oswald:400,700,300|Open+Sans:400,600' rel='stylesheet' type='text/css'>
 	    <script src = "js/respond.min.js"></script>
@@ -48,16 +49,74 @@
 			<div class="row">
 				<div id="colorPalette" class="col-md-4">
 					<h2>Color Palette</h2>
-
 				</div>	<!--close col-md-4-->
+			</div>
 
-				<!--html for Caroline's attempt at custom JS function to generate squares--> 
+			<!--row with chart and list of events-->
+			<div class="row">
+				<!--contains--> 
 				<div id="gridContainer" class="col-md-8">
-					<h2>Chart</h2>
+					<h2 id="chartTitle">Chart: Chronological List of the 16th Century</h2>
 				<!--close col-md-8-->
 				</div>
 
+				<div id="eventList" class="col-md-4">
+					<h2>Events</h2>
+
+					<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+					  <div class="panel panel-default">
+					    <div class="panel-heading" role="tab" id="headingOne">
+					      <h4 class="panel-title">
+					        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+					          Sample Event List: Chronological List of the 16th Century
+					        </a>
+					      </h4>
+					    </div>
+					    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+					      <div class="panel-body">
+					        <ol>
+					        	<li>1501. Henry VII. grants patent for colonizing America. (Show me on chart **TODO). </li>
+					        	<li>1512. Ponce de Leon discovers Florida. (Show me on chart). </li>
+					        	<li>1517. Sebastian Cabot's last voyage in the English service. (Show me on chart). </li>
+					        </ol>
+					      </div>
+					    </div>
+					  </div>
+					  <div class="panel panel-default">
+					    <div class="panel-heading" role="tab" id="headingTwo">
+					      <h4 class="panel-title">
+					        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+					          Sample Event List 2
+					        </a>
+					      </h4>
+					    </div>
+					    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+					      <div class="panel-body">
+					        <ol>
+					        	<li>1900. Blah blah happened.</li>
+					        	<li>1901. So and so did something.</li>
+					        </ol>
+					      </div>
+					    </div>
+					  </div>
+					  <div class="panel panel-default">
+					    <div class="panel-heading" role="tab" id="headingThree">
+					      <h4 class="panel-title">
+					        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+					          Make your own
+					        </a>
+					      </h4>
+					    </div>
+					    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+					      <div class="panel-body">
+					        Not sure how to do this yet
+					      </div>
+					    </div>
+					  </div>
+					</div>
+				</div>
 			</div><!--close row-->
+
 
 			<div class="row">
 				<div id="timelineContainer" class="col-md-12">
