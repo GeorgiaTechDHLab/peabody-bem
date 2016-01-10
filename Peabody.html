@@ -49,16 +49,25 @@
 			<div class="row">
 				<div id="colorPalette" class="col-md-4">
 					<h2>Color Palette</h2>
-				</div>	<!--close col-md-4-->
-			</div>
+					<form id="editForm">
+						Number of countries:</br>
+						<input type="text" name="numCountries" value="6"><br>
+						List of countries, separated by commas:</br>
+						<input type="text" name="listOfCountries" value="Spain, Portugal, France, Germany, Morocco, Italy">
+					</form>
+					<button id="update">Update</button>
 
-			<!--row with chart and list of events-->
-			<div class="row">
-				<!--contains--> 
+				</div>	<!--close col-md-4-->
+				<!--container--> 
 				<div id="gridContainer" class="col-md-8">
 					<h2 id="chartTitle">Chart: Chronological List of the 16th Century</h2>
 				<!--close col-md-8-->
 				</div>
+			</div>
+
+			<!--row with chart and list of events-->
+			<div class="row">
+
 
 				<div id="eventList" class="col-md-4">
 					<h2>Events</h2>

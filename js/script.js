@@ -161,8 +161,13 @@ $( document ).ready(function() { //had to use jquery because my
 
   }
 
+  //array of colors, eventually needs to be manipulable by user
+  var arrayColors = ["#722712","#456544","#3F6869","#D98634","#cd2904","#58705f"];
+  //array of country names, eventually needs to be manipulable by user
+  var countryNames = ["Spain", "Portugal", "France", "Germany", "Morocco", "Italy"];
+
   /*TODO: allow user to change color for each square */
-  var changeSquareColor = function(squareColor){
+  var changeSquareColor = function(){
 
   }
 
@@ -175,6 +180,83 @@ $( document ).ready(function() { //had to use jquery because my
   var removeColorSquare = function(colorSquare){
 
   }
+
+  var updateCurrColor = function(e){
+          // currColor = arrayColors[i];
+        // console.log("currColor: " + currColor);
+
+        if(e.target !== e.currentTarget){
+          var clickedItem = e.target.id;
+          currColor = document.getElementById(clickedItem).getAttribute("fill");
+          console.log("currColor: " + currColor);
+        }
+        e.stopPropagation();
+  }
+
+  /**dynamic color palette to size according to number of colors*/
+  var makeColorPalette2 = function(numColors){
+    var svg = document.createSvg("svg");
+    svg.setAttribute("width", "100%");
+    svg.setAttribute("height", numColors*60);
+
+
+    for(var i=0; i<numColors;i++){
+
+      //group for country color square and its label
+      var colorGroup = document.createSvg("g");
+
+      var colorBox = document.createSvg("rect");
+      colorBox.setAttribute("width", "50px");
+      colorBox.setAttribute("height", "50px");
+      colorBox.setAttribute("transform", ["translate("  + 0, (60*i)  + ")"]);
+      colorBox.setAttribute("id", "colorBox" + i); //colorbox1, colorbox2, etc
+      colorBox.setAttribute("fill", arrayColors[i]);
+      console.log(colorBox.getAttribute("id"));
+
+      /*tutorial: http://www.kirupa.com/html5/handling_events_for_many_elements.htm*/
+      var colorPalette = document.querySelector("#colorPalette");
+      colorPalette.addEventListener("click", updateCurrColor, false);
+
+      var colorLabel = document.createSvg("text"); //need to add to color box 
+      // colorLabel.setAttribute("text","balrg");
+      colorLabel.textContent = countryNames[i];
+      colorLabel.setAttribute("x","55");
+      colorLabel.setAttribute("y","30");
+      colorLabel.setAttribute("font-family", "Verdana");
+      colorLabel.setAttribute("font-size", "20");
+      colorLabel.setAttribute("transform", ["translate("  + 0, (60*i)  + ")"]);
+
+
+      colorGroup.setAttribute("id", "colorGroup" + i);
+      colorGroup.setAttribute("width", "250px");
+
+      // var removeButton = document.createElementNS("button","-");
+      // colorGroup.appendChild(removeButton);
+
+      colorGroup.appendChild(colorBox);
+      colorGroup.appendChild(colorLabel);
+
+      svg.appendChild(colorGroup);
+
+
+    }
+
+          // <textarea name = "country1" cols="20" rows = "1"></textarea>
+    return svg;
+  }
+
+  // //array of colors, eventually needs to be manipulable by user
+  // var arrayColors = ["#722712","#456544","#3F6869","#D98634","#cd2904","#58705f"];
+  // //array of country names, eventually needs to be manipulable by user
+  // var countryNames = ["Spain", "Portugal", "France", "Germany", "Morocco", "Italy"];
+
+  function editColorPalette(){
+    countryNames = document.getElementById("listOfCountries").value;
+
+
+  }
+
+
 
   /*TODO: "show me the chart indication for the example event", function needs to know: country, year, type of event; 
   would to pass "element" variable with state set to changeSquare() method*/
@@ -470,7 +552,8 @@ $( document ).ready(function() { //had to use jquery because my
   container.appendChild(makeGrid(5, 60, 368, 75));
 
   var cpContainer = document.getElementById("colorPalette");
-  cpContainer.appendChild(makeColorPalette()); //make a color palette with 4 colors
+  // cpContainer.appendChild(makeColorPalette()); //make a color palette with 6 colors
+  cpContainer.appendChild(makeColorPalette2(6)); //make dynamic color palette with 3 colors
 
   document.getElementById("timelineGen").addEventListener("click", function(){
     document.getElementById("timeline").innerHTML = ""; //clear out any previous timeline
