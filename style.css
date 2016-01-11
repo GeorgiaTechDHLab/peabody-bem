@@ -32,8 +32,8 @@ so sometimes the white squares overlap the blue outline because there is no room
 
 .selectedColor{
 	outline: 4px solid lightblue;
-	outline-style: double;
-}
+/*	outline-style: double;
+*/}
 
 #typeReference table, th, td{
 	border: 1px solid black;
