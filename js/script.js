@@ -360,50 +360,85 @@ $( document ).ready(function() { //had to use jquery because my
     return svg;
   }
 
-    //currently only accounts for complete squares (not triangles)
-   function generateTimeline(boxesPerSide, startYearID){
-    //TODO: account for triangles, include the year
+
+   function generateTimeline(boxesPerSide, yearID){
       for(var i = 0; i < boxesPerSide; i++) {
         for(var j = 0; j < boxesPerSide; j++) {
-          for(var numType = 0; numType < 9; numType++){
-            var typeSquare = document.getElementById("type" + numType + "year" + startYearID);
+          //TODO: map yearID to an actual year
+          document.getElementById("timeline").innerHTML = document.getElementById("timeline").innerHTML + yearID + "<br>"; //label for the year in which the events took place
+          for(var numType = 0; numType < 9; numType++){ //check each square for a fill
+            var typeSquare = document.getElementById("type" + numType + "year" + yearID);
+            var triangle = document.getElementById("tritype" + numType + "year" + yearID); //the triangle occupying the type square. could be null
             //for number of colors
-            for(var numClr = 1; numClr <= numColors; numClr++){
-              if(typeSquare.getAttribute("fill") == document.getElementById("color" + numClr).getAttribute("fill"))
+            for(var numClr = 1; numClr <= numColors; numClr++){ //check which color the fill is
+              if(triangle != null){ //first check for triangles
+                if(triangle.getAttribute("fill") == arrayColors[numClr-1])
                 {
-                  var country = countries[typeSquare.getAttribute("fill")];
+                  var country = countryNames[numClr-1];
+                  //9 if else statements for type of event
+                    document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Beginning of war <br>"; //using the color as a key, gets the corresponding country value from countries
+                   }
+                   else if(numType == 1){
+                    document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Conquest, annexation, or union <br>"; 
+                   }
+                   else if(numType == 2){
+                    document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Loss or disaster <br>";
+                   }
+                   else if(numType == 3){
+                    document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Fall of state <br>";
+                   }
+                   else if(numType == 4){
+                    document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Foundation or revolution <br>";
+                   }
+                   else if(numType == 5){
+                    document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Treaty or sundry <br>";
+                   }
+                   else if(numType == 6){
+                    document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Birth of remarkable individual <br>";
+                   }
+                   else if(numType == 7){
+                    document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Deed <br>"; 
+                   }
+                   else if(numType == 8){
+                    document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Death of remarkable individual <br>";
+                   }
+                } //end if triangle.getAttr
+              } //end if triangle != null
+              if(typeSquare.getAttribute("fill") == arrayColors[numClr-1])
+                {
+                  var country = countryNames[numClr-1];
                   //9 if else statements for type of event. to avoid: would be nice to have an added attribute during makeGrid that is eventName
                    if(numType == 0){
                     document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Beginning of war <br>"; //using the color as a key, gets the corresponding country value from countries
                    }
-                   if(numType == 1){
+                   else if(numType == 1){
                     document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Conquest, annexation, or union <br>"; 
                    }
-                   if(numType == 2){
+                   else if(numType == 2){
                     document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Loss or disaster <br>";
                    }
-                   if(numType == 3){
+                   else if(numType == 3){
                     document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Fall of state <br>";
                    }
-                   if(numType == 4){
+                   else if(numType == 4){
                     document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Foundation or revolution <br>";
                    }
-                   if(numType == 5){
+                   else if(numType == 5){
                     document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Treaty or sundry <br>";
                    }
-                   if(numType == 6){
+                   else if(numType == 6){
                     document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Birth of remarkable individual <br>";
                    }
-                   if(numType == 7){
+                   else if(numType == 7){
                     document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Deed <br>"; 
                    }
-                   if(numType == 8){
+                   else if(numType == 8){
                     document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Death of remarkable individual <br>";
                    }
-                }
+                } //end if typeSquare
             } //end for numClr
           } //end for numType
-          startYearID = startYearID + 1;
+          yearID = yearID + 1;
         }
       }
   };
