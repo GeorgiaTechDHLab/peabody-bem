@@ -174,6 +174,9 @@ $( document ).ready(function() { //had to use jquery because my
   /*TODO: allow user add a color square*/
   var addColorSquare = function(colorSquare){
 
+    arrayColors.push("New Country");
+    makeColorPalette(arrayColors.length);
+
   }
 
   /*TODO: allow user to remove color square*/
@@ -181,20 +184,26 @@ $( document ).ready(function() { //had to use jquery because my
 
   }
 
+  /*update the current color based on what user clicks*/
   var updateCurrColor = function(e){
-          // currColor = arrayColors[i];
-        // console.log("currColor: " + currColor);
 
+        //returns the svg element of the color square, <rect>
         if(e.target !== e.currentTarget){
-          var clickedItem = e.target.id;
-          currColor = document.getElementById(clickedItem).getAttribute("fill");
-          console.log("currColor: " + currColor);
+          var clickedItemID = e.target.id; //id= #colorBox[i]
+          currColor = document.getElementById(clickedItemID).getAttribute("fill"); 
+
+          //remove all selection css
+          for (var i=0; i<numColors;i++){
+            document.getElementById("colorBox"+i).removeAttribute("class","selectedColor");
+          }
+          //add new selection css
+          e.target.setAttribute("class","selectedColor");
         }
         e.stopPropagation();
   }
 
   /**dynamic color palette to size according to number of colors*/
-  var makeColorPalette2 = function(numColors){
+  var makeColorPalette = function(numColors){
     var svg = document.createSvg("svg");
     svg.setAttribute("width", "100%");
     svg.setAttribute("height", numColors*60);
@@ -208,7 +217,7 @@ $( document ).ready(function() { //had to use jquery because my
       var colorBox = document.createSvg("rect");
       colorBox.setAttribute("width", "50px");
       colorBox.setAttribute("height", "50px");
-      colorBox.setAttribute("transform", ["translate("  + 0, (60*i)  + ")"]);
+      colorBox.setAttribute("transform", ["translate("  + 5, (60*i)  + ")"]); 
       colorBox.setAttribute("id", "colorBox" + i); //colorbox1, colorbox2, etc
       colorBox.setAttribute("fill", arrayColors[i]);
       console.log(colorBox.getAttribute("id"));
@@ -217,14 +226,21 @@ $( document ).ready(function() { //had to use jquery because my
       var colorPalette = document.querySelector("#colorPalette");
       colorPalette.addEventListener("click", updateCurrColor, false);
 
-      var colorLabel = document.createSvg("text"); //need to add to color box 
-      // colorLabel.setAttribute("text","balrg");
+      // var colorLabelTB = document.createElement("input");
+      // colorLabelTB.setAttribute("type", "text");
+      // colorLabelTB.setAttribute("value", "");
+      // colorLabelTB.setAttribute("name", "Test Name");
+      // colorLabelTB.setAttribute("style", "width:200px");
+
+      /*label for color in palette*/
+      var colorLabel = document.createSvg("text");
       colorLabel.textContent = countryNames[i];
       colorLabel.setAttribute("x","55");
       colorLabel.setAttribute("y","30");
       colorLabel.setAttribute("font-family", "Verdana");
       colorLabel.setAttribute("font-size", "20");
-      colorLabel.setAttribute("transform", ["translate("  + 0, (60*i)  + ")"]);
+      colorLabel.setAttribute("transform", ["translate("  + 5, (60*i)  + ")"]);
+      colorLabel.setAttribute("textAlign","center");
 
 
       colorGroup.setAttribute("id", "colorGroup" + i);
@@ -235,10 +251,9 @@ $( document ).ready(function() { //had to use jquery because my
 
       colorGroup.appendChild(colorBox);
       colorGroup.appendChild(colorLabel);
+            // colorGroup.appendChild(colorLabelTB);
 
       svg.appendChild(colorGroup);
-
-
     }
 
           // <textarea name = "country1" cols="20" rows = "1"></textarea>
@@ -251,7 +266,7 @@ $( document ).ready(function() { //had to use jquery because my
   // var countryNames = ["Spain", "Portugal", "France", "Germany", "Morocco", "Italy"];
 
   function editColorPalette(){
-    countryNames = document.getElementById("listOfCountries").value;
+    // countryNames = document.getElementById("listOfCountries").value;
 
 
   }
@@ -261,156 +276,6 @@ $( document ).ready(function() { //had to use jquery because my
   /*TODO: "show me the chart indication for the example event", function needs to know: country, year, type of event; 
   would to pass "element" variable with state set to changeSquare() method*/
 
-
-
-
-  //color palette is hardcoded, for now, event listeners change currColor
-  var makeColorPalette = function(){
-
-    //svg that contains all of the color squares (and all the space to the right) but not the "Color Palette" title
-    var svg = document.createSvg("svg");
-    svg.setAttribute("width", "300px");
-    svg.setAttribute("height", 6*60);
-
-    var color1 = document.createSvg("rect");
-    color1.setAttribute("width", "50px");
-    color1.setAttribute("height", "50px");
-    color1.setAttribute("x", "5px"); //offset palette squares so selection outline can show
-    color1.setAttribute("y", "5px"); //offset palette squares so selection outline can show
-    color1.setAttribute("fill","#722712");
-    color1.setAttribute("id","color1");
-    color1.addEventListener("click", function(e){{
-      currColor = "#722712";
-      //below doesn't work because type is defined in the makeGrid function, and it needs to be (cannot be defined outside of that function)
-      // type.setAttribute("class","typeSquare"); //class for all type squares 
-
-      //there is probably a better way to do the selectedColor with css, but I couldn't get the selection to stick
-      color2.removeAttribute("class","selectedColor");
-      color3.removeAttribute("class","selectedColor");
-      color4.removeAttribute("class","selectedColor");
-      color5.removeAttribute("class","selectedColor");
-      color6.removeAttribute("class","selectedColor");
-      color1.setAttribute("class","selectedColor");
-
-      console.log("currColor is brick red");
-    }}, false);
-
-    var color2 = document.createSvg("rect");
-    color2.setAttribute("width", "50px");
-    color2.setAttribute("height", "50px");
-    color2.setAttribute("x", "5px");
-    color2.setAttribute("y","65px");
-    color2.setAttribute("fill","#456544");
-    color2.setAttribute("id","color2");
-    color2.addEventListener("click", function(e){{
-      currColor = "#456544";
-      color1.removeAttribute("class","selectedColor");
-      color3.removeAttribute("class","selectedColor");
-      color4.removeAttribute("class","selectedColor");
-      color5.removeAttribute("class","selectedColor");
-      color6.removeAttribute("class","selectedColor");
-
-      color2.setAttribute("class","selectedColor");
-      console.log("currColor is green");
-    }}, false);
-
-    var color3 = document.createSvg("rect");
-    color3.setAttribute("width", "50px");
-    color3.setAttribute("height", "50px");
-    color3.setAttribute("x", "5px");
-    color3.setAttribute("y","125px");
-    color3.setAttribute("fill","#3F6869");
-    color3.setAttribute("id","color3");
-    color3.addEventListener("click", function(e){{
-      currColor = "#3F6869";
-      color1.removeAttribute("class","selectedColor");
-      color2.removeAttribute("class","selectedColor");
-      color4.removeAttribute("class","selectedColor");
-      color5.removeAttribute("class","selectedColor");
-      color6.removeAttribute("class","selectedColor");
-
-      color3.setAttribute("class","selectedColor");     
-      console.log("currColor is blue");
-    }}, false);
-
-    var color4 = document.createSvg("rect");
-    color4.setAttribute("width", "50px");
-    color4.setAttribute("height", "50px");
-    color4.setAttribute("x", "5px");
-    color4.setAttribute("y","185px");
-    color4.setAttribute("fill","#D98634");
-    color4.setAttribute("id","color4");
-    color4.addEventListener("click", function(e){{
-      currColor = "#D98634";
-      color1.removeAttribute("class","selectedColor");
-      color2.removeAttribute("class","selectedColor");
-      color3.removeAttribute("class","selectedColor");
-      color5.removeAttribute("class","selectedColor");
-      color6.removeAttribute("class","selectedColor");
-
-      color4.setAttribute("class","selectedColor");
-      console.log("currColor is yellow");
-    }}, false);
-
-    var color5 = document.createSvg("rect");
-    color5.setAttribute("width", "50px");
-    color5.setAttribute("height", "50px");
-    color5.setAttribute("x", "5px");
-    color5.setAttribute("y","245px");
-    color5.setAttribute("fill","#cd2904");
-    color5.setAttribute("id","color5");
-    color5.addEventListener("click", function(e){{
-      currColor = "#cd2904";
-      color1.removeAttribute("class","selectedColor");
-      color2.removeAttribute("class","selectedColor");
-      color3.removeAttribute("class","selectedColor");
-      color4.removeAttribute("class","selectedColor");
-      color6.removeAttribute("class","selectedColor");
-
-      color5.setAttribute("class","selectedColor");
-
-      console.log("currColor is red");
-    }}, false);
-
-
-    var color6 = document.createSvg("rect");
-    color6.setAttribute("width", "50px");
-    color6.setAttribute("height", "50px");
-    color6.setAttribute("x", "5px");
-    color6.setAttribute("y","305px");
-    color6.setAttribute("fill","#58705f");
-    color6.setAttribute("id","color6");
-    color6.addEventListener("click", function(e){{
-      currColor = "#58705f";
-      color1.removeAttribute("class","selectedColor");
-      color2.removeAttribute("class","selectedColor");
-      color3.removeAttribute("class","selectedColor");
-      color4.removeAttribute("class","selectedColor");
-      color5.removeAttribute("class","selectedColor");
-
-      color6.setAttribute("class","selectedColor");
-
-      console.log("currColor is blue-green");
-    }}, false);
-
-    //TODO: use actual country names
-    countries =  {} //global variable mapping color to country
-    countries[color1.getAttribute("fill")] = "country1"; //adding key/value pairs to countries
-    countries[color2.getAttribute("fill")] = "country2"; 
-    countries[color3.getAttribute("fill")] = "country3"; 
-    countries[color4.getAttribute("fill")] = "country4"; 
-    countries[color5.getAttribute("fill")] = "country5"; 
-    countries[color6.getAttribute("fill")] = "country6"; 
-
-    svg.appendChild(color1);
-    svg.appendChild(color2);
-    svg.appendChild(color3);
-    svg.appendChild(color4);
-    svg.appendChild(color5);
-    svg.appendChild(color6);
-
-    return svg;
-  }
 
   var makeGrid = function(boxesPerSide, size, pixelsPerSide, currYearID){
 
@@ -552,8 +417,7 @@ $( document ).ready(function() { //had to use jquery because my
   container.appendChild(makeGrid(5, 60, 368, 75));
 
   var cpContainer = document.getElementById("colorPalette");
-  // cpContainer.appendChild(makeColorPalette()); //make a color palette with 6 colors
-  cpContainer.appendChild(makeColorPalette2(6)); //make dynamic color palette with 3 colors
+  cpContainer.appendChild(makeColorPalette(6)); //make dynamic color palette with 6 colors
 
   document.getElementById("timelineGen").addEventListener("click", function(){
     document.getElementById("timeline").innerHTML = ""; //clear out any previous timeline
