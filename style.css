@@ -24,6 +24,32 @@ so sometimes the white squares overlap the blue outline because there is no room
 }*/
 
 
+input{
+	border: 1px dotted #ccc; 
+	background: white; 
+	font-family: monospace; 
+	padding: 10px 20px; 
+	font-size: 18px; 
+	margin: 20px 10px 20px 0; 
+	color: red;
+}
+
+input:focus{
+	background-color:yellow;
+	outline: none;
+}
+
+#myRadius {
+	max-width: 35px
+}
+
+form {
+	left: 10px; 
+	top: 10px; 
+	background: transparent;
+}
+
+
 /*styles for showing the selected color in the palette*/
 #color1:hover, #color2:hover, #color3:hover, #color4:hover{
 	outline: 4px solid lightblue;

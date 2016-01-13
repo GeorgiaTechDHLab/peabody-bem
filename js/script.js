@@ -188,7 +188,7 @@ $( document ).ready(function() { //had to use jquery because my
   var updateCurrColor = function(e){
 
         //returns the svg element of the color square, <rect>
-        if(e.target !== e.currentTarget){
+        if(e.target !== e.currentTarget && document.getElementById("colorPaletteSVG")){ //second check is for when color palette isn't there because of updating
           var clickedItemID = e.target.id; //id= #colorBox[i]
           currColor = document.getElementById(clickedItemID).getAttribute("fill"); 
 
@@ -202,17 +202,21 @@ $( document ).ready(function() { //had to use jquery because my
         e.stopPropagation();
   }
 
+
+ var colorGroup;
   /**dynamic color palette to size according to number of colors*/
   var makeColorPalette = function(numColors){
+    console.log(numColors);
     var svg = document.createSvg("svg");
     svg.setAttribute("width", "100%");
     svg.setAttribute("height", numColors*60);
+    svg.setAttribute("id","colorPaletteSVG");
 
 
     for(var i=0; i<numColors;i++){
 
       //group for country color square and its label
-      var colorGroup = document.createSvg("g");
+      colorGroup = document.createSvg("g");
 
       var colorBox = document.createSvg("rect");
       colorBox.setAttribute("width", "50px");
@@ -226,11 +230,12 @@ $( document ).ready(function() { //had to use jquery because my
       var colorPalette = document.querySelector("#colorPalette");
       colorPalette.addEventListener("click", updateCurrColor, false);
 
+      //form labels don't work because they can't be appended to an svg...
       // var colorLabelTB = document.createElement("input");
-      // colorLabelTB.setAttribute("type", "text");
+      // colorLabelTB.type = "text";
       // colorLabelTB.setAttribute("value", "");
-      // colorLabelTB.setAttribute("name", "Test Name");
-      // colorLabelTB.setAttribute("style", "width:200px");
+      // colorLabelTB.name = "Country: ";
+      // colorLabelTB.value = countryNames[i];
 
       /*label for color in palette*/
       var colorLabel = document.createSvg("text");
@@ -255,8 +260,6 @@ $( document ).ready(function() { //had to use jquery because my
 
       svg.appendChild(colorGroup);
     }
-
-          // <textarea name = "country1" cols="20" rows = "1"></textarea>
     return svg;
   }
 
@@ -455,7 +458,8 @@ $( document ).ready(function() { //had to use jquery because my
   container.appendChild(makeGrid(5, 60, 368, 75));
 
   var cpContainer = document.getElementById("colorPalette");
-  cpContainer.appendChild(makeColorPalette(6)); //make dynamic color palette with 6 colors
+  cpContainer.appendChild(makeColorPalette(numColors)); //make dynamic color palette with 6 colors
+
 
   document.getElementById("timelineGen").addEventListener("click", function(){
     document.getElementById("timeline").innerHTML = ""; //clear out any previous timeline
@@ -463,7 +467,17 @@ $( document ).ready(function() { //had to use jquery because my
     generateTimeline(5,25);
     generateTimeline(5,50);
     generateTimeline(5,75);
-});
+  });
 
+  //YOUR LAST PROBLEM WAS THAT NEW ELEMENTS ARE GENERATED BUT NOT APPENDED TO HTML 
+  document.getElementById("addCountryButton").addEventListener("click", function(){
+    // document.getElementById("colorPaletteSVG").removeChild(colorGroup); //this line removes the last colorGroup (square and country label)
+    // if(document.getElementById("colorPaletteSVG")){
+          document.getElementById("colorPaletteSVG").remove(); //this removes the whole svg
+    // }
+    countryNames.push("test");
+    arrayColors.push("blue");
+    makeColorPalette(numColors+1); 
+  });
 
  });
