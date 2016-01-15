@@ -195,6 +195,7 @@ $( document ).ready(function() { //had to use jquery because my
           //remove all selection css
           for (var i=0; i<numColors;i++){
             document.getElementById("colorBox"+i).removeAttribute("class","selectedColor");
+            // document.querySelector("colorBox"+i).classList.remove("selectedColor");
           }
           //add new selection css
           e.target.setAttribute("class","selectedColor");
@@ -207,7 +208,9 @@ $( document ).ready(function() { //had to use jquery because my
   /**dynamic color palette to size according to number of colors*/
   var makeColorPalette = function(numColors){
     console.log(numColors);
-    var svg = document.createSvg("svg");
+    // var svg = document.createSvg("svg"); //no difference between this line 
+    var svgNS = "http://www.w3.org/2000/svg";
+    var svg = document.createElementNS(svgNS, "svg"); //and this line, they both work 
     svg.setAttribute("width", "100%");
     svg.setAttribute("height", numColors*60);
     svg.setAttribute("id","colorPaletteSVG");
@@ -377,7 +380,7 @@ $( document ).ready(function() { //had to use jquery because my
             for(var numClr = 1; numClr <= numColors; numClr++){ //check which color the fill is TODO: first check if fill exists
               if(triangle != null){
                 console.log("triangle present");
-                if(typeSquare.getAttribute("fill") == arrayColors[numClr-1])
+                if(triangle.getAttribute("fill") == arrayColors[numClr-1])
                 {
                   var country = countryNames[numClr-1];
                   //9 if else statements for type of event. to avoid: would be nice to have an added attribute during makeGrid that is eventName
@@ -469,15 +472,27 @@ $( document ).ready(function() { //had to use jquery because my
     generateTimeline(5,75);
   });
 
-  //YOUR LAST PROBLEM WAS THAT NEW ELEMENTS ARE GENERATED BUT NOT APPENDED TO HTML 
   document.getElementById("addCountryButton").addEventListener("click", function(){
     // document.getElementById("colorPaletteSVG").removeChild(colorGroup); //this line removes the last colorGroup (square and country label)
-    // if(document.getElementById("colorPaletteSVG")){
-          document.getElementById("colorPaletteSVG").remove(); //this removes the whole svg
-    // }
-    countryNames.push("test");
+    document.getElementById("colorPaletteSVG").remove(); //this removes the whole svg
+    countryNames.push(document.getElementById("newCountry").value);
     arrayColors.push("blue");
-    makeColorPalette(numColors+1); 
+    numColors++; //increase numColors by 1
+    cpContainer.appendChild(makeColorPalette(numColors)); 
+  });
+
+  document.getElementById("removeCountryButton").addEventListener("click", function(){
+    // document.getElementById("colorPaletteSVG").removeChild(colorGroup); //this line removes the last colorGroup (square and country label)
+    document.getElementById("colorPaletteSVG").remove(); //this removes the whole svg
+
+    //NEED TO: 
+    //account for countryNames.length == 0...then shouldn't remove 
+    //if country name not match, removes from end of array...shouldn't remove at all
+    countryNames.splice(countryNames.indexOf(document.getElementById("removeCountry").value),1);
+    console.log(countryNames);
+    arrayColors.splice(countryNames.indexOf(document.getElementById("removeCountry").value),1);
+    numColors--; //decrease numColors by 1
+    cpContainer.appendChild(makeColorPalette(numColors)); 
   });
 
  });

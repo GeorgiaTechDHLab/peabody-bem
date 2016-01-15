@@ -50,19 +50,16 @@
 				<div id="colorPalette" class="col-md-4">
 					<h2>Color Palette</h2>
 					<form id="editForm">
-						Number of countries:</br>
-						<input type="text" name="numCountries" value="6"><br>
-						List of countries, separated by commas:</br>
-						<input type="text" name="listOfCountries" value="Spain, Portugal, France, Germany, Morocco, Italy">
+						Name of country to add:</br>
+						<input type="text" id="newCountry" value="">
+						<button type = "button" id="addCountryButton" >+</button> <!--need to add type="button" to work inside form  -->
+						<br>
+						Name of country to remove:</br>
+						<input type="text" id="removeCountry" value="">
+						<button type = "button" id="removeCountryButton" >-</button>
 					</form>
-
-				    <form name="myform" onSubmit="return handleClick()">
-				        <input name="Submit"  type="submit" value="Radius" />
-				        <input type="text" id="myRadius" maxlength="" />
-				    </form>
-
-<!-- 					<button id="update" onclick="editColorPalette()">Update</button>
- -->					<button id="addCountryButton">+</button>
+					
+				
 
 				</div>	<!--close col-md-4-->
 				<!--container--> 
