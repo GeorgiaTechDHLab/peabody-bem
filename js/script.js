@@ -5,14 +5,38 @@ $( document ).ready(function() { //had to use jquery because my
     document.getElementById("demo").innerHTML = "Hello World";
   }
 
+
+  //array of colors for 4 color palettes, with 10 colors per array. 
+
+  //this array holds the current array of colors 
+  var arrayColors = ["#722712","#336531","#3F6869","#D98634","#723767","#A34F93","#9FBCBF","#9BCF7A","#CC7172","#CFB47E"];
+
+  var arrayColors1 = ["#722712","#336531","#3F6869","#D98634","#723767","#A34F93","#9FBCBF","#9BCF7A","#CC7172","#CFB47E"];
+
+  var arrayColors2 = ["#195232", "#468966","#FFF0A5","#FFB03B","#B64926","#8E2800","#D1DBBD","#91AA9D","#3E606F","#193441"];
+
+  var arrayColors3 = ["#F9E4AD","#E6B098","#CC4452","#723147","#31152B","#FF7F00","#FFD933","#CCCC52","#8FB259","#253F4A"];
+
+  var arrayColors4 = ["#BAB293","#A39770","#EFE4BD","#A32500","#643738","#D5FBFF","#9FBCBF","#647678","#2F3738","#59D8E5"];
+
+  //array of country names, if more colors and country added, new country gets next color
+  //more countryNames than colors get assigned black
+  var countryNames = ["Spain", "Portugal", "France", "Germany", "Morocco", "Italy"];
+
+  //10 country names
+  // var countryNames = ["Spain", "Portugal", "France", "Germany", "Morocco", "Italy", "Mordor", "Rivendel", "Shire", "Hogsmeade"];
+
   //the number of colors/countries represented
-  var numColors = 6;
+  var numColors = countryNames.length;
 
    //currColor will be to hold whatever color the user squareState on to use
   var currColor = "#722712";
 
   //prevColor will hold whatever the previous color of the square was
   var prevColor = "";
+
+ //variable that holds the color square and the country label together
+ var colorGroup;
 
   //squareState keeps track of the current state of the square (whether it is empty, solid, split)
   var squareState;
@@ -153,34 +177,8 @@ $( document ).ready(function() { //had to use jquery because my
   };
 
 
-  /*TODO: attach label to each color square*/
-
-
-  /*TODO: allow user to customize each label for each color square */
-  var customizeLabel = function(countryLabel){
-
-  }
-
-  //array of colors, eventually needs to be manipulable by user
-  var arrayColors = ["#722712","#456544","#3F6869","#D98634","#cd2904","#58705f"];
-  //array of country names, eventually needs to be manipulable by user
-  var countryNames = ["Spain", "Portugal", "France", "Germany", "Morocco", "Italy"];
-
   /*TODO: allow user to change color for each square */
   var changeSquareColor = function(){
-
-  }
-
-  /*TODO: allow user add a color square*/
-  var addColorSquare = function(colorSquare){
-
-    arrayColors.push("New Country");
-    makeColorPalette(arrayColors.length);
-
-  }
-
-  /*TODO: allow user to remove color square*/
-  var removeColorSquare = function(colorSquare){
 
   }
 
@@ -195,7 +193,6 @@ $( document ).ready(function() { //had to use jquery because my
           //remove all selection css
           for (var i=0; i<numColors;i++){
             document.getElementById("colorBox"+i).removeAttribute("class","selectedColor");
-            // document.querySelector("colorBox"+i).classList.remove("selectedColor");
           }
           //add new selection css
           e.target.setAttribute("class","selectedColor");
@@ -204,7 +201,6 @@ $( document ).ready(function() { //had to use jquery because my
   }
 
 
- var colorGroup;
   /**dynamic color palette to size according to number of colors*/
   var makeColorPalette = function(numColors){
     console.log(numColors);
@@ -234,11 +230,6 @@ $( document ).ready(function() { //had to use jquery because my
       colorPalette.addEventListener("click", updateCurrColor, false);
 
       //form labels don't work because they can't be appended to an svg...
-      // var colorLabelTB = document.createElement("input");
-      // colorLabelTB.type = "text";
-      // colorLabelTB.setAttribute("value", "");
-      // colorLabelTB.name = "Country: ";
-      // colorLabelTB.value = countryNames[i];
 
       /*label for color in palette*/
       var colorLabel = document.createSvg("text");
@@ -254,28 +245,15 @@ $( document ).ready(function() { //had to use jquery because my
       colorGroup.setAttribute("id", "colorGroup" + i);
       colorGroup.setAttribute("width", "250px");
 
-      // var removeButton = document.createElementNS("button","-");
-      // colorGroup.appendChild(removeButton);
-
       colorGroup.appendChild(colorBox);
       colorGroup.appendChild(colorLabel);
-            // colorGroup.appendChild(colorLabelTB);
 
       svg.appendChild(colorGroup);
     }
     return svg;
   }
 
-  // //array of colors, eventually needs to be manipulable by user
-  // var arrayColors = ["#722712","#456544","#3F6869","#D98634","#cd2904","#58705f"];
-  // //array of country names, eventually needs to be manipulable by user
-  // var countryNames = ["Spain", "Portugal", "France", "Germany", "Morocco", "Italy"];
 
-  function editColorPalette(){
-    // countryNames = document.getElementById("listOfCountries").value;
-
-
-  }
 
 
 
@@ -452,18 +430,23 @@ $( document ).ready(function() { //had to use jquery because my
       }
   };
   
+/*******************************************INITIALIZE PAGE**********************************************/
 
-
+  /*draw the 100x100 grid*/
   var container = document.getElementById("gridContainer");
   container.appendChild(makeGrid(5, 60, 368, 0)); //makes one 5x5 quadrant with boxes 60 px wide inside a 368x368 viewport //was 340 & then 350 
   container.appendChild(makeGrid(5, 60, 368, 25));
   container.appendChild(makeGrid(5, 60, 368, 50));
   container.appendChild(makeGrid(5, 60, 368, 75));
 
+  /*add the color palette to the page*/
   var cpContainer = document.getElementById("colorPalette");
   cpContainer.appendChild(makeColorPalette(numColors)); //make dynamic color palette with 6 colors
 
 
+/*******************************************EVENT LISTENERS**********************************************/
+
+  /*aevent listener to generate timeline from chart*/
   document.getElementById("timelineGen").addEventListener("click", function(){
     document.getElementById("timeline").innerHTML = ""; //clear out any previous timeline
     generateTimeline(5,0);
@@ -472,27 +455,100 @@ $( document ).ready(function() { //had to use jquery because my
     generateTimeline(5,75);
   });
 
+  /*event listener to allow user to add country*/
   document.getElementById("addCountryButton").addEventListener("click", function(){
-    // document.getElementById("colorPaletteSVG").removeChild(colorGroup); //this line removes the last colorGroup (square and country label)
-    document.getElementById("colorPaletteSVG").remove(); //this removes the whole svg
-    countryNames.push(document.getElementById("newCountry").value);
-    arrayColors.push("blue");
-    numColors++; //increase numColors by 1
-    cpContainer.appendChild(makeColorPalette(numColors)); 
+    //numColors cannot go above 10, because of number of colors in each color palette
+    if(numColors < 10){
+      document.getElementById("colorPaletteSVG").remove(); //this removes the whole svg
+      countryNames.push(document.getElementById("newCountry").value);
+      arrayColors.push("blue");
+      numColors++; //increase numColors by 1
+      cpContainer.appendChild(makeColorPalette(numColors)); 
+      document.getElementById("newCountry").value = ""; //reset input box
+    }else{
+      alert("You can't add more than 10 countries.");
+    }
+
   });
 
+  /*event listener to allow user to remove country*/
   document.getElementById("removeCountryButton").addEventListener("click", function(){
     // document.getElementById("colorPaletteSVG").removeChild(colorGroup); //this line removes the last colorGroup (square and country label)
-    document.getElementById("colorPaletteSVG").remove(); //this removes the whole svg
+      var country = document.getElementById("removeCountry").value;
+      if(countryNames.indexOf(country) >= 0){ //check if the country is actually in the array 
+        document.getElementById("colorPaletteSVG").remove(); //this removes the whole svg
 
-    //NEED TO: 
-    //account for countryNames.length == 0...then shouldn't remove 
-    //if country name not match, removes from end of array...shouldn't remove at all
-    countryNames.splice(countryNames.indexOf(document.getElementById("removeCountry").value),1);
-    console.log(countryNames);
-    arrayColors.splice(countryNames.indexOf(document.getElementById("removeCountry").value),1);
-    numColors--; //decrease numColors by 1
-    cpContainer.appendChild(makeColorPalette(numColors)); 
+        countryNames.splice(countryNames.indexOf(country),1);
+        console.log(countryNames);
+        arrayColors.splice(countryNames.indexOf(country),1);
+        numColors--; //decrease numColors by 1
+        cpContainer.appendChild(makeColorPalette(numColors)); 
+        document.getElementById("removeCountry").value = ""; //reset input box
+      }else{
+        document.getElementById("removeCountry").value = ""; //reset input box
+        console.log("no country to remove");
+        alert("There is no country by this name to remove.");
+      }
   });
 
- });
+  /*event listener to allow user to remove all countries at once*/
+  document.getElementById("removeAllCountriesButton").addEventListener("click", function(){
+    document.getElementById("colorPaletteSVG").remove(); //this removes the whole svg
+
+    console.log("in");
+    countryNames.length = 0; //empty array 
+    numColors = 0; 
+    cpContainer.appendChild(makeColorPalette(0)); 
+  });
+
+
+  /*event listener to listen to changing color scheme*/
+  document.getElementById("editForm").addEventListener("click", function(){
+    console.log("changing color schemes");
+    document.getElementById("colorPaletteSVG").remove(); //this removes the whole svg
+
+    var cpNum = getRadioVal();
+
+    if(cpNum == 1){
+      arrayColors = arrayColors1;
+    }else if(cpNum == 2){
+      arrayColors = arrayColors2;
+    }else if(cpNum == 3){
+      arrayColors = arrayColors3;
+    }else if(cpNum == 4){
+      arrayColors = arrayColors4;
+    }
+    cpContainer.appendChild(makeColorPalette(numColors));
+
+
+  })
+
+  //for switching color palettes
+  function getRadioVal() {
+    var val;
+    // get list of radio buttons with specified name
+    // var radios = form.elements[name];
+    var radios = [];
+
+    //8 is num colors
+    for (var i=1; i<5; i++){
+          radios.push(document.getElementById("g"+i));
+
+    }
+    // loop through list of radio buttons
+    for (var i=0, len=radios.length; i<len; i++) {
+        if ( radios[i].checked ) { // radio checked?
+            val = radios[i].value; // if so, hold its value in val
+            break; // and break out of for loop
+        }
+    }
+    console.log(val);
+    return val; // return value of checked radio or undefined if none checked
+  }
+
+
+
+/**************************************END EVENT LISTENERS**********************************************/
+
+
+});
