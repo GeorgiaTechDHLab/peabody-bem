@@ -49,17 +49,45 @@
 			<div class="row">
 				<div id="colorPalette" class="col-md-4">
 					<h2>Color Palette</h2>
-					<form id="editForm">
-						Name of country to add:</br>
-						<input type="text" id="newCountry" value="">
-						<button type = "button" id="addCountryButton" >+</button> <!--need to add type="button" to work inside form  -->
-						<br>
-						Name of country to remove:</br>
-						<input type="text" id="removeCountry" value="">
-						<button type = "button" id="removeCountryButton" >-</button>
-					</form>
-					
-				
+
+					<div class="panel-group-cp" id="accordion" role="tablist" aria-multiselectable="true">
+					  <div class="panel panel-default">
+					    <div class="panel-heading" role="tab" id="headingOne">
+					      <h4 class="panel-title">
+					        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+					          Customize Color Palette
+					        </a>
+					      </h4>
+					    </div>
+					    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+					      <div class="panel-body">
+
+							<form id="editForm">
+								<p>Instructions: Add up to 10 countries.</p>
+								Name of country to add:</br>
+								<input type="text" id="newCountry" value="">
+								<button type = "button" id="addCountryButton" >+</button> <!--need to add type="button" to work inside form  -->
+								<br>
+								Name of country to remove:</br>
+								<input type="text" id="removeCountry" value="">
+								<button type = "button" id="removeCountryButton" >-</button><br><br>
+								<button type = "button" id="removeAllCountriesButton" >Remove all countries</button><br><br>
+								Select color scheme: 
+								<fieldset id="cpRadio" name="argh">
+								  <p><label for="g1"><input type="radio" name="cpOptions" id="g1" value="1" checked> 1</label></p>
+								  <p><label for="g2"><input type="radio" name="cpOptions" id="g2" value="2"> 2</label></p>
+								  <p><label for="g3"><input type="radio" name="cpOptions" id="g3" value="3"> 3</label></p>
+								  <p><label for="g4"><input type="radio" name="cpOptions" id="g4" value="4"> 4</label></p>
+								  <!--<p><label for="g5"><input type="radio" name="cpOptions" id="g5" value="5"> 5</label></p>
+								  <p><label for="g6"><input type="radio" name="cpOptions" id="g6" value="6"> 6</label></p>
+								  <p><label for="g7"><input type="radio" name="cpOptions" id="g7" value="7"> 7</label></p>-->
+								</fieldset>
+							</form>
+
+					      </div>
+					    </div>
+					  </div>
+					</div>
 
 				</div>	<!--close col-md-4-->
 				<!--container--> 
