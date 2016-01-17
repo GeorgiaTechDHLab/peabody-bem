@@ -1,3 +1,6 @@
+
+/*for showing which square is being hovered*/
+/*TODO: when hovering, show the next state of the square/the state the square will be if clicked*/
 .typeSquare:hover{
 
 /*background does not work because the squares are rectangles with a white fill, created in javascript, there is no background*/
@@ -19,10 +22,29 @@ so sometimes the white squares overlap the blue outline because there is no room
 	fill: gray;
 }
 
-/*.typeSquareRed:hover{
-	fill: #722712;
-}*/
 
+/*http://bl.ocks.org/eesur/9936606, for color palette customization*/
+input{
+	border: 1px dotted #ccc; 
+	background: white; 
+	font-family: monospace; 
+	padding: 10px 20px; 
+	font-size: 18px; 
+	margin: 20px 10px 20px 0; 
+	color: red;
+}
+
+input:focus{
+	background-color:yellow;
+	outline: none;
+}
+
+form {
+	left: 10px; 
+	top: 10px; 
+	background: transparent;
+}
+/*end color palette customization*/
 
 /*styles for showing the selected color in the palette*/
 #color1:hover, #color2:hover, #color3:hover, #color4:hover{
@@ -35,13 +57,12 @@ so sometimes the white squares overlap the blue outline because there is no room
 /*	outline-style: double;
 */}
 
+/*for the table showing the types of events*/
 #typeReference table, th, td{
 	border: 1px solid black;
 }
 
 #typeReference td {
-/*    height: 50px;
-*/  
 	vertical-align: center;
 	text-align: center;
 }
