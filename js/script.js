@@ -606,14 +606,20 @@ $( document ).ready(function() { //had to use jquery because my
       eventsTitleBox.value = userTitle;
       eventsTitleBox.id = "userTitleInput";
 
+      var paragraph = document.createElement("p");
+      var t = document.createTextNode("Give your events a title:");
+      paragraph.appendChild(t);
+      paragraph.id = "giveTitle";
+
+
       /*recreate form for user*/
       document.getElementById("instructionsOrTitle").innerHTML = "Type or paste your own list of events.";
       document.getElementById("customEventsContainer").appendChild(userEventsInput); //re-add textarea with user input
+      document.getElementById("titleInstruct").appendChild(paragraph); //add instructions to give title
       document.getElementById("titleInstruct").appendChild(eventsTitleBox); //add textbox to change title
-      document.getElementById("eventsList").innerHTML = "";
-
-      /*replace*/
-      document.getElementById("buttonContainer").appendChild(testButton);
+      document.getElementById("eventsList").innerHTML = ""; //clear the list of events
+      
+      document.getElementById("buttonContainer").appendChild(testButton); //replace the button
     })
 
     /*remove the form elements*/
@@ -624,7 +630,7 @@ $( document ).ready(function() { //had to use jquery because my
       document.getElementById("giveTitle").remove(); //div to hold text "Give your events a title:"
     }
     document.getElementById("userTitleInput").remove(); //input box for user to add title
-    
+
     /*add new elements*/
     document.getElementById("instructionsOrTitle").innerHTML = userTitle; //replace instructions with user given title
     document.getElementById("eventsList").innerHTML = userEvents; //make list of events part of page, non-editable
