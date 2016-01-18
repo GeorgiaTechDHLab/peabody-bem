@@ -1,0 +1,12 @@
+body {
+  background: transparent;  
+}
+
+.content {
+  overflow: visible;
+  position: relative;
+  width: auto;
+  margin-left: 0;
+  min-height: auto;
+  padding: inherit;
+}
