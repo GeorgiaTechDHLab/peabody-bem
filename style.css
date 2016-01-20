@@ -39,11 +39,26 @@ input:focus{
 	outline: none;
 }
 
-form {
+/*styling for add/remove country*/
+#editForm{
 	left: 10px; 
 	top: 10px; 
 	background: transparent;
 }
+
+/*styling for add custom events*/
+#customEventsForm{
+	left: 10px; 
+	top: 10px; 
+	background: transparent;
+}
+
+#userEventsInput{
+	height:500px;
+	width: 100%;
+
+}
+
 /*end color palette customization*/
 
 /*styles for showing the selected color in the palette*/

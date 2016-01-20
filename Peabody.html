@@ -5,10 +5,17 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" href="style.css">
 		<link rel="stylesheet" href="css/svg-style.css">
+		<script src = "js/jquery-1.11.3.min.js"></script>
  		<script src = "js/d3.min.js"></script>
  		<script src="js/script.js" type="text/javascript"></script>
- 		<script src="js/script.js" type="text/javascript"></script>
  		<script src="js/bootstrap.min.js" type="text/javascript"></script>
+
+		<!--adding TinyMCE
+  		<link rel='stylesheet prefetch' href='http://fast.fonts.net/cssapi/e6dc9b99-64fe-4292-ad98-6974f93cd2a2.css'>
+	    <link rel='stylesheet prefetch' href='http://www.tinymce.com/css/common.min.css'>
+	    <link rel='stylesheet prefetch' href='http://www.tinymce.com/css/docs.min.css'>
+	    <link rel="stylesheet" href="TinyMCEtest.css">-->
+
  		<link rel = "stylesheet" href = "css/bootstrap.min.css">
 	    <link href='http://fonts.googleapis.com/css?family=Oswald:400,700,300|Open+Sans:400,600' rel='stylesheet' type='text/css'>
 	    <script src = "js/respond.min.js"></script>
@@ -134,7 +141,15 @@
 					    </div>
 					    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
 					      <div class="panel-body">
-					        Not sure how to do this yet
+					      	<form id="customEventsForm">
+						        <p id="instructionsOrTitle">Type or paste your own list of events.</p> 
+						        <div id="customEventsContainer"><textarea id="userEventsInput" value=""></textarea></div>
+						        <div id="titleInstruct"><p id="giveTitle">Give your events a title:</p></div>
+								<input type="text" id="userTitleInput" value="">
+								<p id="eventsList"></p><!--where the events go once added -->
+								<!--either the "add" button or the "edit button" or the "update button"-->
+								<div id="buttonContainer"><button type = "button" id="addEvents" >Add</button></div>
+							</form>
 					      </div>
 					    </div>
 					  </div>
@@ -174,5 +189,10 @@
 		</div>
 
 		</svg>
+
+	<!--adding TinyMCE-->
+    <!--<script src='http://cdn.tinymce.com/4/tinymce.min.js'></script>
+        <script src="TinyMCEtest.js"></script>-->
+
 	</body>
 </html>
