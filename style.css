@@ -81,3 +81,9 @@ input:focus{
 	vertical-align: center;
 	text-align: center;
 }
+
+.axis line, .axis path { /* timeline axis */
+	fill: none;
+	stroke: black;
+
+}
