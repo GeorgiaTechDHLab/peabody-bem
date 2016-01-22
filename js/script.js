@@ -467,7 +467,8 @@ $( document ).ready(function() { //had to use jquery because my
 
   /*aevent listener to generate timeline from chart*/
   document.getElementById("timelineGen").addEventListener("click", function(){
-    var margin= {top:20, bottom:20, right:20, left:10};
+    var margin= {top:20, bottom:20, right:50, left:10};
+
     document.getElementById("timelineViz").innerHTML = ""; //clear out any previous timeline
     //dataArr is the combined array of all the arrays returned from calling generateTimeline on all 4 quadrants
     var dataArr = generateTimeline(5,0).concat(generateTimeline(5,25).concat(generateTimeline(5,50).concat(generateTimeline(5,75))));
@@ -479,34 +480,58 @@ $( document ).ready(function() { //had to use jquery because my
                   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     var xScale = d3.scale.linear()
-                  .domain([0, 100])
+                  .domain([0, 100]) //this would need to be user input
                   .range([0,document.getElementById("timelineContainer").offsetWidth - margin.right])
 
     var xAxis = d3.svg.axis()
                   .scale(xScale)
-                  .orient("bottom");
+                  .orient("bottom")
+                  .ticks(100)
+                  .tickFormat(function(d) { //dont display text unless it's an even decade
+                    if((d % 10) != 0){ 
+                        return ("");
+                    }else{ 
+                        return (d);
+                    }});
 
-    var xGuide = canvas.append('g') //TODO: stroke and ticks
+    var xGuide = canvas.append('g')
                   .attr("transform", "translate(" + margin.left + "," + (margin.top + margin.bottom) + ")")
+                  .attr("class","axis")
+                  .style("stroke-width",2)
                   .call(xAxis);
 
-    timeline.selectAll("circle") //TODO: handle overlaps & spacing
+    d3.selectAll("g.axis g.tick") //g.tick is the value of the tick
+      .style("stroke-width", function(d,i){
+        if(i%10 === 0)
+          return 2;
+        else
+          return 1;
+      });
+
+      d3.selectAll("g.axis g.tick line") //g.tick line is the actual tick mark
+      .attr("y2", function(d,i){
+        if(i%10 === 0)
+          return 10;
+        else
+          return 5;
+      });
+
+    timeline.selectAll("circle")
       .data(dataArr)
       .enter()
       .append("circle")
       .attr("cx",function(d){return xScale(+d.year)})
-      .attr("cy", 10)
+      .attr("cy", 12)
       .attr("r", 5)
       .attr("fill", function(d){return d.color});
 
-    timeline.selectAll("text") //TODO: rotate position
+    timeline.selectAll("text") //TODO: rotate position to handle overlaps
       .data(dataArr)
       .enter()
       .append("text")
       .text(function(d){return d.text})
       .attr("x",function(d){return xScale(+d.year)})
-      .attr("y",10);
-
+      .attr("y",5);
 
   });
 
