@@ -10,7 +10,8 @@ $( document ).ready(function() { //had to use jquery because my
   //array of colors for 4 color palettes, with 10 colors per array. 
 
   //this array holds the current array of colors 
-  var arrayColors = ["#722712","#336531","#3F6869","#D98634","#723767","#A34F93","#9FBCBF","#9BCF7A","#CC7172","#CFB47E"];
+  var arrayColors = ["#720042", "#BA390B", "#6EA2A3", "#336531","#D98634","#A34F93","#9FBCBF","#9BCF7A","#CC7172","#CFB47E"]
+  // var arrayColors = ["#723767","#722712","#3F6869","#336531","#D98634","#A34F93","#9FBCBF","#9BCF7A","#CC7172","#CFB47E"];
 
   var arrayColors1 = ["#722712","#336531","#3F6869","#D98634","#723767","#A34F93","#9FBCBF","#9BCF7A","#CC7172","#CFB47E"];
 
@@ -22,7 +23,8 @@ $( document ).ready(function() { //had to use jquery because my
 
   //array of country names, if more colors and country added, new country gets next color
   //more countryNames than colors get assigned black
-  var countryNames = ["Spain", "Portugal", "France", "Germany", "Morocco", "Italy"];
+  var countryNames = ["England", "Spain", "France"]; //countries for sample list
+  // var countryNames = ["England", "Spain", "France", "Germany", "Morocco", "Italy"];
 
   //10 country names
   // var countryNames = ["Spain", "Portugal", "France", "Germany", "Morocco", "Italy", "Mordor", "Rivendel", "Shire", "Hogsmeade"];
@@ -125,6 +127,7 @@ $( document ).ready(function() { //had to use jquery because my
       var triRemoved = document.getElementById("tri"+element.getAttribute("id"));
       element.parentNode.removeChild(triRemoved);
 
+
       /*set up second triangle to be opposite of previous triangle*/
       var pts =  "0,0 " + w + ",0" + " " + w + "," + w; //create a string of the triangle's coordinates
       triangle2.setAttribute("id", "tri"+element.getAttribute("id")); //give id, format is "tritype#year#"
@@ -177,11 +180,6 @@ $( document ).ready(function() { //had to use jquery because my
         return this.createElementNS(svgNS, tagName);
   };
 
-
-  /*TODO: allow user to change color for each square */
-  var changeSquareColor = function(){
-
-  }
 
   /*update the current color based on what user clicks*/
   var updateCurrColor = function(e){
@@ -307,7 +305,7 @@ $( document ).ready(function() { //had to use jquery because my
             "click",
             function(e){
                 {
-                    changeSquare(e.target); //the target is the individual type box
+                    changeSquare(e.target); //e.target is the rect object, where id="type#year#" and class="typeSquare"
                 }
             },
              false);
@@ -631,7 +629,7 @@ $( document ).ready(function() { //had to use jquery because my
   var userTitle; //holds user input title 
   var editButton; //new button to trigger switch from view to form 
 
-  /*event listener to add custom events, switches from form to view*/
+  /*event listener to add custom events, switches from form to view, unnecessary with inline text editor */
   document.getElementById("addEvents").addEventListener("click", function(){
 
     /*create custom events list from user input*/
@@ -697,13 +695,52 @@ $( document ).ready(function() { //had to use jquery because my
 
   })
 
-  /*event listener to edit custom events, switches from view to form*/
-  // document.getElementById("editEvents").addEventListener("click", function(){
 
 
+  /*"show me" feature for the sample list of events*/
+  var theParent = document.querySelector("#sampleList");
+  theParent.addEventListener("click", doSomething, false);
 
-  // })
+  function doSomething(e){
+    if(e.target !== e.currentTarget){
+      var clickedItem = e.target.id;
+      console.log(clickedItem);
 
+      var fillSquareParam = clickedItem.split('_'); //split the id into country and type to fill correct square with correct color
+
+      var country = fillSquareParam[0];
+      var typeSquareID = fillSquareParam[1];
+
+      console.log("typeSquareID: " + typeSquareID);
+      console.log("country: " + country);
+
+      var square = document.getElementById(typeSquareID);
+
+      if(clickedItem == "special"){
+        console.log("special");
+        //year 65, so id year64
+        //type 0 is spain
+        //type 1 is split between spain/england
+        //type 2 is France
+        //type 4 & 7 are Spain
+        document.getElementById("type0year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
+        document.getElementById("type1year64").setAttribute("fill", arrayColors[countryNames.indexOf("France")]);
+        document.getElementById("type2year64").setAttribute("fill", arrayColors[countryNames.indexOf("France")]);
+        document.getElementById("type4year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
+        document.getElementById("type7year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
+
+
+        document.getElementById("type1year64").setAttribute("squareState","1");
+        changeSquare(document.getElementById("type1year64"));
+        document.getElementById("type1year64").setAttribute("squareState","2");
+        changeSquare(document.getElementById("type1year64"));
+
+      }else{
+        square.setAttribute("fill",arrayColors[countryNames.indexOf(country)]);
+
+      }
+    }
+  }
 
 
 

@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
-	<head>
+<!--  <html class = "content"> 
+ --><!--from tinymce, changes style of whole page-->
+ 		<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" href="style.css">
@@ -10,11 +12,13 @@
  		<script src="js/script.js" type="text/javascript"></script>
  		<script src="js/bootstrap.min.js" type="text/javascript"></script>
 
-		<!--adding TinyMCE
-  		<link rel='stylesheet prefetch' href='http://fast.fonts.net/cssapi/e6dc9b99-64fe-4292-ad98-6974f93cd2a2.css'>
+		<!--adding TinyMCE-->
+	    <link rel='stylesheet prefetch' href='http://fast.fonts.net/cssapi/e6dc9b99-64fe-4292-ad98-6974f93cd2a2.css'>
 	    <link rel='stylesheet prefetch' href='http://www.tinymce.com/css/common.min.css'>
 	    <link rel='stylesheet prefetch' href='http://www.tinymce.com/css/docs.min.css'>
-	    <link rel="stylesheet" href="TinyMCEtest.css">-->
+
+	    <link rel="stylesheet" href="TinyMCEtest.css">
+
 
  		<link rel = "stylesheet" href = "css/bootstrap.min.css">
 	    <link href='http://fonts.googleapis.com/css?family=Oswald:400,700,300|Open+Sans:400,600' rel='stylesheet' type='text/css'>
@@ -121,12 +125,27 @@
 					        </a>
 					      </h4>
 					    </div>
-					    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+					    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
 					      <div class="panel-body">
-					        <ol>
-					        	<li>1501. Henry VII. grants patent for colonizing America. (Show me on chart **TODO). </li>
-					        	<li>1512. Ponce de Leon discovers Florida. (Show me on chart). </li>
-					        	<li>1517. Sebastian Cabot's last voyage in the English service. (Show me on chart). </li>
+					        <ol id="sampleList">
+					        	<li>1501. Henry VII. grants patent for colonizing America. <em>To represent this event, the 6th subdivision of the square on the upper left hand is painted purple, which is the color for England.</em><button class="England" id="England_type5year0">Show Me</button></li>
+								<li>1512. Ponce de Leon discovers Florida. <em>Eighth subdivision of the twelfth square is brick red for Spain.</em><button id="Spain_type7year11">Show Me</button></li>
+								<li>1517. Sebastian Cabot's last voyage in the English service. <em>Eighth subdivision, purple.</em><button id="England_type7year16">Show Me</button></li>
+								<li>1520. Vasquez de Ayllon’s Piracy on Chicora. <em>Eighth, brick red.</em><button id="Spain_type7year19">Show Me</button> </li>
+								<li>1523. Verrazzani explores American coasts for France. <em>Eighth subdivision, blue, for France.</em><button id="France_type7year22">Show Me</button></li>
+								<li>1525. Stephen Gomez tries to discover North West Passage to India for Spain. <em>Eighth subdivision, brick red.</em><button id="Spain_type7year24">Show Me</button></li>
+								<li>1526. Pamphilo de Narvaez attempts to conquer Florida. <em>Eighth, brick red.</em><button id="Spain_type7year25">Show Me</button></li>
+								<li>1534. James Cartier discovers River St. Lawrence. <em>Eighth, blue. </em><button id="France_type7year33">Show Me</button></li>
+								<li>1537. Ferdinand de Soto attempts to conquer Florida. <em>Eighth, brick red.</em><button id="Spain_type7year36">Show Me</button></li>
+								<li>1540. Roberval and Cartier try in vain to colonize Canada. <em>Eighth, blue. </em><button id="France_type7year39">Show Me</button></li>
+								<li>1542. Ferdinand de Soto dies on the Mississippi. <em>Ninth, brick red. </em><button id="Spain_type8year41">Show Me</button></li>
+								<li>1562. Coligny sends a Huguenot Colony to America. <em>Eighth, blue.</em><button id="France_type7year61">Show Me</button></li>
+								<li>1565. St. Augustine, founded by the Spanish Melendez, who conquers the French colony. <em>First and upper half of second, brick red, to represent the conquering Spaniards; also, fifth to represent the foundation of St. Augustine; and eighth, the deed of Melendez, a remarkable person. Blue in the lower half of the second, and in the third, to represent French loss. </em><button id="special">Show Me</button></li>
+								<li>1576. Martin Frobisher renews English Explorations. <em>Eighth, purple.</em><button id="England_type7year75">Show Me</button></li>
+								<li>1578. Sir Humphrey Gilbert’s Voyage and Death. <em>Eighth, purple.</em><button id="England_type7year77">Show Me</button></li>
+								<li>1579. Sir Francis Drake discovers Oregon, and names it New Albion. <em>Eighth, purple.</em><button id="England_type7year78">Show Me</button></li>
+								<li>1584. Sir Walter Raleigh gets patent to colonize. <em>Eighth, purple.</em><button id="England_type7year83">Show Me</button></li>
+								<li>1585. Sir W. R.’s unsuccessful colony at Roanoke, carried out by Sir Richard Grenville. <em>Eighth, purple.</em><button id="England_type7year84">Show Me</button></li>
 					        </ol>
 					      </div>
 					    </div>
@@ -150,6 +169,21 @@
 								<!--either the "add" button or the "edit button" or the "update button"-->
 								<div id="buttonContainer"><button type = "button" id="addEvents" >Add</button></div>
 							</form>
+					      </div>
+					    </div>
+					  </div>
+
+					  <div class="panel panel-default">
+					    <div class="panel-heading" role="tab" id="headingThree">
+					      <h4 class="panel-title editable">
+					        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+					          Testing TinyMCE
+					        </a>
+					      </h4>
+					    </div>
+					    <div id="collapseFour" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFour">
+					      <div class="panel-body editable" id="rar">
+					      	<p>body</p>
 					      </div>
 					    </div>
 					  </div>
@@ -186,8 +220,9 @@
 		</svg>
 
 	<!--adding TinyMCE-->
-    <!--<script src='http://cdn.tinymce.com/4/tinymce.min.js'></script>
-        <script src="TinyMCEtest.js"></script>-->
+    <script src='http://cdn.tinymce.com/4/tinymce.min.js'></script>
+
+        <script src="TinyMCEtest.js"></script>
 
 	</body>
 </html>
