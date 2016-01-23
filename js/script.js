@@ -278,11 +278,11 @@ $( document ).ready(function() { //had to use jquery because my
 
     //"physical" bg element, this goes on top of "maing", a little redundant but think of it as the physical object in the container
     var bg = document.createSvg("rect");
-    var sizeBG = (size * boxesPerSide) + 18;
+    var sizeBG = (pixelsPerSide);
     bg.setAttribute("id","bg");
     bg.setAttribute("width", sizeBG + 50);
     bg.setAttribute("height", sizeBG + 50);
-    bg.setAttribute("fill","black");
+    bg.setAttribute("fill","black"); //TODO: do this in css file?
     bg.setAttribute("fill-opacity",".1");
 
     //append maing to svg
@@ -322,16 +322,16 @@ $( document ).ready(function() { //had to use jquery because my
             type.setAttribute("fill", "white");
             type.setAttribute("squareState","0");
 
-            //0,1,2 are type boxes on row 1
+            //0,1,2 are type boxes on the first row
             if(numType == 0 || numType == 1 || numType == 2){
-                                                              //+1 to create margins on the left, 20 and +20 to move squares down
-              type.setAttribute("transform", ["translate(" + (numType + 1) * size/3,20 + ")"]); //moves individual type square
+                                                              
+              type.setAttribute("transform", ["translate(" + ((numType + 1) * size/3 + numType),20 + ")"]); //moves individual type square
             }
             else if(numType == 3 || numType == 4 || numType == 5){
-                type.setAttribute("transform", ["translate(" + (numType-3 + 1) * size/3,size/3 + 20 + ")"]);
+                type.setAttribute("transform", ["translate(" + ((numType-3 + 1) * size/3 + (numType-3)),size/3 + 21 + ")"]); //extra 1 for a 1 pixel space between row above
             }
             else if(numType == 6 || numType == 7 || numType == 8){
-                type.setAttribute("transform", ["translate(" + (numType-6 + 1) * size/3,2*(size/3) + 20 +")"]);
+                type.setAttribute("transform", ["translate(" + ((numType-6 + 1) * (size/3) + (numType-6)),2*(size/3) + 22 +")"]);
             }
 
           } //end for loop
@@ -402,7 +402,9 @@ $( document ).ready(function() { //had to use jquery because my
                 {
                   var country = countryNames[numClr-1];
                   //9 if else statements for type of event. to avoid: would be nice to have an added attribute during makeGrid that is eventName
+                   console.log(typeSquare);
                    if(numType == 0){
+                    console.log(typeSquare);
                     timelineDataPts.push({year: yearID, color: arrayColors[numClr-1], text: country + ": Beginning of war"});
                     //document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Beginning of war <br>"; //using the color as a key, gets the corresponding country value from countries
                    }
@@ -451,10 +453,7 @@ $( document ).ready(function() { //had to use jquery because my
 
   /*draw the 100x100 grid*/
   var container = document.getElementById("gridContainer");
-  container.appendChild(makeGrid(5, 60, 368, 0)); //makes one 5x5 quadrant with boxes 60 px wide inside a 368x368 viewport //was 340 & then 350 
-  container.appendChild(makeGrid(5, 60, 368, 25));
-  container.appendChild(makeGrid(5, 60, 368, 50));
-  container.appendChild(makeGrid(5, 60, 368, 75));
+  container.appendChild(makeGrid(10, 60, 715, 0)); //makes one 5x5 quadrant with boxes 60 px wide inside a 715x715 viewport //was 368 when doing 4 quadrants
 
   /*add the color palette to the page*/
   var cpContainer = document.getElementById("colorPalette");
@@ -468,8 +467,8 @@ $( document ).ready(function() { //had to use jquery because my
     var margin= {top:20, bottom:20, right:50, left:10};
 
     document.getElementById("timelineViz").innerHTML = ""; //clear out any previous timeline
-    //dataArr is the combined array of all the arrays returned from calling generateTimeline on all 4 quadrants
-    var dataArr = generateTimeline(5,0).concat(generateTimeline(5,25).concat(generateTimeline(5,50).concat(generateTimeline(5,75))));
+    //dataArr is the array returned from calling generateTimeline
+    var dataArr = generateTimeline(10,0);
 
     var canvas = d3.select('#timelineViz').append('svg')
               .attr("width",document.getElementById("timelineContainer").offsetWidth); //current width of the timelineContainer div
