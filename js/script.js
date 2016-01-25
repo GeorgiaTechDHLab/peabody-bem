@@ -402,9 +402,7 @@ $( document ).ready(function() { //had to use jquery because my
                 {
                   var country = countryNames[numClr-1];
                   //9 if else statements for type of event. to avoid: would be nice to have an added attribute during makeGrid that is eventName
-                   console.log(typeSquare);
                    if(numType == 0){
-                    console.log(typeSquare);
                     timelineDataPts.push({year: yearID, color: arrayColors[numClr-1], text: country + ": Beginning of war"});
                     //document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Beginning of war <br>"; //using the color as a key, gets the corresponding country value from countries
                    }
@@ -518,18 +516,53 @@ $( document ).ready(function() { //had to use jquery because my
       .enter()
       .append("circle")
       .attr("cx",function(d){return xScale(+d.year)})
-      .attr("cy", 12)
+      .attr("cy", 12) //TODO: to prevent overlapping, have another value in the data object to specify if triangle then have a y offset
       .attr("r", 5)
       .attr("fill", function(d){return d.color});
 
-    timeline.selectAll("text") //TODO: rotate position to handle overlaps
+    var textGroups = timeline.selectAll("gText") //ISSUE: putting each text label into a group allows for rotation, but now x,y position is wrong
       .data(dataArr)
       .enter()
-      .append("text")
-      .text(function(d){return d.text})
+      .append("svg:g")
       .attr("x",function(d){return xScale(+d.year)})
       .attr("y",5);
 
+    textGroups.append("text")
+      .text(function(d){return d.text})
+      .attr("transform","rotate("+(-45)+")");
+
+    // timeline.selectAll("text") //ISSUE: x,y is correct but rotation doesnt work
+    //   .data(dataArr)
+    //   .enter()
+    //   .append("text")
+    //   .text(function(d){return d.text})
+    //   .attr("x",function(d){return xScale(+d.year)})
+    //   .attr("y",5);
+
+  });
+
+/*event listener to clear grid and timeline*/
+  document.getElementById("clearBtn").addEventListener("click", function(){
+   //remove data points and labels from timeline
+    d3.selectAll("circle").remove();
+    d3.selectAll("text").remove();
+    //iterate through all squares and set their states to 0 and fill to white.
+    //remove all triangles
+    var yearID = 0;
+     for(var i = 0; i < 10; i++) { 
+        for(var j = 0; j < 10; j++) {
+          for(var numType = 0; numType < 9; numType++){ 
+            var typeSquare = document.getElementById("type" + numType + "year" + yearID);
+            var triangle = document.getElementById("tritype" + numType + "year" + yearID);
+            typeSquare.setAttribute("squareState",0);
+            typeSquare.setAttribute("fill","white");
+            if(triangle != null){
+              triangle.remove();
+            }
+          }
+          yearID = yearID + 1;
+        }
+      }
   });
 
   /*event listener to allow user to add country*/
