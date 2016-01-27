@@ -106,7 +106,7 @@ $( document ).ready(function() { //had to use jquery because my
       console.log("squareState == 1");
 
       
-      var pts =  "0,0 " + "0," + w + " " + w + "," + w; //create a string of the triangle's coordinates
+      var pts = "0," + w + " " + w + ",0" + " " + w + "," + w; //create a string of the triangle's coordinates //4
 
       triangle.setAttribute("id", "tri"+element.getAttribute("id")); //give id, format is "tritype#year#"
       triangle.setAttribute("points", pts); //specify coordinates
@@ -129,7 +129,8 @@ $( document ).ready(function() { //had to use jquery because my
 
 
       /*set up second triangle to be opposite of previous triangle*/
-      var pts =  "0,0 " + w + ",0" + " " + w + "," + w; //create a string of the triangle's coordinates
+      var pts =  "0,0 " + "0," + w + " " + w + ",0"; //create a string of the triangle's coordinates //3
+
       triangle2.setAttribute("id", "tri"+element.getAttribute("id")); //give id, format is "tritype#year#"
       triangle2.setAttribute("points", pts); //specify coordinates
       triangle2.setAttribute("transform", t); //translate the triangle by the same amount that the typerect has been translated
@@ -143,9 +144,56 @@ $( document ).ready(function() { //had to use jquery because my
       element.setAttribute("squareState","3"); 
     }
 
-    //case 4: square is split with color the second way, fill it with current color
+    //new case, case 4: fill opposite direction 
     else if(element.getAttribute("squareState") == "3"){   
       console.log("squareState == 3");
+
+      //remove triangle to add 
+      var triRemoved = document.getElementById("tri"+element.getAttribute("id"));
+      element.parentNode.removeChild(triRemoved);
+
+      /*set up second triangle to be opposite of previous triangle*/
+      var pts =  "0,0 " + "0," + w + " " + w + "," + w; //create a string of the triangle's coordinates //1
+      console.log(pts);
+      triangle2.setAttribute("id", "tri"+element.getAttribute("id")); //give id, format is "tritype#year#"
+      triangle2.setAttribute("points", pts); //specify coordinates
+      triangle2.setAttribute("transform", t); //translate the triangle by the same amount that the typerect has been translated
+      triangle2.setAttribute('fill', currColor); //change color
+      triangle2.setAttribute("pointer-events","none"); //make the triangle "unclickable" so whatever else is underneath it is clicked on 
+
+      element.parentNode.appendChild(triangle2); //set triangle's parent as yearbox
+
+      element.setAttribute("fill", prevColor); //change type square color
+
+      element.setAttribute("squareState","4"); 
+    }
+
+    //new case, case 5: fill opposite opposite direction 
+    else if(element.getAttribute("squareState") == "4"){   
+      console.log("squareState == 4");
+
+      //remove triangle to add 
+      var triRemoved = document.getElementById("tri"+element.getAttribute("id"));
+      element.parentNode.removeChild(triRemoved);
+
+      /*set up second triangle to be opposite of previous triangle*/
+      var pts =  "0,0 " + w + ",0" + " " + w + "," + w; //create a string of the triangle's coordinates //2
+      triangle2.setAttribute("id", "tri"+element.getAttribute("id")); //give id, format is "tritype#year#"
+      triangle2.setAttribute("points", pts); //specify coordinates
+      triangle2.setAttribute("transform", t); //translate the triangle by the same amount that the typerect has been translated
+      triangle2.setAttribute('fill', currColor); //change color
+      triangle2.setAttribute("pointer-events","none"); //make the triangle "unclickable" so whatever else is underneath it is clicked on 
+
+      element.parentNode.appendChild(triangle2); //set triangle's parent as yearbox
+
+      element.setAttribute("fill", prevColor); //change type square color
+
+      element.setAttribute("squareState","5"); 
+    }
+
+    //case 6: square is split with color the second way, fill it with current color
+    else if(element.getAttribute("squareState") == "5"){   
+      console.log("squareState == 5");
       element.setAttribute("fill", currColor);
 
 
@@ -153,12 +201,12 @@ $( document ).ready(function() { //had to use jquery because my
       var triRemoved2 = document.getElementById("tri"+element.getAttribute("id"));
       element.parentNode.removeChild(triRemoved2);
 
-      element.setAttribute("squareState","4");
+      element.setAttribute("squareState","6");
     }
 
     //case 0: square is filled with current color, make it blank  
-    else if(element.getAttribute("squareState") == "4"){   
-      console.log("squareState == 4");
+    else if(element.getAttribute("squareState") == "6"){   
+      console.log("squareState == 0");
       
       element.setAttribute("fill","white");
 
@@ -565,6 +613,9 @@ $( document ).ready(function() { //had to use jquery because my
       }
   });
 
+
+/**EVENT LISTENERS UNDER "CUSTOMIZE COLOR PALETTE"**/
+
   /*event listener to allow user to add country*/
   document.getElementById("addCountryButton").addEventListener("click", function(){
     //numColors cannot go above 10, because of number of colors in each color palette
@@ -578,7 +629,6 @@ $( document ).ready(function() { //had to use jquery because my
     }else{
       alert("You can't add more than 10 countries.");
     }
-
   });
 
   /*event listener to allow user to remove country*/
@@ -617,7 +667,7 @@ $( document ).ready(function() { //had to use jquery because my
     console.log("changing color schemes");
     document.getElementById("colorPaletteSVG").remove(); //this removes the whole svg
 
-    var cpNum = getRadioVal();
+    var cpNum = getCPRadioVal();
 
     if(cpNum == 1){
       arrayColors = arrayColors1;
@@ -629,23 +679,20 @@ $( document ).ready(function() { //had to use jquery because my
       arrayColors = arrayColors4;
     }
     cpContainer.appendChild(makeColorPalette(numColors));
-
-
   })
 
   //for switching color palettes
-  function getRadioVal() {
+  function getCPRadioVal() {
     var val;
-    // get list of radio buttons with specified name
-    // var radios = form.elements[name];
+    // get list of radio buttons
     var radios = [];
 
-    //8 is num colors
+    //add radio buttons to array 
     for (var i=1; i<5; i++){
-          radios.push(document.getElementById("g"+i));
-
+      radios.push(document.getElementById("g"+i));
     }
-    // loop through list of radio buttons
+
+    //loop through array of radio buttons to see which button is check 
     for (var i=0, len=radios.length; i<len; i++) {
         if ( radios[i].checked ) { // radio checked?
             val = radios[i].value; // if so, hold its value in val
@@ -656,6 +703,10 @@ $( document ).ready(function() { //had to use jquery because my
     return val; // return value of checked radio or undefined if none checked
   }
 
+  /**END EVENT LISTENERS UNDER "CUSTOMIZE COLOR PALETTE"**/
+
+
+  /*VARIABLES AND LISTENER FOR MAKING CUSTOM EVENT*/
   var userEvents; //holds user input events 
   var eventsList; //where the user input text gets appended
   var userTitle; //holds user input title 
@@ -748,6 +799,7 @@ $( document ).ready(function() { //had to use jquery because my
 
       var square = document.getElementById(typeSquareID);
 
+      //to set the triangle square
       if(clickedItem == "special"){
         console.log("special");
         //year 65, so id year64
@@ -756,16 +808,15 @@ $( document ).ready(function() { //had to use jquery because my
         //type 2 is France
         //type 4 & 7 are Spain
         document.getElementById("type0year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
-        document.getElementById("type1year64").setAttribute("fill", arrayColors[countryNames.indexOf("France")]);
+        document.getElementById("type1year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
         document.getElementById("type2year64").setAttribute("fill", arrayColors[countryNames.indexOf("France")]);
         document.getElementById("type4year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
         document.getElementById("type7year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
 
-
         document.getElementById("type1year64").setAttribute("squareState","1");
+        currColor = arrayColors[countryNames.indexOf("France")];
         changeSquare(document.getElementById("type1year64"));
-        document.getElementById("type1year64").setAttribute("squareState","2");
-        changeSquare(document.getElementById("type1year64"));
+
 
       }else{
         square.setAttribute("fill",arrayColors[countryNames.indexOf(country)]);

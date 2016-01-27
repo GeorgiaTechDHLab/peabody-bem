@@ -9,8 +9,8 @@
 
 /*the outline doesn't outline the entire square because the squares are drawn with javascript and have no extra pixels in between, 
 so sometimes the white squares overlap the blue outline because there is no room for the outline display*/
-/*	outline: 1px solid blue;
-*/	
+	outline: 1px solid lightblue;
+	
 
 /*same reason it doesn't work?*/
 /*	-webkit-box-shadow:inset 0px 10px 0px 10px black inset;
@@ -19,8 +19,8 @@ so sometimes the white squares overlap the blue outline because there is no room
 
 
 	/*problem: painted color doesn't appear until hover is removed, would turn gray even when painted */
-	fill: gray;
-}
+/*	fill: gray;
+*/}
 
 
 /*http://bl.ocks.org/eesur/9936606, for color palette customization*/
