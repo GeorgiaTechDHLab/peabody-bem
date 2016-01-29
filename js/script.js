@@ -510,11 +510,14 @@ $( document ).ready(function() { //had to use jquery because my
 
   /*aevent listener to generate timeline from chart*/
   document.getElementById("timelineGen").addEventListener("click", function(){
-    var margin= {top:20, bottom:20, right:50, left:10};
+    var margin= {top:60, bottom:20, right:25, left:10};
 
     document.getElementById("timelineViz").innerHTML = ""; //clear out any previous timeline
     //dataArr is the array returned from calling generateTimeline
     var dataArr = generateTimeline(10,0);
+
+    //object with key as year and value as the number of events during that year
+    var yearsMap = {};
 
     var canvas = d3.select('#timelineViz').append('svg')
               .attr("width",document.getElementById("timelineContainer").offsetWidth); //current width of the timelineContainer div
@@ -559,41 +562,37 @@ $( document ).ready(function() { //had to use jquery because my
           return 5;
       });
 
-    timeline.selectAll("circle")
+    timeline.selectAll("rect") //TODO: add event listener for hover
       .data(dataArr)
       .enter()
-      .append("circle")
-      .attr("cx",function(d){return xScale(+d.year)})
-      .attr("cy", 12) //TODO: to prevent overlapping, have another value in the data object to specify if triangle then have a y offset
-      .attr("r", 5)
+      .append("rect")
+      .attr("x",function(d){return (xScale(+d.year)-3)})
+      .attr("y", function(d){ //prevent overlapping rectangles by keeping track of how many events occur each year
+        if(yearsMap[d.year] == null)
+            yearsMap[d.year] = 1;
+        else 
+            yearsMap[d.year] = +yearsMap[d.year] + 1;
+        return (19 - 7*yearsMap[d.year] - yearsMap[d.year])})
+      .attr("width", 7)
+      .attr("height", 7)
       .attr("fill", function(d){return d.color});
 
-    var textGroups = timeline.selectAll("gText") //ISSUE: putting each text label into a group allows for rotation, but now x,y position is wrong
+    timeline.selectAll("text") //TODO: set an ID so that it can be shown and hidden when hovering over rect
       .data(dataArr)
       .enter()
-      .append("svg:g")
-      .attr("x",function(d){return xScale(+d.year)})
-      .attr("y",5);
-
-    textGroups.append("text")
+      .append("text")
       .text(function(d){return d.text})
-      .attr("transform","rotate("+(-45)+")");
-
-    // timeline.selectAll("text") //ISSUE: x,y is correct but rotation doesnt work
-    //   .data(dataArr)
-    //   .enter()
-    //   .append("text")
-    //   .text(function(d){return d.text})
-    //   .attr("x",function(d){return xScale(+d.year)})
-    //   .attr("y",5);
+      .attr("x",function(d){return xScale(+d.year)}) //TODO: make sure div is on left side of rect if the text is getting cut off
+      .attr("y",5)
+      .attr("class","textLabels");
 
   });
 
 /*event listener to clear grid and timeline*/
   document.getElementById("clearBtn").addEventListener("click", function(){
-   //remove data points and labels from timeline
-    d3.selectAll("circle").remove();
-    d3.selectAll("text").remove();
+   //remove data points from timeline
+    d3.select('#timelineViz').selectAll("rect").remove();
+    d3.select('#timelineViz').selectAll("text.textLabels").remove();
     //iterate through all squares and set their states to 0 and fill to white.
     //remove all triangles
     var yearID = 0;
