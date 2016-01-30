@@ -777,6 +777,30 @@ $( document ).ready(function() { //had to use jquery because my
 
   })
 
+  // document.getElementById("showallb").addEventListener("click", function(){
+
+  //   var buttons = document.getElementsByClassName("showme");
+  //   var countries = [];
+  //   var typeSquareIDs = [];
+  //   var squares = [];
+  //   var temp; 
+  //   for(var i=0; i < buttons.length; i++){
+  //     temp = buttons[i].id.split('_');
+  //     countries.push(temp[0]);
+  //     typeSquareIDs.push(temp[1]);
+
+  //     // document.getElementById(typeSquareIDs[i].setAttribute("fill", arrayColors[countryNames.indexOf(countries[temp[0]])]));
+  //   }
+
+
+  //   console.log(buttons);
+  //   console.log("countries: " + countries);
+  //   console.log("IDS: " + typeSquareIDs);
+
+
+    
+
+  // })
 
 
   /*"show me" feature for the sample list of events*/
@@ -800,12 +824,6 @@ $( document ).ready(function() { //had to use jquery because my
 
       //to set the triangle square
       if(clickedItem == "special"){
-        console.log("special");
-        //year 65, so id year64
-        //type 0 is spain
-        //type 1 is split between spain/england
-        //type 2 is France
-        //type 4 & 7 are Spain
         document.getElementById("type0year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
         document.getElementById("type1year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
         document.getElementById("type2year64").setAttribute("fill", arrayColors[countryNames.indexOf("France")]);
@@ -817,12 +835,48 @@ $( document ).ready(function() { //had to use jquery because my
         changeSquare(document.getElementById("type1year64"));
 
 
+      //if "show all" button is clicked
+      }else if(clickedItem == "showallb"){
+
+        var buttons = document.getElementsByClassName("showme"); //get all of the buttons
+
+        var countries = [];
+        var typeSquareIDs = [];
+        var squares = [];
+        var temp; 
+
+        //loops through buttons to extract the country and typeSquareID from each ID tag, then sets the attributes
+        for(var i=0; i < buttons.length; i++){
+          temp = buttons[i].id.split('_');
+          countries.push(temp[0]);
+          typeSquareIDs.push(temp[1]);
+
+          if(document.getElementById(temp[1])){ //null check for "special" case 
+            document.getElementById(temp[1]).setAttribute("fill", arrayColors[countryNames.indexOf(temp[0])]);
+          }
+        }
+
+        //still need to set the triangle square, probably a better way to avoid this dulicate code
+        document.getElementById("type0year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
+        document.getElementById("type1year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
+        document.getElementById("type2year64").setAttribute("fill", arrayColors[countryNames.indexOf("France")]);
+        document.getElementById("type4year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
+        document.getElementById("type7year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
+
+        document.getElementById("type1year64").setAttribute("squareState","1");
+        currColor = arrayColors[countryNames.indexOf("France")];
+        changeSquare(document.getElementById("type1year64"));
+
+
+      //set the squares from all the regular buttons
       }else{
         square.setAttribute("fill",arrayColors[countryNames.indexOf(country)]);
 
       }
     }
   }
+
+
 
 
 
