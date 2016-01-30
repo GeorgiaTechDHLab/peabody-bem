@@ -58,8 +58,9 @@
 				</div><!--close "col-md-12"-->
 			</div><!--close row-->
 
-			<div class="row">
-				<div id="colorPalette" class="col-md-4">
+			
+			<div class="col-md-4"> <!--column for colorPalette and event list-->
+				<div id="colorPalette">
 					<h2>Color Palette</h2>
 
 					<div class="panel-group-cp" id="accordion" role="tablist" aria-multiselectable="true">
@@ -99,21 +100,10 @@
 					      </div>
 					    </div>
 					  </div>
-					</div>
+					</div> 
+				</div>	<!--close color palette row-->
 
-				</div>	<!--close col-md-4-->
-				<!--container--> 
-				<div id="gridContainer" class="col-md-8">
-					<h2 id="chartTitle">Chart: Chronological List of the 16th Century</h2>
-				<!--close col-md-8-->
-				</div>
-			</div>
-
-			<!--row with chart and list of events-->
-			<div class="row">
-
-
-				<div id="eventList" class="col-md-4">
+				<div id="eventList" >
 					<h2>Events</h2>
 
 					<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
@@ -204,16 +194,23 @@
 					  </div> -->
 					</div>
 				</div><!--close col-md-4-->
+				<!--container--> 
+			</div> <!--close event list row-->
 
-				<div id="timelineContainer" class="col-md-8">
+		<div class="col-md-8"> <!--column to hold chart and timeline-->
+			<div id="gridContainer" class="row">
+					<h2 id="chartTitle">Chart: Chronological List of the 16th Century</h2>
+				<!--row for chart-->
+			</div>
+			<div class="row"><!--row with timeline-->
+				<div id="timelineContainer">
 					<h2>Timeline</h2>
 					<button type="button" id="timelineGen">Generate Timeline</button>
 					<div id="timelineViz"></div>
 					<button type="button" id="clearBtn">Clear All</button>
-
-				</div>	<!--close col-md-8-->
-			
+				</div>			
 			</div><!--close row-->
+		</div> <!--close column holding chart and timeline-->
 
 
 		<!--close container--> 
