@@ -2,9 +2,9 @@
 $( document ).ready(function() { //had to use jquery because my 
   //document.getElementByID was being called before the ID in the document was created
   //but now we can just use jquery syntax instead of doc.getelementbyid
-  var myFunction = function(){
-    document.getElementById("demo").innerHTML = "Hello World";
-  }
+  Number.prototype.between = function (min, max) {
+    return this >= min && this < max;
+    };
 
 
   //array of colors for 4 color palettes, with 10 colors per array. 
@@ -312,14 +312,14 @@ $( document ).ready(function() { //had to use jquery because my
 
     //whole svg 
     var svg = document.createSvg("svg");
-    svg.setAttribute("width", pixelsPerSide);
-    svg.setAttribute("height", pixelsPerSide);
+    svg.setAttribute("width", pixelsPerSide + size);
+    svg.setAttribute("height", pixelsPerSide + size);
     
     //group for everything: background, years, types. so when "maing" is translated, everything moves as a unit
     var maing = document.createSvg("g");
     maing.setAttribute("id", "maing");
-    maing.setAttribute("width", pixelsPerSide);
-    maing.setAttribute("height", pixelsPerSide);
+    maing.setAttribute("width", pixelsPerSide + size);
+    maing.setAttribute("height", pixelsPerSide + size);
 
 
     // maing.setAttribute("transform", ["translate(60,60)"]); //test if objects are grouped together
@@ -328,8 +328,8 @@ $( document ).ready(function() { //had to use jquery because my
     var bg = document.createSvg("rect");
     var sizeBG = (pixelsPerSide);
     bg.setAttribute("id","bg");
-    bg.setAttribute("width", sizeBG + 50);
-    bg.setAttribute("height", sizeBG + 50);
+    bg.setAttribute("width", sizeBG + size);
+    bg.setAttribute("height", sizeBG + size);
     bg.setAttribute("fill","black"); //TODO: do this in css file?
     bg.setAttribute("fill-opacity",".1");
 
@@ -383,8 +383,16 @@ $( document ).ready(function() { //had to use jquery because my
             }
 
           } //end for loop
-          
-        yearBox.setAttribute("transform", ["translate(", j*size + j*8, ",", i*size + i*8, ")"].join("")); //offset to see bkg  
+        if(numYear.between(0,50)){  //upper half of grid
+            yearBox.setAttribute("transform", ["translate(", j*size + j*8, ",", i*size + i*8, ")"].join("")); //offset to see bkg. j is x, i is y
+            if(numYear.between(5,10) || numYear.between(15,20) || numYear.between(25,30) || numYear.between(35,40) || numYear.between(45,50)) // right quadrant
+              yearBox.setAttribute("transform", ["translate(", j*size + j*8 + size, ",", i*size + i*8, ")"].join(""));
+          }
+        if(numYear.between(50,100)){ //lower half of grid
+            yearBox.setAttribute("transform", ["translate(", j*size + j*8, ",", i*size + i*8 + size, ")"].join("")); 
+            if(numYear.between(55,60) || numYear.between(65,70) || numYear.between(75,80) || numYear.between(85,90) || numYear.between(95,100)) // right quadrant
+              yearBox.setAttribute("transform", ["translate(", j*size + j*8 + size, ",", i*size + i*8 + size, ")"].join(""));
+          }
         }//close inner for loop
     }//close outer for loop
 
@@ -510,7 +518,7 @@ $( document ).ready(function() { //had to use jquery because my
 
   /*aevent listener to generate timeline from chart*/
   document.getElementById("timelineGen").addEventListener("click", function(){
-    var margin= {top:60, bottom:20, right:25, left:10};
+    var margin= {top:60, bottom:20, right:25, left:15};
 
     document.getElementById("timelineViz").innerHTML = ""; //clear out any previous timeline
     //dataArr is the array returned from calling generateTimeline
@@ -526,7 +534,7 @@ $( document ).ready(function() { //had to use jquery because my
                   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     var xScale = d3.scale.linear()
-                  .domain([0, 100]) //this would need to be user input
+                  .domain([0, 99])
                   .range([0,document.getElementById("timelineContainer").offsetWidth - margin.right])
 
     var xAxis = d3.svg.axis()
@@ -537,7 +545,7 @@ $( document ).ready(function() { //had to use jquery because my
                     if((d % 10) != 0){ 
                         return ("");
                     }else{ 
-                        return (d);
+                        return (d + 1500); //the 1500 would be user input start century
                     }});
 
     var xGuide = canvas.append('g')
@@ -562,7 +570,7 @@ $( document ).ready(function() { //had to use jquery because my
           return 5;
       });
 
-    timeline.selectAll("rect") //TODO: add event listener for hover
+    timeline.selectAll("rect")
       .data(dataArr)
       .enter()
       .append("rect")
@@ -575,24 +583,30 @@ $( document ).ready(function() { //had to use jquery because my
         return (19 - 7*yearsMap[d.year] - yearsMap[d.year])})
       .attr("width", 7)
       .attr("height", 7)
-      .attr("fill", function(d){return d.color});
+      .attr("fill", function(d){return d.color})
+      .on("mouseover",function(d){ //show and hide tooltip of event label
+              document.getElementById(d.text + d.year).style.visibility = "visible";
+      })
+      .on("mouseout", function(d){
+        document.getElementById(d.text + d.year).style.visibility ="hidden";
+      });
 
-    timeline.selectAll("text") //TODO: set an ID so that it can be shown and hidden when hovering over rect
+    timeline.selectAll("text") 
       .data(dataArr)
       .enter()
       .append("text")
       .text(function(d){return d.text})
-      .attr("x",function(d){return xScale(+d.year)}) //TODO: make sure div is on left side of rect if the text is getting cut off
+      .attr("x",function(d){return xScale(+d.year)}) //TODO: if year is 68, place text on left side of data point
       .attr("y",5)
-      .attr("class","textLabels");
-
+      .attr("class","textLabels")
+      .attr("id", function(d){return d.text + d.year}) //allows text elements to be accessible by their corresponding rect
+      .style("visibility", "hidden");
   });
 
 /*event listener to clear grid and timeline*/
   document.getElementById("clearBtn").addEventListener("click", function(){
    //remove data points from timeline
     d3.select('#timelineViz').selectAll("rect").remove();
-    d3.select('#timelineViz').selectAll("text.textLabels").remove();
     //iterate through all squares and set their states to 0 and fill to white.
     //remove all triangles
     var yearID = 0;
