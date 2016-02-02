@@ -250,7 +250,6 @@ $( document ).ready(function() { //had to use jquery because my
 
   /**dynamic color palette to size according to number of colors*/
   var makeColorPalette = function(numColors){
-    console.log(numColors);
     // var svg = document.createSvg("svg"); //no difference between this line 
     var svgNS = "http://www.w3.org/2000/svg";
     var svg = document.createElementNS(svgNS, "svg"); //and this line, they both work 
@@ -301,20 +300,16 @@ $( document ).ready(function() { //had to use jquery because my
   }
 
 
-
-
-
-  /*TODO: "show me the chart indication for the example event", function needs to know: country, year, type of event; 
-  would to pass "element" variable with state set to changeSquare() method*/
-
-
+  //(10, 60, 715, 0)
   var makeGrid = function(boxesPerSide, size, pixelsPerSide, currYearID){
 
     //whole svg 
     var svg = document.createSvg("svg");
     svg.setAttribute("width", pixelsPerSide + size);
     svg.setAttribute("height", pixelsPerSide + size);
-    
+    console.log(pixelsPerSide);
+    console.log(size);
+
     //group for everything: background, years, types. so when "maing" is translated, everything moves as a unit
     var maing = document.createSvg("g");
     maing.setAttribute("id", "maing");
@@ -508,6 +503,10 @@ $( document ).ready(function() { //had to use jquery because my
   /*draw the 100x100 grid*/
   var container = document.getElementById("gridContainer");
   container.appendChild(makeGrid(10, 60, 715, 0)); //makes one 5x5 quadrant with boxes 60 px wide inside a 715x715 viewport //was 368 when doing 4 quadrants
+
+  /*add year labels*/
+  var years2Label = ["5","9","40","49","50","90","99"];
+  addExYearLabels(years2Label);
 
   /*add the color palette to the page*/
   var cpContainer = document.getElementById("colorPalette");
@@ -791,31 +790,6 @@ $( document ).ready(function() { //had to use jquery because my
 
   })
 
-  // document.getElementById("showallb").addEventListener("click", function(){
-
-  //   var buttons = document.getElementsByClassName("showme");
-  //   var countries = [];
-  //   var typeSquareIDs = [];
-  //   var squares = [];
-  //   var temp; 
-  //   for(var i=0; i < buttons.length; i++){
-  //     temp = buttons[i].id.split('_');
-  //     countries.push(temp[0]);
-  //     typeSquareIDs.push(temp[1]);
-
-  //     // document.getElementById(typeSquareIDs[i].setAttribute("fill", arrayColors[countryNames.indexOf(countries[temp[0]])]));
-  //   }
-
-
-  //   console.log(buttons);
-  //   console.log("countries: " + countries);
-  //   console.log("IDS: " + typeSquareIDs);
-
-
-    
-
-  // })
-
 
   /*"show me" feature for the sample list of events*/
   var theParent = document.querySelector("#sampleList");
@@ -882,11 +856,99 @@ $( document ).ready(function() { //had to use jquery because my
         changeSquare(document.getElementById("type1year64"));
 
 
+        // addExYearLabels2();
+        // var years2Label = ["1506","1510","1541","1550","1551","1591","1600"];
+        var years2Label = ["5","9","40","49","50","90","99"];
+        addExYearLabels(years2Label);
+
       //set the squares from all the regular buttons
       }else{
         square.setAttribute("fill",arrayColors[countryNames.indexOf(country)]);
 
       }
+    }
+  }
+
+  function addExYearLabels(years2Label){
+    for(var i=0; i<years2Label.length; i++){
+      var yearBox = document.getElementById("year"+years2Label[i]);
+      var year2Label = years2Label[i];
+      console.log(years2Label[i]);
+      var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      text.setAttribute('id', 'yearLabel'+i);
+      text.setAttribute('x', '35');
+      text.setAttribute('y', '55');
+      var temp = parseInt(year2Label) + 1;
+      console.log(temp);
+      if(temp<10){ //add a 0 
+        text.textContent = '160'+temp; //specific for example
+      }else if(temp == 100){ //make it next century
+        text.textContent = '1700'; //specific for example
+      }else{
+        text.textContent = '16'+temp; //specific for example
+      }
+      yearBox.appendChild(text);
+    }
+  }
+
+
+  // show years for example...better logic so not two for statements? 
+  function addExYearLabels2(){
+    for(var i=0; i<100; i+=30){
+      var yearBox = document.getElementById("year"+i);
+      var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      text.setAttribute('id', 'yearLabel'+i);
+      text.setAttribute('x', '35');
+      text.setAttribute('y', '55');
+      var temp = i+1;
+      //text.textContent = i+1; //shows the id number plus one, generic template
+      if(temp<10){ //add a 0 
+        text.textContent = '160'+temp; //specific for example
+      }else if(temp == 100){ //make it next century
+        text.textContent = '1700'; //specific for example
+      }else{
+        text.textContent = '16'+temp; //specific for example
+      }
+      yearBox.appendChild(text);
+    }
+
+    for(var i=9; i<100; i+=30){
+      var yearBox = document.getElementById("year"+i);
+      var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      text.setAttribute('id', 'yearLabel'+i);
+      text.setAttribute('x', '35');
+      text.setAttribute('y', '55');
+      var temp = i+1;
+      //text.textContent = i+1; //shows the id number plus one, generic template
+      if(temp<10){ //add a 0 
+        text.textContent = '160'+temp; //specific for example
+      }else if(temp == 100){ //make it next century
+        text.textContent = '1700'; //specific for example
+      }else{
+        text.textContent = '16'+temp; //specific for example
+      }
+      yearBox.appendChild(text);
+    }
+  }
+
+  //shows all years
+  function addAllYearLabels(){
+    for(var i=0; i<100; i++){
+      var yearBox = document.getElementById("year"+i);
+      var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      text.setAttribute('id', 'yearLabel'+i);
+      text.setAttribute('x', '35');
+      text.setAttribute('y', '55');
+      var temp = i+1;
+      //text.textContent = i+1; //shows the id number plus one, generic template
+      if(temp<10){ //add a 0 
+        text.textContent = '160'+temp; //specific for example
+      }else if(temp == 100){ //make it next century
+        text.textContent = '1700'; //specific for example
+      }else{
+        text.textContent = '16'+temp; //specific for example
+      }
+      yearBox.appendChild(text);
     }
   }
 
