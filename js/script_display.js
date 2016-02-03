@@ -516,100 +516,102 @@ $( document ).ready(function() { //had to use jquery because my
 /*******************************************EVENT LISTENERS**********************************************/
 
   /*aevent listener to generate timeline from chart*/
-  document.getElementById("timelineGen").addEventListener("click", function(){
-    var margin= {top:60, bottom:20, right:25, left:15};
+  // document.getElementById("timelineGen").addEventListener("click", function(){
+  //   var margin= {top:60, bottom:20, right:25, left:15};
 
-    document.getElementById("timelineViz").innerHTML = ""; //clear out any previous timeline
-    //dataArr is the array returned from calling generateTimeline
-    var dataArr = generateTimeline(10,0);
+  //   document.getElementById("timelineViz").innerHTML = ""; //clear out any previous timeline
+  //   //dataArr is the array returned from calling generateTimeline
+  //   var dataArr = generateTimeline(10,0);
 
-    //object with key as year and value as the number of events during that year
-    var yearsMap = {};
+  //   //object with key as year and value as the number of events during that year
+  //   var yearsMap = {};
 
-    var canvas = d3.select('#timelineViz').append('svg')
-              .attr("width",document.getElementById("timelineContainer").offsetWidth); //current width of the timelineContainer div
+  //   var canvas = d3.select('#timelineViz').append('svg')
+  //             .attr("width",document.getElementById("timelineContainer").offsetWidth); //current width of the timelineContainer div
     
-    var timeline = canvas.append('g')
-                  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  //   var timeline = canvas.append('g')
+  //                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    var xScale = d3.scale.linear()
-                  .domain([0, 99])
-                  .range([0,document.getElementById("timelineContainer").offsetWidth - margin.right])
+  //   var xScale = d3.scale.linear()
+  //                 .domain([0, 99])
+  //                 .range([0,document.getElementById("timelineContainer").offsetWidth - margin.right])
 
-    var xAxis = d3.svg.axis()
-                  .scale(xScale)
-                  .orient("bottom")
-                  .ticks(100)
-                  .tickFormat(function(d) { //dont display text unless it's an even decade
-                    if((d % 10) != 0){ 
-                        return ("");
-                    }else{ 
-                        return (d + 1500); //the 1500 would be user input start century
-                    }});
+  //   var xAxis = d3.svg.axis()
+  //                 .scale(xScale)
+  //                 .orient("bottom")
+  //                 .ticks(100)
+  //                 .tickFormat(function(d) { //dont display text unless it's an even decade
+  //                   if((d % 10) != 0){ 
+  //                       return ("");
+  //                   }else{ 
+  //                       return (d + 1500); //the 1500 would be user input start century
+  //                   }});
 
-    var xGuide = canvas.append('g')
-                  .attr("transform", "translate(" + margin.left + "," + (margin.top + margin.bottom) + ")")
-                  .attr("class","axis")
-                  .style("stroke-width",2)
-                  .call(xAxis);
+  //   var xGuide = canvas.append('g')
+  //                 .attr("transform", "translate(" + margin.left + "," + (margin.top + margin.bottom) + ")")
+  //                 .attr("class","axis")
+  //                 .style("stroke-width",2)
+  //                 .call(xAxis);
 
-    d3.selectAll("g.axis g.tick") //g.tick is the value of the tick
-      .style("stroke-width", function(d,i){
-        if(i%10 === 0)
-          return 2;
-        else
-          return 1;
-      });
+  //   d3.selectAll("g.axis g.tick") //g.tick is the value of the tick
+  //     .style("stroke-width", function(d,i){
+  //       if(i%10 === 0)
+  //         return 2;
+  //       else
+  //         return 1;
+  //     });
 
-      d3.selectAll("g.axis g.tick line") //g.tick line is the actual tick mark
-      .attr("y2", function(d,i){
-        if(i%10 === 0)
-          return 10;
-        else
-          return 5;
-      });
+  //     d3.selectAll("g.axis g.tick line") //g.tick line is the actual tick mark
+  //     .attr("y2", function(d,i){
+  //       if(i%10 === 0)
+  //         return 10;
+  //       else
+  //         return 5;
+  //     });
 
-    timeline.selectAll("rect")
-      .data(dataArr)
-      .enter()
-      .append("rect")
-      .attr("x",function(d){return (xScale(+d.year)-3)})
-      .attr("y", function(d){ //prevent overlapping rectangles by keeping track of how many events occur each year
-        if(yearsMap[d.year] == null)
-            yearsMap[d.year] = 1;
-        else 
-            yearsMap[d.year] = +yearsMap[d.year] + 1;
-        return (19 - 7*yearsMap[d.year] - yearsMap[d.year])})
-      .attr("width", 7)
-      .attr("height", 7)
-      .attr("fill", function(d){return d.color})
-      .on("mouseover",function(d){ //show and hide tooltip of event label
-              document.getElementById(d.text + d.year).style.visibility = "visible";
-      })
-      .on("mouseout", function(d){
-        document.getElementById(d.text + d.year).style.visibility ="hidden";
-      });
+  //   timeline.selectAll("rect")
+  //     .data(dataArr)
+  //     .enter()
+  //     .append("rect")
+  //     .attr("x",function(d){return (xScale(+d.year)-3)})
+  //     .attr("y", function(d){ //prevent overlapping rectangles by keeping track of how many events occur each year
+  //       if(yearsMap[d.year] == null)
+  //           yearsMap[d.year] = 1;
+  //       else 
+  //           yearsMap[d.year] = +yearsMap[d.year] + 1;
+  //       return (19 - 7*yearsMap[d.year] - yearsMap[d.year])})
+  //     .attr("width", 7)
+  //     .attr("height", 7)
+  //     .attr("fill", function(d){return d.color})
+  //     .on("mouseover",function(d){ //show and hide tooltip of event label
+  //             document.getElementById(d.text + d.year).style.visibility = "visible";
+  //     })
+  //     .on("mouseout", function(d){
+  //       document.getElementById(d.text + d.year).style.visibility ="hidden";
+  //     });
 
-    timeline.selectAll("text") 
-      .data(dataArr)
-      .enter()
-      .append("text")
-      .text(function(d){return d.text})
-      .attr("x",function(d){return xScale(+d.year)}) //TODO: if year is 68, place text on left side of data point
-      .attr("y",5)
-      .attr("class","textLabels")
-      .attr("id", function(d){return d.text + d.year}) //allows text elements to be accessible by their corresponding rect
-      .style("visibility", "hidden");
-  });
+  //   timeline.selectAll("text") 
+  //     .data(dataArr)
+  //     .enter()
+  //     .append("text")
+  //     .text(function(d){return d.text})
+  //     .attr("x",function(d){return xScale(+d.year)}) //TODO: if year is 68, place text on left side of data point
+  //     .attr("y",5)
+  //     .attr("class","textLabels")
+  //     .attr("id", function(d){return d.text + d.year}) //allows text elements to be accessible by their corresponding rect
+  //     .style("visibility", "hidden");
+  // });
 
 /*event listener to clear grid and timeline*/
   document.getElementById("clearBtn").addEventListener("click", function(){
     clearAll();
+
   });
 
+  /*removed function from event listener so can be accessed from elsewhere*/
   function clearAll(){
-    //remove data points from timeline
-    d3.select('#timelineViz').selectAll("rect").remove();
+   //remove data points from timeline
+    // d3.select('#timelineViz').selectAll("rect").remove();
     //iterate through all squares and set their states to 0 and fill to white.
     //remove all triangles
     var yearID = 0;
@@ -738,7 +740,6 @@ $( document ).ready(function() { //had to use jquery because my
       console.log("country: " + country);
 
       var square = document.getElementById(typeSquareID);
-
 
       //clear existing so example is accurate
       clearAll();
