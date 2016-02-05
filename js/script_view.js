@@ -631,96 +631,44 @@ $( document ).ready(function() { //had to use jquery because my
       }
   }
 
+  function drawExample(){
+    
+    var buttons = document.getElementsByClassName("showme"); //get all of the buttons
 
-/**EVENT LISTENERS UNDER "CUSTOMIZE COLOR PALETTE"**/
+    var countries = [];
+    var typeSquareIDs = [];
+    var squares = [];
+    var temp; 
 
-  /*event listener to allow user to add country*/
-  document.getElementById("addCountryButton").addEventListener("click", function(){
-    //numColors cannot go above 10, because of number of colors in each color palette
-    if(numColors < 10){
-      document.getElementById("colorPaletteSVG").remove(); //this removes the whole svg
-      countryNames.push(document.getElementById("newCountry").value);
-      arrayColors.push("blue");
-      numColors++; //increase numColors by 1
-      cpContainer.appendChild(makeColorPalette(numColors)); 
-      document.getElementById("newCountry").value = ""; //reset input box
-    }else{
-      alert("You can't add more than 10 countries.");
-    }
-  });
+    //loops through buttons to extract the country and typeSquareID from each ID tag, then sets the attributes
+    for(var i=0; i < buttons.length; i++){
+      temp = buttons[i].id.split('_');
+      countries.push(temp[0]);
+      typeSquareIDs.push(temp[1]);
 
-  /*event listener to allow user to remove country*/
-  document.getElementById("removeCountryButton").addEventListener("click", function(){
-    // document.getElementById("colorPaletteSVG").removeChild(colorGroup); //this line removes the last colorGroup (square and country label)
-      var country = document.getElementById("removeCountry").value;
-      if(countryNames.indexOf(country) >= 0){ //check if the country is actually in the array 
-        document.getElementById("colorPaletteSVG").remove(); //this removes the whole svg
-
-        countryNames.splice(countryNames.indexOf(country),1);
-        console.log(countryNames);
-        arrayColors.splice(countryNames.indexOf(country),1);
-        numColors--; //decrease numColors by 1
-        cpContainer.appendChild(makeColorPalette(numColors)); 
-        document.getElementById("removeCountry").value = ""; //reset input box
-      }else{
-        document.getElementById("removeCountry").value = ""; //reset input box
-        console.log("no country to remove");
-        alert("There is no country by this name to remove.");
+      if(document.getElementById(temp[1])){ //null check for "special" case 
+        document.getElementById(temp[1]).setAttribute("fill", arrayColors[countryNames.indexOf(temp[0])]);
       }
-  });
-
-  /*event listener to allow user to remove all countries at once*/
-  document.getElementById("removeAllCountriesButton").addEventListener("click", function(){
-    document.getElementById("colorPaletteSVG").remove(); //this removes the whole svg
-
-    console.log("in");
-    countryNames.length = 0; //empty array 
-    numColors = 0; 
-    cpContainer.appendChild(makeColorPalette(0)); 
-  });
-
-
-  /*event listener to listen to changing color scheme*/
-  document.getElementById("editForm").addEventListener("click", function(){
-    console.log("changing color schemes");
-    document.getElementById("colorPaletteSVG").remove(); //this removes the whole svg
-
-    var cpNum = getCPRadioVal();
-
-    if(cpNum == 1){
-      arrayColors = arrayColors1;
-    }else if(cpNum == 2){
-      arrayColors = arrayColors2;
-    }else if(cpNum == 3){
-      arrayColors = arrayColors3;
-    }else if(cpNum == 4){
-      arrayColors = arrayColors4;
-    }
-    cpContainer.appendChild(makeColorPalette(numColors));
-  })
-
-  //for switching color palettes
-  function getCPRadioVal() {
-    var val;
-    // get list of radio buttons
-    var radios = [];
-
-    //add radio buttons to array 
-    for (var i=1; i<5; i++){
-      radios.push(document.getElementById("g"+i));
     }
 
-    //loop through array of radio buttons to see which button is check 
-    for (var i=0, len=radios.length; i<len; i++) {
-        if ( radios[i].checked ) { // radio checked?
-            val = radios[i].value; // if so, hold its value in val
-            break; // and break out of for loop
-        }
-    }
-    console.log(val);
-    return val; // return value of checked radio or undefined if none checked
+    //still need to set the triangle square, probably a better way to avoid this dulicate code
+    document.getElementById("type0year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
+    document.getElementById("type1year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
+    document.getElementById("type2year64").setAttribute("fill", arrayColors[countryNames.indexOf("France")]);
+    document.getElementById("type4year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
+    document.getElementById("type7year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
+
+    document.getElementById("type1year64").setAttribute("squareState","1");
+    currColor = arrayColors[countryNames.indexOf("France")];
+    changeSquare(document.getElementById("type1year64"));
+
+
+    // addExYearLabels2();
+    // var years2Label = ["1506","1510","1541","1550","1551","1591","1600"];
+    var years2Label = ["5","9","40","49","50","90","99"];
+    addExYearLabels(years2Label);
+
   }
-
 
   /*"show me" feature for the sample list of events*/
   var theParent = document.querySelector("#sampleList");
