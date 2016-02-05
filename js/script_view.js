@@ -516,100 +516,102 @@ $( document ).ready(function() { //had to use jquery because my
 /*******************************************EVENT LISTENERS**********************************************/
 
   /*aevent listener to generate timeline from chart*/
-  document.getElementById("timelineGen").addEventListener("click", function(){
-    var margin= {top:60, bottom:20, right:25, left:15};
+  // document.getElementById("timelineGen").addEventListener("click", function(){
+  //   var margin= {top:60, bottom:20, right:25, left:15};
 
-    document.getElementById("timelineViz").innerHTML = ""; //clear out any previous timeline
-    //dataArr is the array returned from calling generateTimeline
-    var dataArr = generateTimeline(10,0);
+  //   document.getElementById("timelineViz").innerHTML = ""; //clear out any previous timeline
+  //   //dataArr is the array returned from calling generateTimeline
+  //   var dataArr = generateTimeline(10,0);
 
-    //object with key as year and value as the number of events during that year
-    var yearsMap = {};
+  //   //object with key as year and value as the number of events during that year
+  //   var yearsMap = {};
 
-    var canvas = d3.select('#timelineViz').append('svg')
-              .attr("width",document.getElementById("timelineContainer").offsetWidth); //current width of the timelineContainer div
+  //   var canvas = d3.select('#timelineViz').append('svg')
+  //             .attr("width",document.getElementById("timelineContainer").offsetWidth); //current width of the timelineContainer div
     
-    var timeline = canvas.append('g')
-                  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  //   var timeline = canvas.append('g')
+  //                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    var xScale = d3.scale.linear()
-                  .domain([0, 99])
-                  .range([0,document.getElementById("timelineContainer").offsetWidth - margin.right])
+  //   var xScale = d3.scale.linear()
+  //                 .domain([0, 99])
+  //                 .range([0,document.getElementById("timelineContainer").offsetWidth - margin.right])
 
-    var xAxis = d3.svg.axis()
-                  .scale(xScale)
-                  .orient("bottom")
-                  .ticks(100)
-                  .tickFormat(function(d) { //dont display text unless it's an even decade
-                    if((d % 10) != 0){ 
-                        return ("");
-                    }else{ 
-                        return (d + 1500); //the 1500 would be user input start century
-                    }});
+  //   var xAxis = d3.svg.axis()
+  //                 .scale(xScale)
+  //                 .orient("bottom")
+  //                 .ticks(100)
+  //                 .tickFormat(function(d) { //dont display text unless it's an even decade
+  //                   if((d % 10) != 0){ 
+  //                       return ("");
+  //                   }else{ 
+  //                       return (d + 1500); //the 1500 would be user input start century
+  //                   }});
 
-    var xGuide = canvas.append('g')
-                  .attr("transform", "translate(" + margin.left + "," + (margin.top + margin.bottom) + ")")
-                  .attr("class","axis")
-                  .style("stroke-width",2)
-                  .call(xAxis);
+  //   var xGuide = canvas.append('g')
+  //                 .attr("transform", "translate(" + margin.left + "," + (margin.top + margin.bottom) + ")")
+  //                 .attr("class","axis")
+  //                 .style("stroke-width",2)
+  //                 .call(xAxis);
 
-    d3.selectAll("g.axis g.tick") //g.tick is the value of the tick
-      .style("stroke-width", function(d,i){
-        if(i%10 === 0)
-          return 2;
-        else
-          return 1;
-      });
+  //   d3.selectAll("g.axis g.tick") //g.tick is the value of the tick
+  //     .style("stroke-width", function(d,i){
+  //       if(i%10 === 0)
+  //         return 2;
+  //       else
+  //         return 1;
+  //     });
 
-      d3.selectAll("g.axis g.tick line") //g.tick line is the actual tick mark
-      .attr("y2", function(d,i){
-        if(i%10 === 0)
-          return 10;
-        else
-          return 5;
-      });
+  //     d3.selectAll("g.axis g.tick line") //g.tick line is the actual tick mark
+  //     .attr("y2", function(d,i){
+  //       if(i%10 === 0)
+  //         return 10;
+  //       else
+  //         return 5;
+  //     });
 
-    timeline.selectAll("rect")
-      .data(dataArr)
-      .enter()
-      .append("rect")
-      .attr("x",function(d){return (xScale(+d.year)-3)})
-      .attr("y", function(d){ //prevent overlapping rectangles by keeping track of how many events occur each year
-        if(yearsMap[d.year] == null)
-            yearsMap[d.year] = 1;
-        else 
-            yearsMap[d.year] = +yearsMap[d.year] + 1;
-        return (19 - 7*yearsMap[d.year] - yearsMap[d.year])})
-      .attr("width", 7)
-      .attr("height", 7)
-      .attr("fill", function(d){return d.color})
-      .on("mouseover",function(d){ //show and hide tooltip of event label
-              document.getElementById(d.text + d.year).style.visibility = "visible";
-      })
-      .on("mouseout", function(d){
-        document.getElementById(d.text + d.year).style.visibility ="hidden";
-      });
+  //   timeline.selectAll("rect")
+  //     .data(dataArr)
+  //     .enter()
+  //     .append("rect")
+  //     .attr("x",function(d){return (xScale(+d.year)-3)})
+  //     .attr("y", function(d){ //prevent overlapping rectangles by keeping track of how many events occur each year
+  //       if(yearsMap[d.year] == null)
+  //           yearsMap[d.year] = 1;
+  //       else 
+  //           yearsMap[d.year] = +yearsMap[d.year] + 1;
+  //       return (19 - 7*yearsMap[d.year] - yearsMap[d.year])})
+  //     .attr("width", 7)
+  //     .attr("height", 7)
+  //     .attr("fill", function(d){return d.color})
+  //     .on("mouseover",function(d){ //show and hide tooltip of event label
+  //             document.getElementById(d.text + d.year).style.visibility = "visible";
+  //     })
+  //     .on("mouseout", function(d){
+  //       document.getElementById(d.text + d.year).style.visibility ="hidden";
+  //     });
 
-    timeline.selectAll("text") 
-      .data(dataArr)
-      .enter()
-      .append("text")
-      .text(function(d){return d.text})
-      .attr("x",function(d){return xScale(+d.year)}) //TODO: if year is 68, place text on left side of data point
-      .attr("y",5)
-      .attr("class","textLabels")
-      .attr("id", function(d){return d.text + d.year}) //allows text elements to be accessible by their corresponding rect
-      .style("visibility", "hidden");
-  });
+  //   timeline.selectAll("text") 
+  //     .data(dataArr)
+  //     .enter()
+  //     .append("text")
+  //     .text(function(d){return d.text})
+  //     .attr("x",function(d){return xScale(+d.year)}) //TODO: if year is 68, place text on left side of data point
+  //     .attr("y",5)
+  //     .attr("class","textLabels")
+  //     .attr("id", function(d){return d.text + d.year}) //allows text elements to be accessible by their corresponding rect
+  //     .style("visibility", "hidden");
+  // });
 
 /*event listener to clear grid and timeline*/
   document.getElementById("clearBtn").addEventListener("click", function(){
     clearAll();
+
   });
 
+  /*removed function from event listener so can be accessed from elsewhere*/
   function clearAll(){
-    //remove data points from timeline
-    d3.select('#timelineViz').selectAll("rect").remove();
+   //remove data points from timeline
+    // d3.select('#timelineViz').selectAll("rect").remove();
     //iterate through all squares and set their states to 0 and fill to white.
     //remove all triangles
     var yearID = 0;
@@ -629,96 +631,44 @@ $( document ).ready(function() { //had to use jquery because my
       }
   }
 
+  function drawExample(){
+    
+    var buttons = document.getElementsByClassName("showme"); //get all of the buttons
 
-/**EVENT LISTENERS UNDER "CUSTOMIZE COLOR PALETTE"**/
+    var countries = [];
+    var typeSquareIDs = [];
+    var squares = [];
+    var temp; 
 
-  /*event listener to allow user to add country*/
-  document.getElementById("addCountryButton").addEventListener("click", function(){
-    //numColors cannot go above 10, because of number of colors in each color palette
-    if(numColors < 10){
-      document.getElementById("colorPaletteSVG").remove(); //this removes the whole svg
-      countryNames.push(document.getElementById("newCountry").value);
-      arrayColors.push("blue");
-      numColors++; //increase numColors by 1
-      cpContainer.appendChild(makeColorPalette(numColors)); 
-      document.getElementById("newCountry").value = ""; //reset input box
-    }else{
-      alert("You can't add more than 10 countries.");
-    }
-  });
+    //loops through buttons to extract the country and typeSquareID from each ID tag, then sets the attributes
+    for(var i=0; i < buttons.length; i++){
+      temp = buttons[i].id.split('_');
+      countries.push(temp[0]);
+      typeSquareIDs.push(temp[1]);
 
-  /*event listener to allow user to remove country*/
-  document.getElementById("removeCountryButton").addEventListener("click", function(){
-    // document.getElementById("colorPaletteSVG").removeChild(colorGroup); //this line removes the last colorGroup (square and country label)
-      var country = document.getElementById("removeCountry").value;
-      if(countryNames.indexOf(country) >= 0){ //check if the country is actually in the array 
-        document.getElementById("colorPaletteSVG").remove(); //this removes the whole svg
-
-        countryNames.splice(countryNames.indexOf(country),1);
-        console.log(countryNames);
-        arrayColors.splice(countryNames.indexOf(country),1);
-        numColors--; //decrease numColors by 1
-        cpContainer.appendChild(makeColorPalette(numColors)); 
-        document.getElementById("removeCountry").value = ""; //reset input box
-      }else{
-        document.getElementById("removeCountry").value = ""; //reset input box
-        console.log("no country to remove");
-        alert("There is no country by this name to remove.");
+      if(document.getElementById(temp[1])){ //null check for "special" case 
+        document.getElementById(temp[1]).setAttribute("fill", arrayColors[countryNames.indexOf(temp[0])]);
       }
-  });
-
-  /*event listener to allow user to remove all countries at once*/
-  document.getElementById("removeAllCountriesButton").addEventListener("click", function(){
-    document.getElementById("colorPaletteSVG").remove(); //this removes the whole svg
-
-    console.log("in");
-    countryNames.length = 0; //empty array 
-    numColors = 0; 
-    cpContainer.appendChild(makeColorPalette(0)); 
-  });
-
-
-  /*event listener to listen to changing color scheme*/
-  document.getElementById("editForm").addEventListener("click", function(){
-    console.log("changing color schemes");
-    document.getElementById("colorPaletteSVG").remove(); //this removes the whole svg
-
-    var cpNum = getCPRadioVal();
-
-    if(cpNum == 1){
-      arrayColors = arrayColors1;
-    }else if(cpNum == 2){
-      arrayColors = arrayColors2;
-    }else if(cpNum == 3){
-      arrayColors = arrayColors3;
-    }else if(cpNum == 4){
-      arrayColors = arrayColors4;
-    }
-    cpContainer.appendChild(makeColorPalette(numColors));
-  })
-
-  //for switching color palettes
-  function getCPRadioVal() {
-    var val;
-    // get list of radio buttons
-    var radios = [];
-
-    //add radio buttons to array 
-    for (var i=1; i<5; i++){
-      radios.push(document.getElementById("g"+i));
     }
 
-    //loop through array of radio buttons to see which button is check 
-    for (var i=0, len=radios.length; i<len; i++) {
-        if ( radios[i].checked ) { // radio checked?
-            val = radios[i].value; // if so, hold its value in val
-            break; // and break out of for loop
-        }
-    }
-    console.log(val);
-    return val; // return value of checked radio or undefined if none checked
+    //still need to set the triangle square, probably a better way to avoid this dulicate code
+    document.getElementById("type0year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
+    document.getElementById("type1year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
+    document.getElementById("type2year64").setAttribute("fill", arrayColors[countryNames.indexOf("France")]);
+    document.getElementById("type4year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
+    document.getElementById("type7year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
+
+    document.getElementById("type1year64").setAttribute("squareState","1");
+    currColor = arrayColors[countryNames.indexOf("France")];
+    changeSquare(document.getElementById("type1year64"));
+
+
+    // addExYearLabels2();
+    // var years2Label = ["1506","1510","1541","1550","1551","1591","1600"];
+    var years2Label = ["5","9","40","49","50","90","99"];
+    addExYearLabels(years2Label);
+
   }
-
 
   /*"show me" feature for the sample list of events*/
   var theParent = document.querySelector("#sampleList");
@@ -738,7 +688,6 @@ $( document ).ready(function() { //had to use jquery because my
       console.log("country: " + country);
 
       var square = document.getElementById(typeSquareID);
-
 
       //clear existing so example is accurate
       clearAll();
