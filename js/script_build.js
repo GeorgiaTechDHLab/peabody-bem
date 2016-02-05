@@ -1,4 +1,3 @@
-//TODO: make list into timeline
 $( document ).ready(function() { //had to use jquery because my 
   //document.getElementByID was being called before the ID in the document was created
   //but now we can just use jquery syntax instead of doc.getelementbyid
@@ -323,8 +322,8 @@ $( document ).ready(function() { //had to use jquery because my
     var bg = document.createSvg("rect");
     var sizeBG = (pixelsPerSide);
     bg.setAttribute("id","bg");
-    bg.setAttribute("width", sizeBG + size);
-    bg.setAttribute("height", sizeBG + size);
+    bg.setAttribute("width", sizeBG + size/3);
+    bg.setAttribute("height", sizeBG + size/3);
     bg.setAttribute("fill","black"); //TODO: do this in css file?
     bg.setAttribute("fill-opacity",".1");
 
@@ -381,12 +380,12 @@ $( document ).ready(function() { //had to use jquery because my
         if(numYear.between(0,50)){  //upper half of grid
             yearBox.setAttribute("transform", ["translate(", j*size + j*8, ",", i*size + i*8, ")"].join("")); //offset to see bkg. j is x, i is y
             if(numYear.between(5,10) || numYear.between(15,20) || numYear.between(25,30) || numYear.between(35,40) || numYear.between(45,50)) // right quadrant
-              yearBox.setAttribute("transform", ["translate(", j*size + j*8 + size, ",", i*size + i*8, ")"].join(""));
+              yearBox.setAttribute("transform", ["translate(", j*size + j*8 + size/3, ",", i*size + i*8, ")"].join(""));
           }
         if(numYear.between(50,100)){ //lower half of grid
-            yearBox.setAttribute("transform", ["translate(", j*size + j*8, ",", i*size + i*8 + size, ")"].join("")); 
+            yearBox.setAttribute("transform", ["translate(", j*size + j*8, ",", i*size + i*8 + size/3, ")"].join("")); 
             if(numYear.between(55,60) || numYear.between(65,70) || numYear.between(75,80) || numYear.between(85,90) || numYear.between(95,100)) // right quadrant
-              yearBox.setAttribute("transform", ["translate(", j*size + j*8 + size, ",", i*size + i*8 + size, ")"].join(""));
+              yearBox.setAttribute("transform", ["translate(", j*size + j*8 + size/3, ",", i*size + i*8 + size/3, ")"].join(""));
           }
         }//close inner for loop
     }//close outer for loop
@@ -398,7 +397,6 @@ $( document ).ready(function() { //had to use jquery because my
     var timelineDataPts = []; //array of points to be plotted on the timeline
       for(var i = 0; i < boxesPerSide; i++) {
         for(var j = 0; j < boxesPerSide; j++) {
-          //TODO: map yearID to an actual year
           //document.getElementById("timeline").innerHTML = document.getElementById("timeline").innerHTML + yearID + "<br>"; //label for the year in which the events took place
           for(var numType = 0; numType < 9; numType++){ //check each square for a fill
             var typeSquare = document.getElementById("type" + numType + "year" + yearID);

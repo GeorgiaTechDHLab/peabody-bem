@@ -305,16 +305,16 @@ $( document ).ready(function() { //had to use jquery because my
 
     //whole svg 
     var svg = document.createSvg("svg");
-    svg.setAttribute("width", pixelsPerSide + size);
-    svg.setAttribute("height", pixelsPerSide + size);
+    svg.setAttribute("width", pixelsPerSide + size/3);
+    svg.setAttribute("height", pixelsPerSide + size/3);
     console.log(pixelsPerSide);
     console.log(size);
 
     //group for everything: background, years, types. so when "maing" is translated, everything moves as a unit
     var maing = document.createSvg("g");
     maing.setAttribute("id", "maing");
-    maing.setAttribute("width", pixelsPerSide + size);
-    maing.setAttribute("height", pixelsPerSide + size);
+    maing.setAttribute("width", pixelsPerSide + size/3);
+    maing.setAttribute("height", pixelsPerSide + size/3);
 
 
     // maing.setAttribute("transform", ["translate(60,60)"]); //test if objects are grouped together
@@ -323,8 +323,8 @@ $( document ).ready(function() { //had to use jquery because my
     var bg = document.createSvg("rect");
     var sizeBG = (pixelsPerSide);
     bg.setAttribute("id","bg");
-    bg.setAttribute("width", sizeBG + size);
-    bg.setAttribute("height", sizeBG + size);
+    bg.setAttribute("width", sizeBG + size/3);
+    bg.setAttribute("height", sizeBG + size/3);
     bg.setAttribute("fill","black"); //TODO: do this in css file?
     bg.setAttribute("fill-opacity",".1");
 
@@ -381,12 +381,12 @@ $( document ).ready(function() { //had to use jquery because my
         if(numYear.between(0,50)){  //upper half of grid
             yearBox.setAttribute("transform", ["translate(", j*size + j*8, ",", i*size + i*8, ")"].join("")); //offset to see bkg. j is x, i is y
             if(numYear.between(5,10) || numYear.between(15,20) || numYear.between(25,30) || numYear.between(35,40) || numYear.between(45,50)) // right quadrant
-              yearBox.setAttribute("transform", ["translate(", j*size + j*8 + size, ",", i*size + i*8, ")"].join(""));
+              yearBox.setAttribute("transform", ["translate(", j*size + j*8 + size/3, ",", i*size + i*8, ")"].join(""));
           }
         if(numYear.between(50,100)){ //lower half of grid
-            yearBox.setAttribute("transform", ["translate(", j*size + j*8, ",", i*size + i*8 + size, ")"].join("")); 
+            yearBox.setAttribute("transform", ["translate(", j*size + j*8, ",", i*size + i*8 + size/3, ")"].join("")); 
             if(numYear.between(55,60) || numYear.between(65,70) || numYear.between(75,80) || numYear.between(85,90) || numYear.between(95,100)) // right quadrant
-              yearBox.setAttribute("transform", ["translate(", j*size + j*8 + size, ",", i*size + i*8 + size, ")"].join(""));
+              yearBox.setAttribute("transform", ["translate(", j*size + j*8 + size/3, ",", i*size + i*8 + size/3, ")"].join(""));
           }
         }//close inner for loop
     }//close outer for loop
