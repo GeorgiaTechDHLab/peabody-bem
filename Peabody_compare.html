@@ -31,7 +31,8 @@
 		<!--using bootstrap to organize elements on page, so container/row/col-md-12 etc come from Bootstrap files--> 
 	    <div class = "container">
 			
-			<div class="col-md-12"> <!--column for colorPalette and event list-->
+
+		<div class="col-md-4"> <!--column for colorPalette and event list-->
 
 				<div id="eventList" >
 					<h2>Events</h2>
@@ -41,7 +42,7 @@
 					    <div class="panel-heading" role="tab" id="headingOne">
 					      <h4 class="panel-title">
 					        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-					          Sample Event List: Chronological List of the 16th Century
+					          Event List: Chronological List of the 16th Century
 					        </a>
 					      </h4>
 					    </div>
@@ -73,24 +74,24 @@
 					  </div>
 
 					</div>
-				</div><!--close col-md-4-->
+				</div><!--close event list div-->
 				<!--container--> 
-			</div> <!--close event list row-->
+			</div> <!--close col-md-4-->
 
-		<div class="col-md-12"> <!--column to hold chart and timeline-->
-			<div id="gridContainer" class="row">
-					<h2 id="chartTitle">Chart: Chronological List of the 16th Century</h2>
-				<!--row for chart-->
-			</div>
-			<div class="row"><!--row with timeline-->
-				<div id="timelineContainer">
-					<h2>Timeline</h2>
-					<button type="button" id="timelineGen">Generate Timeline</button>
-					<div id="timelineViz"></div>
-					<button type="button" id="clearBtn">Clear All</button>
-				</div>			
-			</div><!--close row-->
-		</div> <!--close column holding chart and timeline-->
+			<div class="col-md-8"> <!--column to hold chart and timeline-->
+				<div id="gridContainer" class="row">
+						<h2 id="chartTitle">Chart: Chronological List of the 16th Century</h2>
+					<!--row for chart-->
+				</div>
+				<div class="row"><!--row with timeline-->
+					<div id="timelineContainer">
+						<h2>Timeline</h2>
+						<button type="button" id="timelineGen">Generate Timeline</button>
+						<div id="timelineViz"></div>
+						<button type="button" id="clearBtn">Clear All</button>
+					</div>			
+				</div><!--close row-->
+			</div> <!--close column holding chart and timeline-->
 
 
 		<!--close container--> 

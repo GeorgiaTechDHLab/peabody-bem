@@ -1,7 +1,9 @@
-//TODO: make list into timeline
-$( document ).ready(function() { //had to use jquery because my 
-  //document.getElementByID was being called before the ID in the document was created
-  //but now we can just use jquery syntax instead of doc.getelementbyid
+//TODO: generate event list from csv
+//handle triangles in fillChart
+
+$( document ).ready(function() { 
+
+
   Number.prototype.between = function (min, max) {
     return this >= min && this < max;
     };
@@ -24,6 +26,7 @@ $( document ).ready(function() { //had to use jquery because my
   //array of country names, if more colors and country added, new country gets next color
   //more countryNames than colors get assigned black
   var countryNames = ["England", "Spain", "France"]; //countries for sample list
+
   // var countryNames = ["England", "Spain", "France", "Germany", "Morocco", "Italy"];
 
   //10 country names
@@ -33,7 +36,7 @@ $( document ).ready(function() { //had to use jquery because my
   var numColors = countryNames.length;
 
    //currColor will be to hold whatever color the user squareState on to use
-  var currColor = "#722712";
+  var currColor = "#720042";
 
   //prevColor will hold whatever the previous color of the square was
   var prevColor = "";
@@ -497,8 +500,22 @@ $( document ).ready(function() { //had to use jquery because my
       }
       return timelineDataPts;
   };
+
+  /*fill in squares on chart given an array of objects w/ year, type, color*/
+  function fillChart(dataArr){
+    dataArr.forEach(function (element, index, array){
+      console.log('type' + element.eventType + 'year' + (+element.year % 100));
+        document.getElementById('type' + element.eventType + 'year' + (+element.year % 100))
+        .setAttribute('fill', element.color);
+
+        //TODO: if fill != white, create a triangle instead of setting attribute
+
+    })
+  }
   
 /*******************************************INITIALIZE PAGE**********************************************/
+
+d3.csv('peabodyData.csv', function(d){
 
   /*draw the 100x100 grid*/
   var container = document.getElementById("gridContainer");
@@ -508,7 +525,13 @@ $( document ).ready(function() { //had to use jquery because my
   var years2Label = ["5","9","40","49","50","90","99"];
   addExYearLabels(years2Label);
 
+  /*populate chart*/
+  fillChart(d);
 
+  /*draw timeline*/
+  drawTimeline();
+
+})
 
   /*add the color palette to the page*/
   // var cpContainer = document.getElementById("colorPalette");
@@ -517,8 +540,11 @@ $( document ).ready(function() { //had to use jquery because my
 
 /*******************************************EVENT LISTENERS**********************************************/
 
-  /*aevent listener to generate timeline from chart*/
-  document.getElementById("timelineGen").addEventListener("click", function(){
+  /*event listener to generate timeline from chart*/
+  document.getElementById("timelineGen").addEventListener("click", drawTimeline);
+  
+  /*function to draw timeline from chart*/
+  function drawTimeline() {
     var margin= {top:60, bottom:20, right:25, left:15};
 
     document.getElementById("timelineViz").innerHTML = ""; //clear out any previous timeline
@@ -546,7 +572,7 @@ $( document ).ready(function() { //had to use jquery because my
                     if((d % 10) != 0){ 
                         return ("");
                     }else{ 
-                        return (d + 1500); //the 1500 would be user input start century
+                        return (d + 1600); //the 1600 would be user input start century
                     }});
 
     var xGuide = canvas.append('g')
@@ -602,7 +628,7 @@ $( document ).ready(function() { //had to use jquery because my
       .attr("class","textLabels")
       .attr("id", function(d){return d.text + d.year}) //allows text elements to be accessible by their corresponding rect
       .style("visibility", "hidden");
-  });
+  };
 
 /*event listener to clear grid and timeline*/
   document.getElementById("clearBtn").addEventListener("click", function(){
