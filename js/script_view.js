@@ -6,28 +6,11 @@ $( document ).ready(function() { //had to use jquery because my
     return this >= min && this < max;
     };
 
-
-  //array of colors for 4 color palettes, with 10 colors per array. 
-
-  //this array holds the current array of colors 
+  //array of colors for sample list
   var arrayColors = ["#720042", "#BA390B", "#6EA2A3", "#336531","#D98634","#A34F93","#9FBCBF","#9BCF7A","#CC7172","#CFB47E"]
-  // var arrayColors = ["#723767","#722712","#3F6869","#336531","#D98634","#A34F93","#9FBCBF","#9BCF7A","#CC7172","#CFB47E"];
 
-  var arrayColors1 = ["#720042", "#BA390B", "#6EA2A3", "#336531","#D98634","#A34F93","#9FBCBF","#9BCF7A","#CC7172","#CFB47E"];
-
-  var arrayColors2 = ["#195232", "#468966","#FFF0A5","#FFB03B","#B64926","#8E2800","#D1DBBD","#91AA9D","#3E606F","#193441"];
-
-  var arrayColors3 = ["#F9E4AD","#E6B098","#CC4452","#723147","#31152B","#FF7F00","#FFD933","#CCCC52","#8FB259","#253F4A"];
-
-  var arrayColors4 = ["#BAB293","#A39770","#EFE4BD","#A32500","#643738","#D5FBFF","#9FBCBF","#647678","#2F3738","#59D8E5"];
-
-  //array of country names, if more colors and country added, new country gets next color
-  //more countryNames than colors get assigned black
-  var countryNames = ["England", "Spain", "France"]; //countries for sample list
-  // var countryNames = ["England", "Spain", "France", "Germany", "Morocco", "Italy"];
-
-  //10 country names
-  // var countryNames = ["Spain", "Portugal", "France", "Germany", "Morocco", "Italy", "Mordor", "Rivendel", "Shire", "Hogsmeade"];
+  //array of country names for sample list
+  var countryNames = ["England", "Spain", "France"]; 
 
   //the number of colors/countries represented
   var numColors = countryNames.length;
@@ -57,14 +40,10 @@ $( document ).ready(function() { //had to use jquery because my
   //array for all 900 rectangles h
   var rect = [];
 
-  /*TODO: update chart title based on which event list is active (sample or custom titled)*/
-  function updateChartTitle(element){
+    var squares2Fill = ["England_type5year0", "Spain_type7year11", "England_type7year16", "Spain_type7year19", "France_type7year22", "Spain_type7year24", 
+                      "Spain_type7year25", "France_type7year33", "Spain_type7year36", "France_type7year39", "Spain_type8year41", "France_type7year61", 
+                      "special", "England_type7year75", "England_type7year77", "England_type7year78", "England_type7year83", "England_type7year84"];
 
-    //need title variable from event list
-
-    //#chartTitle is id for title above chart
-
-  }
 
   /*if we want to use right-click functionality instead: http://www.sitepoint.com/building-custom-right-click-context-menu-javascript/ */
 
@@ -228,26 +207,6 @@ $( document ).ready(function() { //had to use jquery because my
         return this.createElementNS(svgNS, tagName);
   };
 
-
-  /*update the current color based on what user clicks*/
-  var updateCurrColor = function(e){
-
-        //returns the svg element of the color square, <rect>
-        if(e.target !== e.currentTarget && document.getElementById("colorPaletteSVG")){ //second check is for when color palette isn't there because of updating
-          var clickedItemID = e.target.id; //id= #colorBox[i]
-          currColor = document.getElementById(clickedItemID).getAttribute("fill"); 
-
-          //remove all selection css
-          for (var i=0; i<numColors;i++){
-            document.getElementById("colorBox"+i).removeAttribute("class","selectedColor");
-          }
-          //add new selection css
-          e.target.setAttribute("class","selectedColor");
-        }
-        e.stopPropagation();
-  }
-
-
   /**dynamic color palette to size according to number of colors*/
   var makeColorPalette = function(numColors){
     // var svg = document.createSvg("svg"); //no difference between this line 
@@ -273,9 +232,6 @@ $( document ).ready(function() { //had to use jquery because my
 
       /*tutorial: http://www.kirupa.com/html5/handling_events_for_many_elements.htm*/
       var colorPalette = document.querySelector("#colorPalette");
-      colorPalette.addEventListener("click", updateCurrColor, false);
-
-      //form labels don't work because they can't be appended to an svg...
 
       /*label for color in palette*/
       var colorLabel = document.createSvg("text");
@@ -307,8 +263,6 @@ $( document ).ready(function() { //had to use jquery because my
     var svg = document.createSvg("svg");
     svg.setAttribute("width", pixelsPerSide + size/3);
     svg.setAttribute("height", pixelsPerSide + size/3);
-    console.log(pixelsPerSide);
-    console.log(size);
 
     //group for everything: background, years, types. so when "maing" is translated, everything moves as a unit
     var maing = document.createSvg("g");
@@ -393,110 +347,6 @@ $( document ).ready(function() { //had to use jquery because my
 
     return svg;
   }
-
-   function generateTimeline(boxesPerSide, yearID){
-    var timelineDataPts = []; //array of points to be plotted on the timeline
-      for(var i = 0; i < boxesPerSide; i++) {
-        for(var j = 0; j < boxesPerSide; j++) {
-          //TODO: map yearID to an actual year
-          //document.getElementById("timeline").innerHTML = document.getElementById("timeline").innerHTML + yearID + "<br>"; //label for the year in which the events took place
-          for(var numType = 0; numType < 9; numType++){ //check each square for a fill
-            var typeSquare = document.getElementById("type" + numType + "year" + yearID);
-            var triangle = document.getElementById("tritype" + numType + "year" + yearID); //the triangle occupying the type square. could be null
-            //for number of colors
-            for(var numClr = 1; numClr <= numColors; numClr++){ //check which color the fill is TODO: first check if fill exists
-              if(triangle != null){
-                if(triangle.getAttribute("fill") == arrayColors[numClr-1])
-                {
-                  var country = countryNames[numClr-1];
-                  //9 if else statements for type of event. to avoid: would be nice to have an added attribute during makeGrid that is eventName
-                   if(numType == 0){
-                    //add data point object: year, color, text
-                    timelineDataPts.push({year: yearID, color: arrayColors[numClr-1], text: country + ": Beginning of war"});
-                    //document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Beginning of war <br>"; //using the color as a key, gets the corresponding country value from countries
-                   }
-                   else if(numType == 1){
-                    timelineDataPts.push({year: yearID, color: arrayColors[numClr-1], text: country + ": Conquest, annexation, or union"});
-                    //document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Conquest, annexation, or union <br>"; 
-                   }
-                   else if(numType == 2){
-                    timelineDataPts.push({year: yearID, color: arrayColors[numClr-1], text: country + ": Loss or disaster"});
-                    //document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Loss or disaster <br>";
-                   }
-                   else if(numType == 3){
-                    timelineDataPts.push({year: yearID, color: arrayColors[numClr-1], text: country + ": Fall of state"});
-                    //document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Fall of state <br>";
-                   }
-                   else if(numType == 4){
-                    timelineDataPts.push({year: yearID, color: arrayColors[numClr-1], text: country + ": Foundation or revolution"});
-                    //document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Foundation or revolution <br>";
-                   }
-                   else if(numType == 5){
-                    timelineDataPts.push({year: yearID, color: arrayColors[numClr-1], text: country + ": Treaty or sundry"});
-                    //document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Treaty or sundry <br>";
-                   }
-                   else if(numType == 6){
-                    timelineDataPts.push({year: yearID, color: arrayColors[numClr-1], text: country + ": Birth of remarkable individual"});
-                    //document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Birth of remarkable individual <br>";
-                   }
-                   else if(numType == 7){
-                    timelineDataPts.push({year: yearID, color: arrayColors[numClr-1], text: country + ": Deed"});
-                    //document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Deed <br>"; 
-                   }
-                   else if(numType == 8){
-                    timelineDataPts.push({year: yearID, color: arrayColors[numClr-1], text: country + ": Death of remarkable individual"});
-                    //document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Death of remarkable individual <br>";
-                   }
-                } //end if triangle.getAttr
-              } //end if triangle != null
-              if(typeSquare.getAttribute("fill") == arrayColors[numClr-1])
-                {
-                  var country = countryNames[numClr-1];
-                  //9 if else statements for type of event. to avoid: would be nice to have an added attribute during makeGrid that is eventName
-                   if(numType == 0){
-                    timelineDataPts.push({year: yearID, color: arrayColors[numClr-1], text: country + ": Beginning of war"});
-                    //document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Beginning of war <br>"; //using the color as a key, gets the corresponding country value from countries
-                   }
-                   if(numType == 1){
-                    timelineDataPts.push({year: yearID, color: arrayColors[numClr-1], text: country + ": Conquest, annexation, or union"});
-                    //document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Conquest, annexation, or union <br>"; 
-                   }
-                   if(numType == 2){
-                    timelineDataPts.push({year: yearID, color: arrayColors[numClr-1], text: country + ": Loss or disaster"});
-                    //document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Loss or disaster <br>";
-                   }
-                   if(numType == 3){
-                    timelineDataPts.push({year: yearID, color: arrayColors[numClr-1], text: country + ": Fall of state"});
-                    //document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Fall of state <br>";
-                   }
-                   if(numType == 4){
-                    timelineDataPts.push({year: yearID, color: arrayColors[numClr-1], text: country + ": Foundation or revolution"});
-                    //document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Foundation or revolution <br>";
-                   }
-                   if(numType == 5){
-                    timelineDataPts.push({year: yearID, color: arrayColors[numClr-1], text: country + ": Treaty or sundry"});
-                    //document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Treaty or sundry <br>";
-                   }
-                   if(numType == 6){
-                    timelineDataPts.push({year: yearID, color: arrayColors[numClr-1], text: country + ": Birth of remarkable individual"});
-                    //document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Birth of remarkable individual <br>";
-                   }
-                   if(numType == 7){
-                    timelineDataPts.push({year: yearID, color: arrayColors[numClr-1], text: country + ": Deed"});
-                    //document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Deed <br>"; 
-                   }
-                   if(numType == 8){
-                    timelineDataPts.push({year: yearID, color: arrayColors[numClr-1], text: country + ": Death of remarkable individual"});
-                    //document.getElementById("timeline").innerHTML =  document.getElementById("timeline").innerHTML + country + ": Death of remarkable individual <br>";
-                   }
-                } //end if typeSquare
-            } //end for numClr
-          } //end for numType
-          yearID = yearID + 1;
-        }
-      }
-      return timelineDataPts;
-  };
   
 /*******************************************INITIALIZE PAGE**********************************************/
 
@@ -512,124 +362,13 @@ $( document ).ready(function() { //had to use jquery because my
   var cpContainer = document.getElementById("colorPalette");
   cpContainer.appendChild(makeColorPalette(numColors)); //make dynamic color palette with 6 colors
 
+  fillSquares();
+
+
+
 
 /*******************************************EVENT LISTENERS**********************************************/
 
-  /*aevent listener to generate timeline from chart*/
-  // document.getElementById("timelineGen").addEventListener("click", function(){
-  //   var margin= {top:60, bottom:20, right:25, left:15};
-
-  //   document.getElementById("timelineViz").innerHTML = ""; //clear out any previous timeline
-  //   //dataArr is the array returned from calling generateTimeline
-  //   var dataArr = generateTimeline(10,0);
-
-  //   //object with key as year and value as the number of events during that year
-  //   var yearsMap = {};
-
-  //   var canvas = d3.select('#timelineViz').append('svg')
-  //             .attr("width",document.getElementById("timelineContainer").offsetWidth); //current width of the timelineContainer div
-    
-  //   var timeline = canvas.append('g')
-  //                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-  //   var xScale = d3.scale.linear()
-  //                 .domain([0, 99])
-  //                 .range([0,document.getElementById("timelineContainer").offsetWidth - margin.right])
-
-  //   var xAxis = d3.svg.axis()
-  //                 .scale(xScale)
-  //                 .orient("bottom")
-  //                 .ticks(100)
-  //                 .tickFormat(function(d) { //dont display text unless it's an even decade
-  //                   if((d % 10) != 0){ 
-  //                       return ("");
-  //                   }else{ 
-  //                       return (d + 1500); //the 1500 would be user input start century
-  //                   }});
-
-  //   var xGuide = canvas.append('g')
-  //                 .attr("transform", "translate(" + margin.left + "," + (margin.top + margin.bottom) + ")")
-  //                 .attr("class","axis")
-  //                 .style("stroke-width",2)
-  //                 .call(xAxis);
-
-  //   d3.selectAll("g.axis g.tick") //g.tick is the value of the tick
-  //     .style("stroke-width", function(d,i){
-  //       if(i%10 === 0)
-  //         return 2;
-  //       else
-  //         return 1;
-  //     });
-
-  //     d3.selectAll("g.axis g.tick line") //g.tick line is the actual tick mark
-  //     .attr("y2", function(d,i){
-  //       if(i%10 === 0)
-  //         return 10;
-  //       else
-  //         return 5;
-  //     });
-
-  //   timeline.selectAll("rect")
-  //     .data(dataArr)
-  //     .enter()
-  //     .append("rect")
-  //     .attr("x",function(d){return (xScale(+d.year)-3)})
-  //     .attr("y", function(d){ //prevent overlapping rectangles by keeping track of how many events occur each year
-  //       if(yearsMap[d.year] == null)
-  //           yearsMap[d.year] = 1;
-  //       else 
-  //           yearsMap[d.year] = +yearsMap[d.year] + 1;
-  //       return (19 - 7*yearsMap[d.year] - yearsMap[d.year])})
-  //     .attr("width", 7)
-  //     .attr("height", 7)
-  //     .attr("fill", function(d){return d.color})
-  //     .on("mouseover",function(d){ //show and hide tooltip of event label
-  //             document.getElementById(d.text + d.year).style.visibility = "visible";
-  //     })
-  //     .on("mouseout", function(d){
-  //       document.getElementById(d.text + d.year).style.visibility ="hidden";
-  //     });
-
-  //   timeline.selectAll("text") 
-  //     .data(dataArr)
-  //     .enter()
-  //     .append("text")
-  //     .text(function(d){return d.text})
-  //     .attr("x",function(d){return xScale(+d.year)}) //TODO: if year is 68, place text on left side of data point
-  //     .attr("y",5)
-  //     .attr("class","textLabels")
-  //     .attr("id", function(d){return d.text + d.year}) //allows text elements to be accessible by their corresponding rect
-  //     .style("visibility", "hidden");
-  // });
-
-/*event listener to clear grid and timeline*/
-  document.getElementById("clearBtn").addEventListener("click", function(){
-    clearAll();
-
-  });
-
-  /*removed function from event listener so can be accessed from elsewhere*/
-  function clearAll(){
-   //remove data points from timeline
-    // d3.select('#timelineViz').selectAll("rect").remove();
-    //iterate through all squares and set their states to 0 and fill to white.
-    //remove all triangles
-    var yearID = 0;
-     for(var i = 0; i < 10; i++) { 
-        for(var j = 0; j < 10; j++) {
-          for(var numType = 0; numType < 9; numType++){ 
-            var typeSquare = document.getElementById("type" + numType + "year" + yearID);
-            var triangle = document.getElementById("tritype" + numType + "year" + yearID);
-            typeSquare.setAttribute("squareState",0);
-            typeSquare.setAttribute("fill","white");
-            if(triangle != null){
-              triangle.remove();
-            }
-          }
-          yearID = yearID + 1;
-        }
-      }
-  }
 
   function drawExample(){
     
@@ -670,98 +409,17 @@ $( document ).ready(function() { //had to use jquery because my
 
   }
 
-  /*"show me" feature for the sample list of events*/
-  var theParent = document.querySelector("#sampleList");
-  theParent.addEventListener("click", doSomething, false);
 
-  function doSomething(e){
-    if(e.target !== e.currentTarget){
-      var clickedItem = e.target.id;
-      console.log(clickedItem);
-
-      var fillSquareParam = clickedItem.split('_'); //split the id into country and type to fill correct square with correct color
-
-      var country = fillSquareParam[0];
-      var typeSquareID = fillSquareParam[1];
-
-      console.log("typeSquareID: " + typeSquareID);
-      console.log("country: " + country);
-
-      var square = document.getElementById(typeSquareID);
-
-      //clear existing so example is accurate
-      clearAll();
-      
-      //to set the triangle square
-      if(clickedItem == "special"){
-        document.getElementById("type0year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
-        document.getElementById("type1year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
-        document.getElementById("type2year64").setAttribute("fill", arrayColors[countryNames.indexOf("France")]);
-        document.getElementById("type4year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
-        document.getElementById("type7year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
-
-        document.getElementById("type1year64").setAttribute("squareState","1");
-        currColor = arrayColors[countryNames.indexOf("France")];
-        changeSquare(document.getElementById("type1year64"));
-
-
-      //if "show all" button is clicked
-      }else if(clickedItem == "showallb"){
-
-        var buttons = document.getElementsByClassName("showme"); //get all of the buttons
-
-        var countries = [];
-        var typeSquareIDs = [];
-        var squares = [];
-        var temp; 
-
-        //loops through buttons to extract the country and typeSquareID from each ID tag, then sets the attributes
-        for(var i=0; i < buttons.length; i++){
-          temp = buttons[i].id.split('_');
-          countries.push(temp[0]);
-          typeSquareIDs.push(temp[1]);
-
-          if(document.getElementById(temp[1])){ //null check for "special" case 
-            document.getElementById(temp[1]).setAttribute("fill", arrayColors[countryNames.indexOf(temp[0])]);
-          }
-        }
-
-        //still need to set the triangle square, probably a better way to avoid this dulicate code
-        document.getElementById("type0year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
-        document.getElementById("type1year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
-        document.getElementById("type2year64").setAttribute("fill", arrayColors[countryNames.indexOf("France")]);
-        document.getElementById("type4year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
-        document.getElementById("type7year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
-
-        document.getElementById("type1year64").setAttribute("squareState","1");
-        currColor = arrayColors[countryNames.indexOf("France")];
-        changeSquare(document.getElementById("type1year64"));
-
-
-        // addExYearLabels2();
-        // var years2Label = ["1506","1510","1541","1550","1551","1591","1600"];
-        var years2Label = ["5","9","40","49","50","90","99"];
-        addExYearLabels(years2Label);
-
-      //set the squares from all the regular buttons
-      }else{
-        square.setAttribute("fill",arrayColors[countryNames.indexOf(country)]);
-
-      }
-    }
-  }
 
   function addExYearLabels(years2Label){
     for(var i=0; i<years2Label.length; i++){
       var yearBox = document.getElementById("year"+years2Label[i]);
       var year2Label = years2Label[i];
-      console.log(years2Label[i]);
       var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       text.setAttribute('id', 'yearLabel'+i);
       text.setAttribute('x', '35');
       text.setAttribute('y', '55');
       var temp = parseInt(year2Label) + 1;
-      console.log(temp);
       if(temp<10){ //add a 0 
         text.textContent = '160'+temp; //specific for example
       }else if(temp == 100){ //make it next century
@@ -834,8 +492,35 @@ $( document ).ready(function() { //had to use jquery because my
     }
   }
 
+  function fillSquares(){
 
+    var fillSquareParam;
+    var countries = [];
+    var typeSquareIDs = [];
+    var temp;
 
+    for(var i=0; i < squares2Fill.length; i++){
+      temp = squares2Fill[i].split('_');
+      countries.push(temp[0]);
+      typeSquareIDs.push(temp[1]);
+
+      if(document.getElementById(temp[1])){ //null check for "special" case 
+        document.getElementById(temp[1]).setAttribute("fill", arrayColors[countryNames.indexOf(temp[0])]);
+      }
+
+      //still need to set the triangle square, probably a better way to avoid this dulicate code
+      document.getElementById("type0year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
+      document.getElementById("type1year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
+      document.getElementById("type2year64").setAttribute("fill", arrayColors[countryNames.indexOf("France")]);
+      document.getElementById("type4year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
+      document.getElementById("type7year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
+
+      document.getElementById("type1year64").setAttribute("squareState","1");
+      currColor = arrayColors[countryNames.indexOf("France")];
+      changeSquare(document.getElementById("type1year64"));
+    }
+
+  }
 
 
 /**************************************END EVENT LISTENERS**********************************************/
