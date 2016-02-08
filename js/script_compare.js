@@ -401,13 +401,12 @@ $( document ).ready(function() {
     var timelineDataPts = []; //array of points to be plotted on the timeline
       for(var i = 0; i < boxesPerSide; i++) {
         for(var j = 0; j < boxesPerSide; j++) {
-          //TODO: map yearID to an actual year
           //document.getElementById("timeline").innerHTML = document.getElementById("timeline").innerHTML + yearID + "<br>"; //label for the year in which the events took place
           for(var numType = 0; numType < 9; numType++){ //check each square for a fill
             var typeSquare = document.getElementById("type" + numType + "year" + yearID);
             var triangle = document.getElementById("tritype" + numType + "year" + yearID); //the triangle occupying the type square. could be null
             //for number of colors
-            for(var numClr = 1; numClr <= numColors; numClr++){ //check which color the fill is TODO: first check if fill exists
+            for(var numClr = 1; numClr <= numColors; numClr++){ //check which color the fill is
               if(triangle != null){
                 if(triangle.getAttribute("fill") == arrayColors[numClr-1])
                 {
@@ -501,15 +500,29 @@ $( document ).ready(function() {
       return timelineDataPts;
   };
 
-  /*fill in squares on chart given an array of objects w/ year, type, color*/
+  /*fill in squares on chart given an array of objects w/ year, eventType, color*/
   function fillChart(dataArr){
     dataArr.forEach(function (element, index, array){
       console.log('type' + element.eventType + 'year' + (+element.year % 100));
-        document.getElementById('type' + element.eventType + 'year' + (+element.year % 100))
-        .setAttribute('fill', element.color);
+        var typeRect = document.getElementById('type' + element.eventType + 'year' + (+element.year % 100))
+        if(typeRect.getAttribute('fill') != 'white'){
+          //if a rectangle is present, draw a triangle over it
+          var w = typeRect.getAttribute('width');
+          var t = typeRect.getAttribute('transform');
+          var pts = "0," + w + " " + w + ",0" + " " + w + "," + w; //create a string of the triangle's coordinates //4
 
-        //TODO: if fill != white, create a triangle instead of setting attribute
+          var triangle = document.createSvg("polygon");
 
+          triangle.setAttribute("id", "tri"+typeRect.getAttribute("id")); //give id, format is "tritype#year#"
+          triangle.setAttribute("points", pts); //specify coordinates
+          triangle.setAttribute("transform", t); //translate the triangle by the same amount that the typerect has been translated
+          triangle.setAttribute('fill', element.color); //change color
+          triangle.setAttribute("pointer-events","none"); //make the triangle "unclickable" so whatever else is underneath it is clicked on 
+         
+          typeRect.parentNode.appendChild(triangle);
+        }
+        else
+            typeRect.setAttribute('fill', element.color);
     })
   }
   
