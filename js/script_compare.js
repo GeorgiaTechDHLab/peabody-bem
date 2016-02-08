@@ -1,6 +1,3 @@
-//TODO: generate event list from csv
-//handle triangles in fillChart
-
 $( document ).ready(function() { 
 
 
@@ -8,7 +5,30 @@ $( document ).ready(function() {
     return this >= min && this < max;
     };
 
+/*******************************************INITIALIZE PAGE**********************************************/
 
+d3.csv('peabodyData.csv', function(d){
+
+  /*draw the 100x100 grid*/
+  var container = document.getElementById("gridContainer");
+  container.appendChild(makeGrid(10, 60, 715, 0)); //makes one 5x5 quadrant with boxes 60 px wide inside a 715x715 viewport //was 368 when doing 4 quadrants
+
+  /*add year labels*/
+  var years2Label = ["5","9","40","49","50","90","99"];
+  addExYearLabels(years2Label);
+
+  /*populate chart*/
+  fillChart(d);
+
+  /*populate event list*/
+  fillEventList(d);
+
+  /*draw timeline*/
+  drawTimeline();
+
+})
+
+/*******************************************INITIALIZER VARIABLES**********************************************/
   //array of colors for 4 color palettes, with 10 colors per array. 
 
   //this array holds the current array of colors 
@@ -26,11 +46,6 @@ $( document ).ready(function() {
   //array of country names, if more colors and country added, new country gets next color
   //more countryNames than colors get assigned black
   var countryNames = ["England", "Spain", "France"]; //countries for sample list
-
-  // var countryNames = ["England", "Spain", "France", "Germany", "Morocco", "Italy"];
-
-  //10 country names
-  // var countryNames = ["Spain", "Portugal", "France", "Germany", "Morocco", "Italy", "Mordor", "Rivendel", "Shire", "Hogsmeade"];
 
   //the number of colors/countries represented
   var numColors = countryNames.length;
@@ -60,169 +75,6 @@ $( document ).ready(function() {
   //array for all 900 rectangles h
   var rect = [];
 
-  /*TODO: update chart title based on which event list is active (sample or custom titled)*/
-  function updateChartTitle(element){
-
-    //need title variable from event list
-
-    //#chartTitle is id for title above chart
-
-  }
-
-  /*if we want to use right-click functionality instead: http://www.sitepoint.com/building-custom-right-click-context-menu-javascript/ */
-
-  /*function changes type square based on current square state and color. currently states are identified by number, could have 
-  better-named string variables but doesn't matter*/
-  function changeSquare(element){
-    var w = element.getAttribute('width');
-    var t = element.getAttribute('transform');
-
-    //create the polygon svg elements for the triangle overlay 
-    var triangle = document.createSvg("polygon");  //triangle order 1
-    var triangle2 = document.createSvg("polygon"); //triangle order 2
-
-
-
-
-    /*case 1: square is empty, fill it with current color*/
-    if(element.getAttribute("squareState") == "0"){
-      console.log("squareState == 1");
-
-      element.setAttribute("fill", currColor); //fill square with currColor
-
-      prevColor = element.getAttribute("fill"); //store previous color
-
-      element.setAttribute("squareState","1"); //change squareState, 1=filled with color
-
-    /*case 1.5: if the square is already filled with a color and the currColor is the same, make it blank*/
-    }else if(element.getAttribute("squareState") == "1" && element.getAttribute("fill") == currColor){
-      console.log("squareState == 0");
-
-      console.log(element.getAttribute("fill")); 
-      console.log(currColor);
-
-      element.setAttribute("fill", "white");
-      element.setAttribute("squareState","0");
-    
-    /*case 2: square is already filled with color, split it with current color*/
-    }else if(element.getAttribute("squareState") == "1"){
-      console.log("squareState == 1");
-
-      
-      var pts = "0," + w + " " + w + ",0" + " " + w + "," + w; //create a string of the triangle's coordinates //4
-
-      triangle.setAttribute("id", "tri"+element.getAttribute("id")); //give id, format is "tritype#year#"
-      triangle.setAttribute("points", pts); //specify coordinates
-      triangle.setAttribute("transform", t); //translate the triangle by the same amount that the typerect has been translated
-      triangle.setAttribute('fill', currColor); //change color
-      triangle.setAttribute("pointer-events","none"); //make the triangle "unclickable" so whatever else is underneath it is clicked on 
-     
-      element.parentNode.appendChild(triangle); //set triangle's parent as yearbox
-     
-      element.setAttribute("squareState","2");
-
-    /*case 3: square is already split with color one way, split it the other way*/
-    //Lauren didn't request this but I think it is necessary for some of the chart possibilites 
-    }else if(element.getAttribute("squareState") == "2"){   
-      console.log("squareState == 2");
-
-      //remove triangle to add 
-      var triRemoved = document.getElementById("tri"+element.getAttribute("id"));
-      element.parentNode.removeChild(triRemoved);
-
-
-      /*set up second triangle to be opposite of previous triangle*/
-      var pts =  "0,0 " + "0," + w + " " + w + ",0"; //create a string of the triangle's coordinates //3
-
-      triangle2.setAttribute("id", "tri"+element.getAttribute("id")); //give id, format is "tritype#year#"
-      triangle2.setAttribute("points", pts); //specify coordinates
-      triangle2.setAttribute("transform", t); //translate the triangle by the same amount that the typerect has been translated
-      triangle2.setAttribute('fill', currColor); //change color
-      triangle2.setAttribute("pointer-events","none"); //make the triangle "unclickable" so whatever else is underneath it is clicked on 
-
-      element.parentNode.appendChild(triangle2); //set triangle's parent as yearbox
-
-      element.setAttribute("fill", prevColor); //change type square color
-
-      element.setAttribute("squareState","3"); 
-    }
-
-    //new case, case 4: fill opposite direction 
-    else if(element.getAttribute("squareState") == "3"){   
-      console.log("squareState == 3");
-
-      //remove triangle to add 
-      var triRemoved = document.getElementById("tri"+element.getAttribute("id"));
-      element.parentNode.removeChild(triRemoved);
-
-      /*set up second triangle to be opposite of previous triangle*/
-      var pts =  "0,0 " + "0," + w + " " + w + "," + w; //create a string of the triangle's coordinates //1
-      console.log(pts);
-      triangle2.setAttribute("id", "tri"+element.getAttribute("id")); //give id, format is "tritype#year#"
-      triangle2.setAttribute("points", pts); //specify coordinates
-      triangle2.setAttribute("transform", t); //translate the triangle by the same amount that the typerect has been translated
-      triangle2.setAttribute('fill', currColor); //change color
-      triangle2.setAttribute("pointer-events","none"); //make the triangle "unclickable" so whatever else is underneath it is clicked on 
-
-      element.parentNode.appendChild(triangle2); //set triangle's parent as yearbox
-
-      element.setAttribute("fill", prevColor); //change type square color
-
-      element.setAttribute("squareState","4"); 
-    }
-
-    //new case, case 5: fill opposite opposite direction 
-    else if(element.getAttribute("squareState") == "4"){   
-      console.log("squareState == 4");
-
-      //remove triangle to add 
-      var triRemoved = document.getElementById("tri"+element.getAttribute("id"));
-      element.parentNode.removeChild(triRemoved);
-
-      /*set up second triangle to be opposite of previous triangle*/
-      var pts =  "0,0 " + w + ",0" + " " + w + "," + w; //create a string of the triangle's coordinates //2
-      triangle2.setAttribute("id", "tri"+element.getAttribute("id")); //give id, format is "tritype#year#"
-      triangle2.setAttribute("points", pts); //specify coordinates
-      triangle2.setAttribute("transform", t); //translate the triangle by the same amount that the typerect has been translated
-      triangle2.setAttribute('fill', currColor); //change color
-      triangle2.setAttribute("pointer-events","none"); //make the triangle "unclickable" so whatever else is underneath it is clicked on 
-
-      element.parentNode.appendChild(triangle2); //set triangle's parent as yearbox
-
-      element.setAttribute("fill", prevColor); //change type square color
-
-      element.setAttribute("squareState","5"); 
-    }
-
-    //case 6: square is split with color the second way, fill it with current color
-    else if(element.getAttribute("squareState") == "5"){   
-      console.log("squareState == 5");
-      element.setAttribute("fill", currColor);
-
-
-      /*remove triangle so it can be a solid square again*/
-      var triRemoved2 = document.getElementById("tri"+element.getAttribute("id"));
-      element.parentNode.removeChild(triRemoved2);
-
-      element.setAttribute("squareState","6");
-    }
-
-    //case 0: square is filled with current color, make it blank  
-    else if(element.getAttribute("squareState") == "6"){   
-      console.log("squareState == 0");
-      
-      element.setAttribute("fill","white");
-
-      element.setAttribute("squareState","0");
-    }
-
-    //if it's not 0,1,2,3,4, we have a problem...it's usually been null 
-    else{
-      console.log("Houston we have a problem");
-      console.log("squareState is " + element.getAttribute("squareState"));
-    }
-  }
-
 
   //this function is used as the short form for: document.createElementNS("http://www.w3.org/2000/svg", "tagname");
   //which is how you make an svg using javascript
@@ -231,80 +83,10 @@ $( document ).ready(function() {
         return this.createElementNS(svgNS, tagName);
   };
 
-
-  /*update the current color based on what user clicks*/
-  var updateCurrColor = function(e){
-
-        //returns the svg element of the color square, <rect>
-        if(e.target !== e.currentTarget && document.getElementById("colorPaletteSVG")){ //second check is for when color palette isn't there because of updating
-          var clickedItemID = e.target.id; //id= #colorBox[i]
-          currColor = document.getElementById(clickedItemID).getAttribute("fill"); 
-
-          //remove all selection css
-          for (var i=0; i<numColors;i++){
-            document.getElementById("colorBox"+i).removeAttribute("class","selectedColor");
-          }
-          //add new selection css
-          e.target.setAttribute("class","selectedColor");
-        }
-        e.stopPropagation();
-  }
-
-
-  /**dynamic color palette to size according to number of colors*/
-  var makeColorPalette = function(numColors){
-    // var svg = document.createSvg("svg"); //no difference between this line 
-    var svgNS = "http://www.w3.org/2000/svg";
-    var svg = document.createElementNS(svgNS, "svg"); //and this line, they both work 
-    svg.setAttribute("width", "100%");
-    svg.setAttribute("height", numColors*60);
-    svg.setAttribute("id","colorPaletteSVG");
-
-
-    for(var i=0; i<numColors;i++){
-
-      //group for country color square and its label
-      colorGroup = document.createSvg("g");
-
-      var colorBox = document.createSvg("rect");
-      colorBox.setAttribute("width", "50px");
-      colorBox.setAttribute("height", "50px");
-      colorBox.setAttribute("transform", ["translate("  + 5, (60*i)  + ")"]); 
-      colorBox.setAttribute("id", "colorBox" + i); //colorbox1, colorbox2, etc
-      colorBox.setAttribute("fill", arrayColors[i]);
-      console.log(colorBox.getAttribute("id"));
-
-      /*tutorial: http://www.kirupa.com/html5/handling_events_for_many_elements.htm*/
-      var colorPalette = document.querySelector("#colorPalette");
-      colorPalette.addEventListener("click", updateCurrColor, false);
-
-      //form labels don't work because they can't be appended to an svg...
-
-      /*label for color in palette*/
-      var colorLabel = document.createSvg("text");
-      colorLabel.textContent = countryNames[i];
-      colorLabel.setAttribute("x","55");
-      colorLabel.setAttribute("y","30");
-      colorLabel.setAttribute("font-family", "Verdana");
-      colorLabel.setAttribute("font-size", "20");
-      colorLabel.setAttribute("transform", ["translate("  + 5, (60*i)  + ")"]);
-      colorLabel.setAttribute("textAlign","center");
-
-
-      colorGroup.setAttribute("id", "colorGroup" + i);
-      colorGroup.setAttribute("width", "250px");
-
-      colorGroup.appendChild(colorBox);
-      colorGroup.appendChild(colorLabel);
-
-      svg.appendChild(colorGroup);
-    }
-    return svg;
-  }
-
+/**************************************INITIALIZER FUNCTIONS**********************************************/
 
   //(10, 60, 715, 0)
-  var makeGrid = function(boxesPerSide, size, pixelsPerSide, currYearID){
+var makeGrid = function(boxesPerSide, size, pixelsPerSide, currYearID){
 
     //whole svg 
     var svg = document.createSvg("svg");
@@ -396,8 +178,45 @@ $( document ).ready(function() {
 
     return svg;
   }
+  
+  /*fill in squares on chart given an array of objects w/ year, eventType, color*/
+  function fillChart(dataArr){
+    dataArr.forEach(function (element, index, array){
+      console.log('type' + element.eventType + 'year' + (+element.year % 100));
+        var typeRect = document.getElementById('type' + element.eventType + 'year' + (+element.year % 100))
+        if(typeRect.getAttribute('fill') != 'white'){
+          //if a rectangle is present, draw a triangle over it
+          var w = typeRect.getAttribute('width');
+          var t = typeRect.getAttribute('transform');
+          var pts = "0," + w + " " + w + ",0" + " " + w + "," + w; //create a string of the triangle's coordinates //4
 
-   function generateTimeline(boxesPerSide, yearID){
+          var triangle = document.createSvg("polygon");
+
+          triangle.setAttribute("id", "tri"+typeRect.getAttribute("id")); //give id, format is "tritype#year#"
+          triangle.setAttribute("points", pts); //specify coordinates
+          triangle.setAttribute("transform", t); //translate the triangle by the same amount that the typerect has been translated
+          triangle.setAttribute('fill', element.color); //change color
+          triangle.setAttribute("pointer-events","none"); //make the triangle "unclickable" so whatever else is underneath it is clicked on 
+         
+          typeRect.parentNode.appendChild(triangle);
+        }
+        else
+            typeRect.setAttribute('fill', element.color);
+    })
+  }
+
+/*creates a list of events based on a "text" attribute of objects in an array*/
+  function fillEventList(dataArr){
+    dataArr.forEach(function (e, i, a){
+      var eventList = document.getElementById("sampleList").innerHTML;
+      document.getElementById('sampleList').innerHTML = eventList + '<li>' + e.text + '</li>';
+    })
+  }
+  
+/**************************************HELPER FUNCTIONS**********************************************/
+
+/*this function pulls events from a chart and returns as an array of objects*/
+   function generateEventDataArray(boxesPerSide, yearID){ 
     var timelineDataPts = []; //array of points to be plotted on the timeline
       for(var i = 0; i < boxesPerSide; i++) {
         for(var j = 0; j < boxesPerSide; j++) {
@@ -500,56 +319,6 @@ $( document ).ready(function() {
       return timelineDataPts;
   };
 
-  /*fill in squares on chart given an array of objects w/ year, eventType, color*/
-  function fillChart(dataArr){
-    dataArr.forEach(function (element, index, array){
-      console.log('type' + element.eventType + 'year' + (+element.year % 100));
-        var typeRect = document.getElementById('type' + element.eventType + 'year' + (+element.year % 100))
-        if(typeRect.getAttribute('fill') != 'white'){
-          //if a rectangle is present, draw a triangle over it
-          var w = typeRect.getAttribute('width');
-          var t = typeRect.getAttribute('transform');
-          var pts = "0," + w + " " + w + ",0" + " " + w + "," + w; //create a string of the triangle's coordinates //4
-
-          var triangle = document.createSvg("polygon");
-
-          triangle.setAttribute("id", "tri"+typeRect.getAttribute("id")); //give id, format is "tritype#year#"
-          triangle.setAttribute("points", pts); //specify coordinates
-          triangle.setAttribute("transform", t); //translate the triangle by the same amount that the typerect has been translated
-          triangle.setAttribute('fill', element.color); //change color
-          triangle.setAttribute("pointer-events","none"); //make the triangle "unclickable" so whatever else is underneath it is clicked on 
-         
-          typeRect.parentNode.appendChild(triangle);
-        }
-        else
-            typeRect.setAttribute('fill', element.color);
-    })
-  }
-  
-/*******************************************INITIALIZE PAGE**********************************************/
-
-d3.csv('peabodyData.csv', function(d){
-
-  /*draw the 100x100 grid*/
-  var container = document.getElementById("gridContainer");
-  container.appendChild(makeGrid(10, 60, 715, 0)); //makes one 5x5 quadrant with boxes 60 px wide inside a 715x715 viewport //was 368 when doing 4 quadrants
-
-  /*add year labels*/
-  var years2Label = ["5","9","40","49","50","90","99"];
-  addExYearLabels(years2Label);
-
-  /*populate chart*/
-  fillChart(d);
-
-  /*draw timeline*/
-  drawTimeline();
-
-})
-
-  /*add the color palette to the page*/
-  // var cpContainer = document.getElementById("colorPalette");
-  // cpContainer.appendChild(makeColorPalette(numColors)); //make dynamic color palette with 6 colors
-
 
 /*******************************************EVENT LISTENERS**********************************************/
 
@@ -561,8 +330,8 @@ d3.csv('peabodyData.csv', function(d){
     var margin= {top:60, bottom:20, right:25, left:15};
 
     document.getElementById("timelineViz").innerHTML = ""; //clear out any previous timeline
-    //dataArr is the array returned from calling generateTimeline
-    var dataArr = generateTimeline(10,0);
+    
+    var dataArr = generateEventDataArray(10,0);
 
     //object with key as year and value as the number of events during that year
     var yearsMap = {};
@@ -643,122 +412,12 @@ d3.csv('peabodyData.csv', function(d){
       .style("visibility", "hidden");
   };
 
-/*event listener to clear grid and timeline*/
-  document.getElementById("clearBtn").addEventListener("click", function(){
-    clearAll();
-  });
 
-  function clearAll(){
-    //remove data points from timeline
-    d3.select('#timelineViz').selectAll("rect").remove();
-    //iterate through all squares and set their states to 0 and fill to white.
-    //remove all triangles
-    var yearID = 0;
-     for(var i = 0; i < 10; i++) { 
-        for(var j = 0; j < 10; j++) {
-          for(var numType = 0; numType < 9; numType++){ 
-            var typeSquare = document.getElementById("type" + numType + "year" + yearID);
-            var triangle = document.getElementById("tritype" + numType + "year" + yearID);
-            typeSquare.setAttribute("squareState",0);
-            typeSquare.setAttribute("fill","white");
-            if(triangle != null){
-              triangle.remove();
-            }
-          }
-          yearID = yearID + 1;
-        }
-      }
-  }
+/**************************************END EVENT LISTENERS**********************************************/
 
 
-  /*"show me" feature for the sample list of events*/
-  var theParent = document.querySelector("#sampleList");
-  theParent.addEventListener("click", doSomething, false);
-
-  function doSomething(e){
-    if(e.target !== e.currentTarget){
-      var clickedItem = e.target.id;
-      console.log(clickedItem);
-
-      var fillSquareParam = clickedItem.split('_'); //split the id into country and type to fill correct square with correct color
-
-      var country = fillSquareParam[0];
-      var typeSquareID = fillSquareParam[1];
-
-      console.log("typeSquareID: " + typeSquareID);
-      console.log("country: " + country);
-
-      var square = document.getElementById(typeSquareID);
-
-
-      //clear existing so example is accurate
-      clearAll();
-      
-      //to set the triangle square
-      if(clickedItem == "special"){
-        document.getElementById("type0year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
-        document.getElementById("type1year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
-        document.getElementById("type2year64").setAttribute("fill", arrayColors[countryNames.indexOf("France")]);
-        document.getElementById("type4year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
-        document.getElementById("type7year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
-
-        document.getElementById("type1year64").setAttribute("squareState","1");
-        currColor = arrayColors[countryNames.indexOf("France")];
-        changeSquare(document.getElementById("type1year64"));
-
-
-      //if "show all" button is clicked
-      }else if(clickedItem == "showallb"){
-
-        var buttons = document.getElementsByClassName("showme"); //get all of the buttons
-
-        var countries = [];
-        var typeSquareIDs = [];
-        var squares = [];
-        var temp; 
-
-        //loops through buttons to extract the country and typeSquareID from each ID tag, then sets the attributes
-        for(var i=0; i < buttons.length; i++){
-          temp = buttons[i].id.split('_');
-          countries.push(temp[0]);
-          typeSquareIDs.push(temp[1]);
-
-          if(document.getElementById(temp[1])){ //null check for "special" case 
-            document.getElementById(temp[1]).setAttribute("fill", arrayColors[countryNames.indexOf(temp[0])]);
-          }
-        }
-
-        //still need to set the triangle square, probably a better way to avoid this dulicate code
-        document.getElementById("type0year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
-        document.getElementById("type1year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
-        document.getElementById("type2year64").setAttribute("fill", arrayColors[countryNames.indexOf("France")]);
-        document.getElementById("type4year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
-        document.getElementById("type7year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
-
-        document.getElementById("type1year64").setAttribute("squareState","1");
-        currColor = arrayColors[countryNames.indexOf("France")];
-        changeSquare(document.getElementById("type1year64"));
-
-
-        // addExYearLabels2();
-        // var years2Label = ["1506","1510","1541","1550","1551","1591","1600"];
-        var years2Label = ["5","9","40","49","50","90","99"];
-        addExYearLabels(years2Label);
-
-      //set the squares from all the regular buttons
-      }else{
-        square.setAttribute("fill",arrayColors[countryNames.indexOf(country)]);
-
-      }
-    }
-  }
-
-  function fillExample(){
-    
-
-  }
-
-  function addExYearLabels(years2Label){
+/**************************************ADD YEAR LABELS**********************************************/
+ function addExYearLabels(years2Label){
     for(var i=0; i<years2Label.length; i++){
       var yearBox = document.getElementById("year"+years2Label[i]);
       var year2Label = years2Label[i];
@@ -840,12 +499,5 @@ d3.csv('peabodyData.csv', function(d){
       yearBox.appendChild(text);
     }
   }
-
-
-
-
-
-/**************************************END EVENT LISTENERS**********************************************/
-
 
 });
