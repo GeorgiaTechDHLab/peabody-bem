@@ -26,6 +26,9 @@ d3.csv('peabodyData.csv', function(d){
   /*draw timeline*/
   drawTimeline();
 
+  /*displays the internal data*/
+  showData(d);
+
 })
 
 /*******************************************INITIALIZER VARIABLES**********************************************/
@@ -92,8 +95,6 @@ var makeGrid = function(boxesPerSide, size, pixelsPerSide, currYearID){
     var svg = document.createSvg("svg");
     svg.setAttribute("width", pixelsPerSide + size);
     svg.setAttribute("height", pixelsPerSide + size);
-    console.log(pixelsPerSide);
-    console.log(size);
 
     //group for everything: background, years, types. so when "maing" is translated, everything moves as a unit
     var maing = document.createSvg("g");
@@ -182,7 +183,6 @@ var makeGrid = function(boxesPerSide, size, pixelsPerSide, currYearID){
   /*fill in squares on chart given an array of objects w/ year, eventType, color*/
   function fillChart(dataArr){
     dataArr.forEach(function (element, index, array){
-      console.log('type' + element.eventType + 'year' + (+element.year % 100));
         var typeRect = document.getElementById('type' + element.eventType + 'year' + (+element.year % 100))
         if(typeRect.getAttribute('fill') != 'white'){
           //if a rectangle is present, draw a triangle over it
@@ -196,12 +196,34 @@ var makeGrid = function(boxesPerSide, size, pixelsPerSide, currYearID){
           triangle.setAttribute("points", pts); //specify coordinates
           triangle.setAttribute("transform", t); //translate the triangle by the same amount that the typerect has been translated
           triangle.setAttribute('fill', element.color); //change color
-          triangle.setAttribute("pointer-events","none"); //make the triangle "unclickable" so whatever else is underneath it is clicked on 
          
           typeRect.parentNode.appendChild(triangle);
         }
         else
             typeRect.setAttribute('fill', element.color);
+    })
+  }
+
+  function showData(dataArr){
+    var oldTriType ='';
+    dataArr.forEach(function (element, index, array){
+        var typeRect = document.getElementById('type' + element.eventType + 'year' + (+element.year % 100))
+        var triType = document.getElementById('tri' + typeRect.getAttribute('id'));
+        var color = element.color;
+        var country = element.country;
+        var id ="";
+        if((triType != null) && (triType.getAttribute('id') == oldTriType)){
+          //if the triangle event exists AND we know it's actually the triangle, not the underlying rect
+          id = "tri"+typeRect.getAttribute("id");
+        }
+        else
+          id = 'type' + element.eventType + 'year' + (+element.year % 100);
+        if(triType != null)
+          oldTriType = triType.getAttribute('id'); //store the previous triangle event so when it comes around again, we know it's really the second of the two events. The first one should be labeled w/o 'tri'
+        
+        var dataEntry = country + ', ' +color + ', ' +id;
+        var dataList = document.getElementById("dataList").innerHTML;
+        document.getElementById('dataList').innerHTML = dataList + '<li>' + dataEntry + '</li>';
     })
   }
 
@@ -212,6 +234,7 @@ var makeGrid = function(boxesPerSide, size, pixelsPerSide, currYearID){
       document.getElementById('sampleList').innerHTML = eventList + '<li>' + e.text + '</li>';
     })
   }
+
   
 /**************************************HELPER FUNCTIONS**********************************************/
 
@@ -421,13 +444,11 @@ var makeGrid = function(boxesPerSide, size, pixelsPerSide, currYearID){
     for(var i=0; i<years2Label.length; i++){
       var yearBox = document.getElementById("year"+years2Label[i]);
       var year2Label = years2Label[i];
-      console.log(years2Label[i]);
       var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       text.setAttribute('id', 'yearLabel'+i);
       text.setAttribute('x', '35');
       text.setAttribute('y', '55');
       var temp = parseInt(year2Label) + 1;
-      console.log(temp);
       if(temp<10){ //add a 0 
         text.textContent = '160'+temp; //specific for example
       }else if(temp == 100){ //make it next century
