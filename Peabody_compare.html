@@ -29,10 +29,10 @@
 	</head>
 	<body>
 		<!--using bootstrap to organize elements on page, so container/row/col-md-12 etc come from Bootstrap files--> 
-	    <div class = "container">
+
 			
 
-		<div class="col-md-4"> <!--column for colorPalette and event list-->
+		<div class="col-md-3"> <!--column for colorPalette and event list-->
 
 				<div id="eventList" >
 					<h2>Events</h2>
@@ -60,7 +60,7 @@
 				<!--container--> 
 			</div> <!--close col-md-4-->
 
-			<div class="col-md-8"> <!--column to hold chart and timeline-->
+			<div class="col-md-6"> <!--column to hold chart and timeline-->
 				<div id="gridContainer" class="row">
 						<h2 id="chartTitle">Chart: Chronological List of the 16th Century</h2>
 					<!--row for chart-->
@@ -73,9 +73,32 @@
 				</div><!--close row-->
 			</div> <!--close column holding chart and timeline-->
 
+			<div class="col-md-3">
+				<div id="internalData" >
+					<h2>Internal Data</h2>
 
-		<!--close container--> 
-		</div>
+					<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+					  <div class="panel panel-default">
+					    <div class="panel-heading" role="tab" id="headingData">
+					      <h4 class="panel-title">
+					        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseData" aria-expanded="true" aria-controls="collapseData">
+					          Country, Color, SVG Element ID
+					        </a>
+					      </h4>
+					    </div>
+					    <div id="collapseData" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingData">
+					      <div class="panel-body">
+					        <ol id="dataList">
+					        		<!-- list of country + color + id will go here -->
+					        </ol>
+					      </div>
+					    </div>
+					  </div>
+
+					</div>
+				</div><!--close event list div-->
+			</div> <!-- close col-md-3-->
+	
 
 		</svg>
 
