@@ -5,3 +5,14 @@ body{
 .typeSquare:hover{
 	outline: 1px solid lightblue;
 }
+
+ul#sampleList{
+	list-style: none;
+	padding-left: 0;
+	font-size: smaller;
+}
+
+.col-md-12 #colorPalette{
+	padding-bottom: 0;
+	margin-bottom: 0;
+}

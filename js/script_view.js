@@ -6,6 +6,23 @@ $( document ).ready(function() { //had to use jquery because my
     return this >= min && this < max;
     };
 
+  d3.csv('peabodyData.csv', function(d){
+
+    /*draw the 100x100 grid*/
+    var container = document.getElementById("gridContainer");
+    container.appendChild(makeGrid(10, 60, 715, 0)); //makes one 5x5 quadrant with boxes 60 px wide inside a 715x715 viewport //was 368 when doing 4 quadrants
+
+    /*add year labels*/
+    var years2Label = ["5","9","40","49","50","90","99"];
+    addExYearLabels(years2Label);
+
+    /*populate chart*/
+    fillChart(d);
+
+    /*populate event list*/
+    fillEventList(d);
+  })
+
   //array of colors for sample list
   var arrayColors = ["#720042", "#BA390B", "#6EA2A3", "#336531","#D98634","#A34F93","#9FBCBF","#9BCF7A","#CC7172","#CFB47E"]
 
@@ -40,11 +57,6 @@ $( document ).ready(function() { //had to use jquery because my
   //array for all 900 rectangles h
   var rect = [];
 
-  var squares2Fill = ["England_type5year0", "Spain_type7year11", "England_type7year16", "Spain_type7year19", "France_type7year22", "Spain_type7year24", 
-                      "Spain_type7year25", "France_type7year33", "Spain_type7year36", "France_type7year39", "Spain_type8year41", "France_type7year61", 
-                      "special", "England_type7year75", "England_type7year77", "England_type7year78", "England_type7year83", "England_type7year84"];
-
-
 
   //event types to show in key 
   var eventTypes = ["Battles, Sieges, Beginning of War", "Conquests, Annexations, Unions", "Losses and Disasters", "Falls of States", 
@@ -52,165 +64,46 @@ $( document ).ready(function() { //had to use jquery because my
 
   /*if we want to use right-click functionality instead: http://www.sitepoint.com/building-custom-right-click-context-menu-javascript/ */
 
-  /*function changes type square based on current square state and color. currently states are identified by number, could have 
-  better-named string variables but doesn't matter*/
-  function changeSquare(element){
-    var w = element.getAttribute('width');
-    var t = element.getAttribute('transform');
-
-    //create the polygon svg elements for the triangle overlay 
-    var triangle = document.createSvg("polygon");  //triangle order 1
-    var triangle2 = document.createSvg("polygon"); //triangle order 2
-
-
-
-
-    /*case 1: square is empty, fill it with current color*/
-    if(element.getAttribute("squareState") == "0"){
-      console.log("squareState == 1");
-
-      element.setAttribute("fill", currColor); //fill square with currColor
-
-      prevColor = element.getAttribute("fill"); //store previous color
-
-      element.setAttribute("squareState","1"); //change squareState, 1=filled with color
-
-    /*case 1.5: if the square is already filled with a color and the currColor is the same, make it blank*/
-    }else if(element.getAttribute("squareState") == "1" && element.getAttribute("fill") == currColor){
-      console.log("squareState == 0");
-
-      console.log(element.getAttribute("fill")); 
-      console.log(currColor);
-
-      element.setAttribute("fill", "white");
-      element.setAttribute("squareState","0");
-    
-    /*case 2: square is already filled with color, split it with current color*/
-    }else if(element.getAttribute("squareState") == "1"){
-      console.log("squareState == 1");
-
-      
-      var pts = "0," + w + " " + w + ",0" + " " + w + "," + w; //create a string of the triangle's coordinates //4
-
-      triangle.setAttribute("id", "tri"+element.getAttribute("id")); //give id, format is "tritype#year#"
-      triangle.setAttribute("points", pts); //specify coordinates
-      triangle.setAttribute("transform", t); //translate the triangle by the same amount that the typerect has been translated
-      triangle.setAttribute('fill', currColor); //change color
-      triangle.setAttribute("pointer-events","none"); //make the triangle "unclickable" so whatever else is underneath it is clicked on 
-     
-      element.parentNode.appendChild(triangle); //set triangle's parent as yearbox
-     
-      element.setAttribute("squareState","2");
-
-    /*case 3: square is already split with color one way, split it the other way*/
-    //Lauren didn't request this but I think it is necessary for some of the chart possibilites 
-    }else if(element.getAttribute("squareState") == "2"){   
-      console.log("squareState == 2");
-
-      //remove triangle to add 
-      var triRemoved = document.getElementById("tri"+element.getAttribute("id"));
-      element.parentNode.removeChild(triRemoved);
-
-
-      /*set up second triangle to be opposite of previous triangle*/
-      var pts =  "0,0 " + "0," + w + " " + w + ",0"; //create a string of the triangle's coordinates //3
-
-      triangle2.setAttribute("id", "tri"+element.getAttribute("id")); //give id, format is "tritype#year#"
-      triangle2.setAttribute("points", pts); //specify coordinates
-      triangle2.setAttribute("transform", t); //translate the triangle by the same amount that the typerect has been translated
-      triangle2.setAttribute('fill', currColor); //change color
-      triangle2.setAttribute("pointer-events","none"); //make the triangle "unclickable" so whatever else is underneath it is clicked on 
-
-      element.parentNode.appendChild(triangle2); //set triangle's parent as yearbox
-
-      element.setAttribute("fill", prevColor); //change type square color
-
-      element.setAttribute("squareState","3"); 
-    }
-
-    //new case, case 4: fill opposite direction 
-    else if(element.getAttribute("squareState") == "3"){   
-      console.log("squareState == 3");
-
-      //remove triangle to add 
-      var triRemoved = document.getElementById("tri"+element.getAttribute("id"));
-      element.parentNode.removeChild(triRemoved);
-
-      /*set up second triangle to be opposite of previous triangle*/
-      var pts =  "0,0 " + "0," + w + " " + w + "," + w; //create a string of the triangle's coordinates //1
-      console.log(pts);
-      triangle2.setAttribute("id", "tri"+element.getAttribute("id")); //give id, format is "tritype#year#"
-      triangle2.setAttribute("points", pts); //specify coordinates
-      triangle2.setAttribute("transform", t); //translate the triangle by the same amount that the typerect has been translated
-      triangle2.setAttribute('fill', currColor); //change color
-      triangle2.setAttribute("pointer-events","none"); //make the triangle "unclickable" so whatever else is underneath it is clicked on 
-
-      element.parentNode.appendChild(triangle2); //set triangle's parent as yearbox
-
-      element.setAttribute("fill", prevColor); //change type square color
-
-      element.setAttribute("squareState","4"); 
-    }
-
-    //new case, case 5: fill opposite opposite direction 
-    else if(element.getAttribute("squareState") == "4"){   
-      console.log("squareState == 4");
-
-      //remove triangle to add 
-      var triRemoved = document.getElementById("tri"+element.getAttribute("id"));
-      element.parentNode.removeChild(triRemoved);
-
-      /*set up second triangle to be opposite of previous triangle*/
-      var pts =  "0,0 " + w + ",0" + " " + w + "," + w; //create a string of the triangle's coordinates //2
-      triangle2.setAttribute("id", "tri"+element.getAttribute("id")); //give id, format is "tritype#year#"
-      triangle2.setAttribute("points", pts); //specify coordinates
-      triangle2.setAttribute("transform", t); //translate the triangle by the same amount that the typerect has been translated
-      triangle2.setAttribute('fill', currColor); //change color
-      triangle2.setAttribute("pointer-events","none"); //make the triangle "unclickable" so whatever else is underneath it is clicked on 
-
-      element.parentNode.appendChild(triangle2); //set triangle's parent as yearbox
-
-      element.setAttribute("fill", prevColor); //change type square color
-
-      element.setAttribute("squareState","5"); 
-    }
-
-    //case 6: square is split with color the second way, fill it with current color
-    else if(element.getAttribute("squareState") == "5"){   
-      console.log("squareState == 5");
-      element.setAttribute("fill", currColor);
-
-
-      /*remove triangle so it can be a solid square again*/
-      var triRemoved2 = document.getElementById("tri"+element.getAttribute("id"));
-      element.parentNode.removeChild(triRemoved2);
-
-      element.setAttribute("squareState","6");
-    }
-
-    //case 0: square is filled with current color, make it blank  
-    else if(element.getAttribute("squareState") == "6"){   
-      console.log("squareState == 0");
-      
-      element.setAttribute("fill","white");
-
-      element.setAttribute("squareState","0");
-    }
-
-    //if it's not 0,1,2,3,4, we have a problem...it's usually been null 
-    else{
-      console.log("Houston we have a problem");
-      console.log("squareState is " + element.getAttribute("squareState"));
-    }
-  }
-
-
   //this function is used as the short form for: document.createElementNS("http://www.w3.org/2000/svg", "tagname");
   //which is how you make an svg using javascript
   document.createSvg = function(tagName) {
         var svgNS = "http://www.w3.org/2000/svg";
         return this.createElementNS(svgNS, tagName);
   };
+
+  
+  /*fill in squares on chart given an array of objects w/ year, eventType, color*/
+  function fillChart(dataArr){
+    dataArr.forEach(function (element, index, array){
+        var typeRect = document.getElementById('type' + element.eventType + 'year' + (+element.year % 100))
+        if(typeRect.getAttribute('fill') != 'white'){
+          //if a rectangle is present, draw a triangle over it
+          var w = typeRect.getAttribute('width');
+          var t = typeRect.getAttribute('transform');
+          var pts = "0," + w + " " + w + ",0" + " " + w + "," + w; //create a string of the triangle's coordinates //4
+
+          var triangle = document.createSvg("polygon");
+
+          triangle.setAttribute("id", "tri"+typeRect.getAttribute("id")); //give id, format is "tritype#year#"
+          triangle.setAttribute("points", pts); //specify coordinates
+          triangle.setAttribute("transform", t); //translate the triangle by the same amount that the typerect has been translated
+          triangle.setAttribute('fill', element.color); //change color
+         
+          typeRect.parentNode.appendChild(triangle);
+        }
+        else
+            typeRect.setAttribute('fill', element.color);
+    })
+  }
+
+
+/*creates a list of events based on a "text" attribute of objects in an array*/
+  function fillEventList(dataArr){
+    dataArr.forEach(function (e, i, a){
+      var eventList = document.getElementById("sampleList").innerHTML;
+      document.getElementById('sampleList').innerHTML = eventList + '<li>' + e.text + '</li>';
+    })
+  }
 
   /**dynamic color palette to size according to number of colors*/
   var makeColorPalette = function(numColors){
@@ -230,7 +123,7 @@ $( document ).ready(function() { //had to use jquery because my
       var colorBox = document.createSvg("rect");
       colorBox.setAttribute("width", "50px");
       colorBox.setAttribute("height", "50px");
-      colorBox.setAttribute("transform", ["translate("  + (60*i), 5  + ")"]); //5, (60*i) for vertical stacking of color blocks
+      colorBox.setAttribute("transform", ["translate("  + (160*i), 5  + ")"]); //5, (60*i) for vertical stacking of color blocks
       colorBox.setAttribute("id", "colorBox" + i); //colorbox1, colorbox2, etc
       colorBox.setAttribute("fill", arrayColors[i]);
       console.log(colorBox.getAttribute("id"));
@@ -245,7 +138,7 @@ $( document ).ready(function() { //had to use jquery because my
       colorLabel.setAttribute("y","30");
       colorLabel.setAttribute("font-family", "Alegreya");
       colorLabel.setAttribute("font-size", "20");
-      colorLabel.setAttribute("transform", ["translate("  + 5, (60*i)  + ")"]);
+      colorLabel.setAttribute("transform", ["translate("  + (160*i), 5 + ")"]);
       colorLabel.setAttribute("textAlign","center");
 
 
@@ -347,10 +240,6 @@ $( document ).ready(function() { //had to use jquery because my
 
 /*******************************************INITIALIZE PAGE**********************************************/
 
-  /*draw the 100x100 grid*/
-  var container = document.getElementById("gridContainer");
-  container.appendChild(makeGrid(10, 60, 715, 0)); //makes one 5x5 quadrant with boxes 60 px wide inside a 715x715 viewport //was 368 when doing 4 quadrants
-
   //add sample year square to bottom of event column
   document.getElementById("eventList").appendChild(makeGrid(1,60,80,100));
 
@@ -362,7 +251,6 @@ $( document ).ready(function() { //had to use jquery because my
   var cpContainer = document.getElementById("colorPalette");
   cpContainer.appendChild(makeColorPalette(numColors)); //make dynamic color palette with 6 colors
 
-  fillSquares();
   showTypeKey();
 
 
@@ -383,40 +271,14 @@ $( document ).ready(function() { //had to use jquery because my
       }else{
         text.textContent = '16'+temp; //specific for example
       }
-      yearBox.appendChild(text);
-    }
-  }
-
-
-  function fillSquares(){
-
-    var fillSquareParam;
-    var countries = [];
-    var typeSquareIDs = [];
-    var temp;
-
-    for(var i=0; i < squares2Fill.length; i++){
-      temp = squares2Fill[i].split('_');
-      countries.push(temp[0]);
-      typeSquareIDs.push(temp[1]);
-
-      if(document.getElementById(temp[1])){ //null check for "special" case 
-        document.getElementById(temp[1]).setAttribute("fill", arrayColors[countryNames.indexOf(temp[0])]);
+      if(yearBox){
+        yearBox.appendChild(text);
       }
-
-      //still need to set the triangle square, probably a better way to avoid this dulicate code
-      document.getElementById("type0year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
-      document.getElementById("type1year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
-      document.getElementById("type2year64").setAttribute("fill", arrayColors[countryNames.indexOf("France")]);
-      document.getElementById("type4year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
-      document.getElementById("type7year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
-
-      document.getElementById("type1year64").setAttribute("squareState","1");
-      currColor = arrayColors[countryNames.indexOf("France")];
-      changeSquare(document.getElementById("type1year64"));
+      
     }
-
   }
+
+
 
   function showTypeKey(){
     //hold year ID of key
