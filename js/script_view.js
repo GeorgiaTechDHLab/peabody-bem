@@ -40,10 +40,15 @@ $( document ).ready(function() { //had to use jquery because my
   //array for all 900 rectangles h
   var rect = [];
 
-    var squares2Fill = ["England_type5year0", "Spain_type7year11", "England_type7year16", "Spain_type7year19", "France_type7year22", "Spain_type7year24", 
+  var squares2Fill = ["England_type5year0", "Spain_type7year11", "England_type7year16", "Spain_type7year19", "France_type7year22", "Spain_type7year24", 
                       "Spain_type7year25", "France_type7year33", "Spain_type7year36", "France_type7year39", "Spain_type8year41", "France_type7year61", 
                       "special", "England_type7year75", "England_type7year77", "England_type7year78", "England_type7year83", "England_type7year84"];
 
+
+
+  //event types to show in key 
+  var eventTypes = ["Battles, Sieges, Beginning of War", "Conquests, Annexations, Unions", "Losses and Disasters", "Falls of States", 
+                    "Foundations of States and Revolutions", "Treaties and Sundies", "Births", "Deeds", "Deaths, of remarkable individuals"];
 
   /*if we want to use right-click functionality instead: http://www.sitepoint.com/building-custom-right-click-context-menu-javascript/ */
 
@@ -225,7 +230,7 @@ $( document ).ready(function() { //had to use jquery because my
       var colorBox = document.createSvg("rect");
       colorBox.setAttribute("width", "50px");
       colorBox.setAttribute("height", "50px");
-      colorBox.setAttribute("transform", ["translate("  + 5, (60*i)  + ")"]); 
+      colorBox.setAttribute("transform", ["translate("  + (60*i), 5  + ")"]); //5, (60*i) for vertical stacking of color blocks
       colorBox.setAttribute("id", "colorBox" + i); //colorbox1, colorbox2, etc
       colorBox.setAttribute("fill", arrayColors[i]);
       console.log(colorBox.getAttribute("id"));
@@ -238,7 +243,7 @@ $( document ).ready(function() { //had to use jquery because my
       colorLabel.textContent = countryNames[i];
       colorLabel.setAttribute("x","55");
       colorLabel.setAttribute("y","30");
-      colorLabel.setAttribute("font-family", "Verdana");
+      colorLabel.setAttribute("font-family", "Alegreya");
       colorLabel.setAttribute("font-size", "20");
       colorLabel.setAttribute("transform", ["translate("  + 5, (60*i)  + ")"]);
       colorLabel.setAttribute("textAlign","center");
@@ -298,14 +303,6 @@ $( document ).ready(function() { //had to use jquery because my
             yearBox.setAttribute("id", "year" + currYearID);
             currYearID = currYearID + 1;
             maing.appendChild(yearBox);
-            yearBox.addEventListener( //adds event listener to each yearBox
-            "click",
-            function(e){
-                {
-                    changeSquare(e.target); //e.target is the rect object, where id="type#year#" and class="typeSquare"
-                }
-            },
-             false);
           for(var numType = 0; numType < 9; numType++){ //for 9 times, create a type square and append to current year box
 
             var type = document.createSvg("rect");
@@ -347,12 +344,15 @@ $( document ).ready(function() { //had to use jquery because my
 
     return svg;
   }
-  
+
 /*******************************************INITIALIZE PAGE**********************************************/
 
   /*draw the 100x100 grid*/
   var container = document.getElementById("gridContainer");
   container.appendChild(makeGrid(10, 60, 715, 0)); //makes one 5x5 quadrant with boxes 60 px wide inside a 715x715 viewport //was 368 when doing 4 quadrants
+
+  //add sample year square to bottom of event column
+  document.getElementById("eventList").appendChild(makeGrid(1,60,80,100));
 
   /*add year labels*/
   var years2Label = ["5","9","40","49","50","90","99"];
@@ -363,51 +363,7 @@ $( document ).ready(function() { //had to use jquery because my
   cpContainer.appendChild(makeColorPalette(numColors)); //make dynamic color palette with 6 colors
 
   fillSquares();
-
-
-
-
-/*******************************************EVENT LISTENERS**********************************************/
-
-
-  function drawExample(){
-    
-    var buttons = document.getElementsByClassName("showme"); //get all of the buttons
-
-    var countries = [];
-    var typeSquareIDs = [];
-    var squares = [];
-    var temp; 
-
-    //loops through buttons to extract the country and typeSquareID from each ID tag, then sets the attributes
-    for(var i=0; i < buttons.length; i++){
-      temp = buttons[i].id.split('_');
-      countries.push(temp[0]);
-      typeSquareIDs.push(temp[1]);
-
-      if(document.getElementById(temp[1])){ //null check for "special" case 
-        document.getElementById(temp[1]).setAttribute("fill", arrayColors[countryNames.indexOf(temp[0])]);
-      }
-    }
-
-    //still need to set the triangle square, probably a better way to avoid this dulicate code
-    document.getElementById("type0year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
-    document.getElementById("type1year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
-    document.getElementById("type2year64").setAttribute("fill", arrayColors[countryNames.indexOf("France")]);
-    document.getElementById("type4year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
-    document.getElementById("type7year64").setAttribute("fill", arrayColors[countryNames.indexOf("Spain")]);
-
-    document.getElementById("type1year64").setAttribute("squareState","1");
-    currColor = arrayColors[countryNames.indexOf("France")];
-    changeSquare(document.getElementById("type1year64"));
-
-
-    // addExYearLabels2();
-    // var years2Label = ["1506","1510","1541","1550","1551","1591","1600"];
-    var years2Label = ["5","9","40","49","50","90","99"];
-    addExYearLabels(years2Label);
-
-  }
+  showTypeKey();
 
 
 
@@ -431,66 +387,6 @@ $( document ).ready(function() { //had to use jquery because my
     }
   }
 
-
-  // show years for example...better logic so not two for statements? 
-  function addExYearLabels2(){
-    for(var i=0; i<100; i+=30){
-      var yearBox = document.getElementById("year"+i);
-      var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      text.setAttribute('id', 'yearLabel'+i);
-      text.setAttribute('x', '35');
-      text.setAttribute('y', '55');
-      var temp = i+1;
-      //text.textContent = i+1; //shows the id number plus one, generic template
-      if(temp<10){ //add a 0 
-        text.textContent = '160'+temp; //specific for example
-      }else if(temp == 100){ //make it next century
-        text.textContent = '1700'; //specific for example
-      }else{
-        text.textContent = '16'+temp; //specific for example
-      }
-      yearBox.appendChild(text);
-    }
-
-    for(var i=9; i<100; i+=30){
-      var yearBox = document.getElementById("year"+i);
-      var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      text.setAttribute('id', 'yearLabel'+i);
-      text.setAttribute('x', '35');
-      text.setAttribute('y', '55');
-      var temp = i+1;
-      //text.textContent = i+1; //shows the id number plus one, generic template
-      if(temp<10){ //add a 0 
-        text.textContent = '160'+temp; //specific for example
-      }else if(temp == 100){ //make it next century
-        text.textContent = '1700'; //specific for example
-      }else{
-        text.textContent = '16'+temp; //specific for example
-      }
-      yearBox.appendChild(text);
-    }
-  }
-
-  //shows all years
-  function addAllYearLabels(){
-    for(var i=0; i<100; i++){
-      var yearBox = document.getElementById("year"+i);
-      var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      text.setAttribute('id', 'yearLabel'+i);
-      text.setAttribute('x', '35');
-      text.setAttribute('y', '55');
-      var temp = i+1;
-      //text.textContent = i+1; //shows the id number plus one, generic template
-      if(temp<10){ //add a 0 
-        text.textContent = '160'+temp; //specific for example
-      }else if(temp == 100){ //make it next century
-        text.textContent = '1700'; //specific for example
-      }else{
-        text.textContent = '16'+temp; //specific for example
-      }
-      yearBox.appendChild(text);
-    }
-  }
 
   function fillSquares(){
 
@@ -522,8 +418,23 @@ $( document ).ready(function() { //had to use jquery because my
 
   }
 
+  function showTypeKey(){
+    //hold year ID of key
+    var keyID = 100;
 
-/**************************************END EVENT LISTENERS**********************************************/
+    //loop through ID to show related text 
+    for(var i=0; i<9; i++){
+      console.log(eventTypes[i]);
+      // document.getElementById("type" + i +"year" + keyID).addEventListener( //adds event listener to each yearBox
+      //       "hover",
+      //       function(e){
+      //           {
+      //             console.log(eventTypes[i]);
+      //           }
+      //       },
+      //        false);
+    }
+  }
 
 
 });
