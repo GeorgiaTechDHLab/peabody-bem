@@ -1,0 +1,7 @@
+body{
+	font-family: 'Alegreya', serif;
+}
+
+.typeSquare:hover{
+	outline: 1px solid lightblue;
+}
