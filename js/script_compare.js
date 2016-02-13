@@ -1,3 +1,4 @@
+//TODO: edit csv file to remove explanation of visual event
 $( document ).ready(function() { 
 
 
@@ -93,6 +94,7 @@ var makeGrid = function(boxesPerSide, size, pixelsPerSide, currYearID){
 
     //whole svg 
     var svg = document.createSvg("svg");
+
     svg.setAttribute("width", pixelsPerSide + size);
     svg.setAttribute("height", pixelsPerSide + size);
 
@@ -183,7 +185,7 @@ var makeGrid = function(boxesPerSide, size, pixelsPerSide, currYearID){
   /*fill in squares on chart given an array of objects w/ year, eventType, color*/
   function fillChart(dataArr){
     dataArr.forEach(function (element, index, array){
-        var typeRect = document.getElementById('type' + element.eventType + 'year' + (+element.year % 100))
+        var typeRect = document.getElementById('type' + element.eventType + 'year' + (+element.year % 100 - 1))
         if(typeRect.getAttribute('fill') != 'white'){
           //if a rectangle is present, draw a triangle over it
           var w = typeRect.getAttribute('width');
@@ -204,20 +206,21 @@ var makeGrid = function(boxesPerSide, size, pixelsPerSide, currYearID){
     })
   }
 
+/*function to display internal data*/
   function showData(dataArr){
     var oldTriType ='';
     dataArr.forEach(function (element, index, array){
-        var typeRect = document.getElementById('type' + element.eventType + 'year' + (+element.year % 100))
+        var typeRect = document.getElementById('type' + element.eventType + 'year' + (+element.year % 100 - 1))
         var triType = document.getElementById('tri' + typeRect.getAttribute('id'));
         var color = element.color;
-        var country = element.country;
+        var country = element.country; //TODO: use map of country to color
         var id ="";
         if((triType != null) && (triType.getAttribute('id') == oldTriType)){
           //if the triangle event exists AND we know it's actually the triangle, not the underlying rect
           id = "tri"+typeRect.getAttribute("id");
         }
         else
-          id = 'type' + element.eventType + 'year' + (+element.year % 100);
+          id = 'type' + element.eventType + 'year' + (+element.year % 100 - 1);
         if(triType != null)
           oldTriType = triType.getAttribute('id'); //store the previous triangle event so when it comes around again, we know it's really the second of the two events. The first one should be labeled w/o 'tri'
         
@@ -345,8 +348,8 @@ var makeGrid = function(boxesPerSide, size, pixelsPerSide, currYearID){
 
 /*******************************************EVENT LISTENERS**********************************************/
 
-  /*event listener to generate timeline from chart*/
-  document.getElementById("timelineGen").addEventListener("click", drawTimeline);
+  /*event listener for button to generate timeline from chart*/
+  // document.getElementById("timelineGen").addEventListener("click", drawTimeline);
   
   /*function to draw timeline from chart*/
   function drawTimeline() {
