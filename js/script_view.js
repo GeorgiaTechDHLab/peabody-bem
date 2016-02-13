@@ -75,6 +75,9 @@ $( document ).ready(function() { //had to use jquery because my
   /*fill in squares on chart given an array of objects w/ year, eventType, color*/
   function fillChart(dataArr){
     dataArr.forEach(function (element, index, array){
+      // console.log("element: "+ element.year, element.color, element.country, element.eventType, element.text);
+      // console.log("index: " + index);
+      // console.log("array: " + array);
         var typeRect = document.getElementById('type' + element.eventType + 'year' + (+element.year % 100))
         if(typeRect.getAttribute('fill') != 'white'){
           //if a rectangle is present, draw a triangle over it
@@ -95,7 +98,6 @@ $( document ).ready(function() { //had to use jquery because my
             typeRect.setAttribute('fill', element.color);
     })
   }
-
 
 /*creates a list of events based on a "text" attribute of objects in an array*/
   function fillEventList(dataArr){
