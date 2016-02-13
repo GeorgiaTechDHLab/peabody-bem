@@ -25,34 +25,36 @@
 		<title>Peabody</title>
 	</head>
 	<body>		
-		<div class="col-md-12"> <!--column for colorPalette-->
-			<div id="colorPalette">
-				<h2>Color/Country Key</h2>
-			</div>	<!--close color palette row-->
-		</div>
-
-
 		<div class="col-md-7"> <!--column to hold chart-->
 			<div id="gridContainer" class="row col-md-12">
 				<h2 id="chartTitle">Chronological List of the 16th Century</h2>
 			</div>
 		</div> <!--close column holding chart-->
 
-		<div class="col-md-5">
-			<div id="eventList" >
-				<h2>Chronological List of the 16th Century</h2>
-			        <ul id="sampleList">
-			        </ul>
-			        <p id="eventKeyID"></p>
-			</div><!--close event list-->
-		</div> <!--close col for events-->
+		<div class="row">
+			<div class="col-md-5">
+				<div id="eventList" >
+					<h2>Chronological List of the 16th Century</h2>
+				    <ul id="sampleList"></ul>
+				</div><!--close event list-->
+				<div class="col-md-3 bottomalign" id="eventKeyGrid">
+				</div>
+				<div class="col-md-9 bottomalign">
+					<p id="eventKeyID"></p>
+				</div>
+			</div> <!--close col for events-->
+			
+	
+		</div>
 
-		</div><!--close container--> 
+		<div class="col-md-12"> <!--column for colorPalette-->
+			<div id="colorPalette">
+				<h2>Color/Country Key</h2>
+			</div>	<!--close color palette row-->
+		</div>
 
-<!-- 		</div>
+<!-- 		</svg>
  -->
-		</svg>
-
 	<!--adding TinyMCE-->
     <script src='http://cdn.tinymce.com/4/tinymce.min.js'></script>
 

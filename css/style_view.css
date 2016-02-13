@@ -16,3 +16,10 @@ ul#sampleList{
 	padding-bottom: 0;
 	margin-bottom: 0;
 }
+
+.bottomalign{
+	float: none;
+	display: table-cell;
+	vertical-align: bottom;
+	padding-left: 0;
+}
