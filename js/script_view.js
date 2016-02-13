@@ -1,10 +1,10 @@
 //TODO: make list into timeline
-$( document ).ready(function() { //had to use jquery because my 
-  //document.getElementByID was being called before the ID in the document was created
-  //but now we can just use jquery syntax instead of doc.getelementbyid
+$( document ).ready(function() { //had to use jquery because document.getElementByID was being called before the ID in the document was created
   Number.prototype.between = function (min, max) {
     return this >= min && this < max;
     };
+
+/*******************************************INITIALIZE PAGE**********************************************/
 
   d3.csv('peabodyData.csv', function(d){
 
@@ -21,7 +21,21 @@ $( document ).ready(function() { //had to use jquery because my
 
     /*populate event list*/
     fillEventList(d);
+
+    //add sample year square to bottom of event column
+    document.getElementById("eventList").appendChild(makeGrid(1,60,80,100));
+
+    /*add year labels*/
+    var years2Label = ["5","9","40","49","50","90","99"];
+    addExYearLabels(years2Label);
+
+    /*add the color palette to the page*/
+    var cpContainer = document.getElementById("colorPalette");
+    cpContainer.appendChild(makeColorPalette(numColors)); //make dynamic color palette with 6 colors
+
+    showTypeKey();
   })
+
 
   //array of colors for sample list
   var arrayColors = ["#720042", "#BA390B", "#6EA2A3", "#336531","#D98634","#A34F93","#9FBCBF","#9BCF7A","#CC7172","#CFB47E"]
@@ -75,10 +89,14 @@ $( document ).ready(function() { //had to use jquery because my
   /*fill in squares on chart given an array of objects w/ year, eventType, color*/
   function fillChart(dataArr){
     dataArr.forEach(function (element, index, array){
+<<<<<<< HEAD
       // console.log("element: "+ element.year, element.color, element.country, element.eventType, element.text);
       // console.log("index: " + index);
       // console.log("array: " + array);
         var typeRect = document.getElementById('type' + element.eventType + 'year' + (+element.year % 100))
+=======
+        var typeRect = document.getElementById('type' + element.eventType + 'year' + (+element.year % 100 - 1))
+>>>>>>> 2069a83149ea98372f58de8228217ba234f8bcc9
         if(typeRect.getAttribute('fill') != 'white'){
           //if a rectangle is present, draw a triangle over it
           var w = typeRect.getAttribute('width');
@@ -240,21 +258,6 @@ $( document ).ready(function() { //had to use jquery because my
     return svg;
   }
 
-/*******************************************INITIALIZE PAGE**********************************************/
-
-  //add sample year square to bottom of event column
-  document.getElementById("eventList").appendChild(makeGrid(1,60,80,100));
-
-  /*add year labels*/
-  var years2Label = ["5","9","40","49","50","90","99"];
-  addExYearLabels(years2Label);
-
-  /*add the color palette to the page*/
-  var cpContainer = document.getElementById("colorPalette");
-  cpContainer.appendChild(makeColorPalette(numColors)); //make dynamic color palette with 6 colors
-
-  showTypeKey();
-
 
 
   function addExYearLabels(years2Label){
@@ -280,23 +283,23 @@ $( document ).ready(function() { //had to use jquery because my
     }
   }
 
-
-
   function showTypeKey(){
     //hold year ID of key
     var keyID = 100;
 
-    //loop through ID to show related text 
+    //loop through ID to add event listener for showing associated text 
     for(var i=0; i<9; i++){
-      console.log(eventTypes[i]);
-      // document.getElementById("type" + i +"year" + keyID).addEventListener( //adds event listener to each yearBox
-      //       "hover",
-      //       function(e){
-      //           {
-      //             console.log(eventTypes[i]);
-      //           }
-      //       },
-      //        false);
+      document.getElementById("type" + i +"year" + keyID).addEventListener( //adds event listener to each yearBox
+            "mouseover",
+            function(e){
+                {
+                  //get 5th character of the id of the element triggering the event
+                  //can't use i b/o scope
+                  var eventTypeNum = this.getAttribute('id').charAt(4);
+                  document.getElementById('eventKeyID').innerHTML = eventTypes[+eventTypeNum];
+                }
+            },
+             false);
     }
   }
 
