@@ -110,11 +110,33 @@ $( document ).ready(function() { //had to use jquery because document.getElement
 /*creates a list of events based on a "text" attribute of objects in an array*/
   function fillEventList(dataArr){
     dataArr.forEach(function (e, i, a){
-      var eventList = document.getElementById("sampleList").innerHTML;
-      document.getElementById('sampleList').innerHTML = eventList + '<li>' + e.text + '</li>';
+      var eventList = document.getElementById("sampleList").innerHTML;                      //this math sets text id equal to year id, e.g. year0 and text0
+      document.getElementById('sampleList').innerHTML = eventList + '<li id= text'+parseInt((e.year%100)-1)+'>' + e.text + '</li>';
     })
 
+    for(var i=0; i<99; i++){
+      var textEl = document.getElementById("text"+i);
 
+      if(textEl){
+        console.log(textEl);
+        textEl.addEventListener( //adds event listener to each yearBox
+        "mouseover",
+        function(e){
+            {
+              highlightItem(e.target); //e.target is the rect object, where id="type#year#" and class="typeSquare"
+            }
+        },
+         false);
+      }
+      
+
+
+    }
+    // d3.select("sampleList").selectAll("li")
+    //   .data(dataArr)
+    //   .enter()
+    //   .append("li")
+    //   .text("test");
   }
 
   /**dynamic color palette to size according to number of colors*/
@@ -211,14 +233,14 @@ $( document ).ready(function() { //had to use jquery because document.getElement
 
             //maybe add this code...
 
-            // yearBox.addEventListener( //adds event listener to each yearBox
-            // "click",
-            // function(e){
-            //     {
-            //         changeSquare(e.target); //e.target is the rect object, where id="type#year#" and class="typeSquare"
-            //     }
-            // },
-            //  false);
+            yearBox.addEventListener( //adds event listener to each yearBox
+            "mouseover",
+            function(e){
+                {
+                    highlightItem(e.target); //e.target is the rect object, where id="type#year#" and class="typeSquare"
+                }
+            },
+             false);
 
           for(var numType = 0; numType < 9; numType++){ //for 9 times, create a type square and append to current year box
 
@@ -341,6 +363,12 @@ function addTypeKeyLabels(){
     }
   }
 
+
+  function highlightItem(element){
+    console.log("hovering over this: " + element);
+    console.log(element.getAttribute("id"));
+
+  }
 
 
 });
