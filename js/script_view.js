@@ -117,13 +117,14 @@ $( document ).ready(function() { //had to use jquery because document.getElement
     for(var i=0; i<99; i++){
       var textEl = document.getElementById("text"+i);
 
+      //if there is a text element with the ID (null check)
       if(textEl){
         console.log(textEl);
         textEl.addEventListener( //adds event listener to each yearBox
         "mouseover",
         function(e){
             {
-              highlightItem(e.target); //e.target is the rect object, where id="type#year#" and class="typeSquare"
+              highlightItem(e.target); //e.target is the rect object, where id="type#year#" and class="typeSquare", OR the HTMLLIElement (list element)
             }
         },
          false);
@@ -364,9 +365,32 @@ function addTypeKeyLabels(){
   }
 
 
-  function highlightItem(element){
+  function highlightItem(element){ //element is either text in list or typesquare rectangle 
     console.log("hovering over this: " + element);
     console.log(element.getAttribute("id"));
+    // console.log(element.eventType);
+
+
+    //if it's a text in list element
+      //highlight the text and the square 
+
+    //if it's a typesquare rectangle
+      //highlight the square and text (same thing as above)
+
+    //if it's a text in list element or if it's a typesquare rectangle
+      //highlight the square and text 
+
+
+    var id = element.getAttribute("id");
+    console.log(id);
+
+    if(id.includes("text")){
+      var textHID = id; 
+      console.log(textHID);
+      // document.getElementById("textHID").setAttribute("class","highlight"); 
+
+    }
+
 
   }
 
