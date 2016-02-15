@@ -23,17 +23,14 @@ $( document ).ready(function() { //had to use jquery because document.getElement
     fillEventList(d);
 
     //add sample year square to bottom of event column
-    document.getElementById("eventList").appendChild(makeGrid(1,60,80,100));
-
-    /*add year labels*/
-    var years2Label = ["5","9","40","49","50","90","99"];
-    addExYearLabels(years2Label);
+    document.getElementById("eventKeyGrid").appendChild(makeGrid(1,60,80,100));
 
     /*add the color palette to the page*/
     var cpContainer = document.getElementById("colorPalette");
     cpContainer.appendChild(makeColorPalette(numColors)); //make dynamic color palette with 6 colors
 
     showTypeKey();
+    addTypeKeyLabels();
   })
 
 
@@ -110,13 +107,36 @@ $( document ).ready(function() { //had to use jquery because document.getElement
     })
   }
 
-
 /*creates a list of events based on a "text" attribute of objects in an array*/
   function fillEventList(dataArr){
     dataArr.forEach(function (e, i, a){
-      var eventList = document.getElementById("sampleList").innerHTML;
-      document.getElementById('sampleList').innerHTML = eventList + '<li>' + e.text + '</li>';
+      var eventList = document.getElementById("sampleList").innerHTML;                      //this math sets text id equal to year id, e.g. year0 and text0
+      document.getElementById('sampleList').innerHTML = eventList + '<li id= text'+parseInt((e.year%100)-1)+'>' + e.text + '</li>';
     })
+
+    for(var i=0; i<99; i++){
+      var textEl = document.getElementById("text"+i);
+
+      if(textEl){
+        console.log(textEl);
+        textEl.addEventListener( //adds event listener to each yearBox
+        "mouseover",
+        function(e){
+            {
+              highlightItem(e.target); //e.target is the rect object, where id="type#year#" and class="typeSquare"
+            }
+        },
+         false);
+      }
+      
+
+
+    }
+    // d3.select("sampleList").selectAll("li")
+    //   .data(dataArr)
+    //   .enter()
+    //   .append("li")
+    //   .text("test");
   }
 
   /**dynamic color palette to size according to number of colors*/
@@ -210,6 +230,18 @@ $( document ).ready(function() { //had to use jquery because document.getElement
             yearBox.setAttribute("id", "year" + currYearID);
             currYearID = currYearID + 1;
             maing.appendChild(yearBox);
+
+            //maybe add this code...
+
+            yearBox.addEventListener( //adds event listener to each yearBox
+            "mouseover",
+            function(e){
+                {
+                    highlightItem(e.target); //e.target is the rect object, where id="type#year#" and class="typeSquare"
+                }
+            },
+             false);
+
           for(var numType = 0; numType < 9; numType++){ //for 9 times, create a type square and append to current year box
 
             var type = document.createSvg("rect");
@@ -273,9 +305,42 @@ $( document ).ready(function() { //had to use jquery because document.getElement
       if(yearBox){
         yearBox.appendChild(text);
       }
-      
     }
   }
+
+
+function addTypeKeyLabels(){
+    var keyID = 100;
+
+    for(var i=0; i<9; i++){
+      // var typeBox = document.getElementById("type" + i +"year" + keyID);
+
+      var size = 68;
+      var typeBox = document.getElementById("year"+keyID);
+      var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      text.setAttribute('id', 'typeLabel'+i);
+
+      text.textContent = parseInt(i)+1;
+
+
+        //0,1,2 are type boxes on the first row
+      if(i == 0 || i == 1 || i == 2){
+                                                        
+        text.setAttribute("transform", ["translate(" + ((i + 1) * size/3 + i),30 + ")"]); //moves individual type square
+      }
+      else if(i == 3 || i == 4 || i == 5){
+          text.setAttribute("transform", ["translate(" + ((i-3 + 1) * size/3 + (i-3)),size/3 + 31 + ")"]); //extra 1 for a 1 pixel space between row above
+      }
+      else if(i == 6 || i == 7 || i == 8){
+          text.setAttribute("transform", ["translate(" + ((i-6 + 1) * (size/3) + (i-6)),2*(size/3) + 32 +")"]);
+      }
+
+      typeBox.appendChild(text);
+    }
+
+  }
+
+
 
   function showTypeKey(){
     //hold year ID of key
@@ -290,11 +355,19 @@ $( document ).ready(function() { //had to use jquery because document.getElement
                   //get 5th character of the id of the element triggering the event
                   //can't use i b/o scope
                   var eventTypeNum = this.getAttribute('id').charAt(4);
-                  document.getElementById('eventKeyID').innerHTML = eventTypes[+eventTypeNum];
+                  var outlineNum = parseInt(eventTypeNum) + 1;
+                  document.getElementById('eventKeyID').innerHTML = outlineNum + ". " + eventTypes[+eventTypeNum];
                 }
             },
              false);
     }
+  }
+
+
+  function highlightItem(element){
+    console.log("hovering over this: " + element);
+    console.log(element.getAttribute("id"));
+
   }
 
 
