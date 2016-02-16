@@ -5,6 +5,8 @@ $( document ).ready(function() { //had to use jquery because my
     return this >= min && this < max;
     };
 
+  //global variable of year to begin chart. default 1400 for sample event list
+  var startYear = 1500;
 
   //array of colors for 4 color palettes, with 10 colors per array. 
 
@@ -393,7 +395,7 @@ $( document ).ready(function() { //had to use jquery because my
     return svg;
   }
 
-   function generateTimeline(boxesPerSide, yearID){
+   function generateEventDataArray(boxesPerSide, yearID){
     var timelineDataPts = []; //array of points to be plotted on the timeline
       for(var i = 0; i < boxesPerSide; i++) {
         for(var j = 0; j < boxesPerSide; j++) {
@@ -513,13 +515,30 @@ $( document ).ready(function() { //had to use jquery because my
 
 /*******************************************EVENT LISTENERS**********************************************/
 
-  /*aevent listener to generate timeline from chart*/
+/*event listener for custom year*/
+  document.getElementById("submitYrBtn").addEventListener("click", function(){
+    //set the new year
+    startYear = +document.getElementById("startYrInput").value;
+    //redraw timeline
+    drawTimeline();
+    //clear text field
+    document.getElementById("startYrInput").value = "";
+    //update year labels TODO
+  })
+
+
+  /*event listener to generate timeline from chart*/
   document.getElementById("timelineGen").addEventListener("click", function(){
+    drawTimeline();
+})
+
+/*function to draw timeline from chart*/
+  function drawTimeline() {
     var margin= {top:60, bottom:20, right:25, left:15};
 
     document.getElementById("timelineViz").innerHTML = ""; //clear out any previous timeline
-    //dataArr is the array returned from calling generateTimeline
-    var dataArr = generateTimeline(10,0);
+    
+    var dataArr = generateEventDataArray(10,0);
 
     //object with key as year and value as the number of events during that year
     var yearsMap = {};
@@ -542,7 +561,7 @@ $( document ).ready(function() { //had to use jquery because my
                     if((d % 10) != 0){ 
                         return ("");
                     }else{ 
-                        return (d + 1500); //the 1500 would be user input start century
+                        return (d + (+startYear)); //user input startYear
                     }});
 
     var xGuide = canvas.append('g')
@@ -598,7 +617,10 @@ $( document ).ready(function() { //had to use jquery because my
       .attr("class","textLabels")
       .attr("id", function(d){return d.text + d.year}) //allows text elements to be accessible by their corresponding rect
       .style("visibility", "hidden");
-  });
+  };
+
+
+
 
 /*event listener to clear grid and timeline*/
   document.getElementById("clearBtn").addEventListener("click", function(){

@@ -353,6 +353,8 @@ function addTypeKeyLabels(){
             "mouseover",
             function(e){
                 {
+                  console.log(eventTypes[i]);
+                  
                   //get 5th character of the id of the element triggering the event
                   //can't use i b/o scope
                   var eventTypeNum = this.getAttribute('id').charAt(4);
