@@ -380,7 +380,7 @@ var makeGrid = function(boxesPerSide, size, pixelsPerSide, currYearID){
                     if((d % 10) != 0){ 
                         return ("");
                     }else{ 
-                        return (d + 1600); //the 1600 would be user input start century
+                        return (d + 1500); //the 1600 would be user input start century
                     }});
 
     var xGuide = canvas.append('g')
