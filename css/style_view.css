@@ -23,3 +23,7 @@ ul#sampleList{
 	vertical-align: bottom;
 	padding-left: 0;
 }
+
+.highlight{
+	color:blue;
+}
