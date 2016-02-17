@@ -6,6 +6,10 @@ body{
 	outline: 1px solid lightblue;
 }
 
+.highlightSquare{
+	outline: 1px solid blue;
+}
+
 ul#sampleList{
 	list-style: none;
 	padding-left: 0;

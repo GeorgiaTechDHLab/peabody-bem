@@ -388,8 +388,9 @@ function addTypeKeyLabels(){
 
     if(id.includes("text")){
       var textHID = id; 
-      console.log(textHID);
-      // document.getElementById("textHID").setAttribute("class","highlight"); 
+      console.log(textHID.substring(4)); //gets the year
+      document.getElementById(textHID).setAttribute("class","highlight"); 
+      document.getElementById("type7year"+textHID.substring(4)).setAttribute("class","highlightSquare");
 
     }
 
