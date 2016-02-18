@@ -58,15 +58,6 @@ $( document ).ready(function() { //had to use jquery because my
   //array for all 900 rectangles h
   var rect = [];
 
-  /*TODO: update chart title based on which event list is active (sample or custom titled)*/
-  function updateChartTitle(element){
-
-    //need title variable from event list
-
-    //#chartTitle is id for title above chart
-
-  }
-
   /*if we want to use right-click functionality instead: http://www.sitepoint.com/building-custom-right-click-context-menu-javascript/ */
 
   /*function changes type square based on current square state and color. currently states are identified by number, could have 
@@ -519,8 +510,13 @@ $( document ).ready(function() { //had to use jquery because my
   document.getElementById("submitYrBtn").addEventListener("click", function(){
     //set the new year
     startYear = +document.getElementById("startYrInput").value;
+
+    //TODO: make sure it's valid value
+
     //redraw timeline
     drawTimeline();
+    //relabel graph with years
+    addCustomYearLabels();
     //clear text field
     document.getElementById("startYrInput").value = "";
     //update year labels TODO
@@ -822,6 +818,52 @@ $( document ).ready(function() { //had to use jquery because my
     }
   }
 
+  function addCustomYearLabels(){
+
+    console.log(startYear);
+    // startYear; //input from user
+
+    // var centuryYY = startYear%100; //extract the century from the year
+
+    var centuryYY = startYear.toString();
+    var newStr = centuryYY.slice(0,2);
+    // centuryYY = parseInt(centuryYY);
+    console.log(newStr);
+
+
+    //remove old year labels before adding new
+    for(var i=0; i<100; i++){
+
+      var yearLabels = document.getElementsByClassName("yearLabel");
+
+      for(var j=0; j<yearLabels.length; j++){
+        var temp = yearLabels[j].parentNode;
+        temp.removeChild(yearLabels[j]);
+      }
+
+      var yearBox = document.getElementById("year"+i);
+
+
+      var text = document.createElementNS('http://www.w3.org/2000/svg', 'text'); //create svg text element for label
+      text.setAttribute('id', 'yearLabel'+i); //give ID
+      text.setAttribute('x', '35'); //position
+      text.setAttribute('y', '55'); //position
+
+      var temp = i+1;
+      //text.textContent = i+1; //shows the id number plus one, generic template
+      if(temp<10){ //add a 0 
+        text.textContent = centuryYY+temp;
+      }else if(temp == 100){ //make it next century
+        text.textContent = startYear+100;
+      }else{
+        text.textContent = centuryYY+temp; 
+      }
+      yearBox.appendChild(text);
+    }
+
+
+  }
+
   function addExYearLabels(years2Label){
     for(var i=0; i<years2Label.length; i++){
       var yearBox = document.getElementById("year"+years2Label[i]);
@@ -829,16 +871,17 @@ $( document ).ready(function() { //had to use jquery because my
       console.log(years2Label[i]);
       var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       text.setAttribute('id', 'yearLabel'+i);
+      text.setAttribute('class','yearLabel');
       text.setAttribute('x', '35');
       text.setAttribute('y', '55');
       var temp = parseInt(year2Label) + 1;
       console.log(temp);
       if(temp<10){ //add a 0 
-        text.textContent = '160'+temp; //specific for example
+        text.textContent = '150'+temp; //specific for example
       }else if(temp == 100){ //make it next century
-        text.textContent = '1700'; //specific for example
+        text.textContent = '1600'; //specific for example
       }else{
-        text.textContent = '16'+temp; //specific for example
+        text.textContent = '15'+temp; //specific for example
       }
       yearBox.appendChild(text);
     }

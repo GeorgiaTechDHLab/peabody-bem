@@ -6,7 +6,7 @@
  		<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="css/style.css">
 		<link rel="stylesheet" href="css/svg-style.css">
 		<script src = "js/jquery-1.11.3.min.js"></script>
  		<script src = "js/d3.min.js"></script>
@@ -18,8 +18,8 @@
 	    <link rel='stylesheet prefetch' href='http://www.tinymce.com/css/common.min.css'>
 	    <link rel='stylesheet prefetch' href='http://www.tinymce.com/css/docs.min.css'>
 
-	    <link rel="stylesheet" href="TinyMCEtest.css">
-
+<!-- 	    <link rel="stylesheet" href="TinyMCEtest.css">
+ -->
 
  		<link rel = "stylesheet" href = "css/bootstrap.min.css">
 	    <link href='http://fonts.googleapis.com/css?family=Oswald:400,700,300|Open+Sans:400,600' rel='stylesheet' type='text/css'>
@@ -29,35 +29,6 @@
 	<body>
 		<!--using bootstrap to organize elements on page, so container/row/col-md-12 etc come from Bootstrap files--> 
 	    <div class = "container">
-
-	        <div class="row">
-	         	<div class="col-md-12">
-					<h1>Peabody Visual History</h1>
-					<div class="col-md-8">
-						<p>Based on work from <a href="https://en.wikipedia.org/wiki/Elizabeth_Peabody">Elizabeth Peabody</a>, an American educator in the 19th century, this interactive tool modernizes a method of learning history chronilogically. Each square represents a year in a century, starting at 0 in the upper left hand corner and ending in 9 in the bottom right hand corner. Each year square is subdivided into 9 squares, which each have an event type. These types are shown in the table on the right. The colors in the color palette represent the countries involved in the historical timeline. </p>
-						<p>To make your own chronological history chart, take a list of events and fill in the squares accordingly. Click on the color for the country in the palette, and then fill in the square that represents the event type. Clicking on the square once makes it the solid color. To remove the color, click again. To split the colored square with another color, if the nations share the event, click again. Click again to swap the slant. Click one more time to fill the square with the new color.</p>
-					</div>
-					<div class="col-md-4">
-						<table style="width:100%" id="typeReference">
-						  <tr>
-						    <td>Battles, Sieges, Beginnings of War.</td>
-						    <td>Conquests, Annexations, Unions.</td> 
-						    <td>Losses and Disasters.</td>
-						  </tr>
-						  <tr>
-						    <td>Falls of States.</td>
-						    <td>Foundations of States and Revolutions.</td> 
-						    <td>Treaties and Sundries.</td>
-						  </tr>
-						  <tr>
-						    <td>Births,</td>
-						    <td>Deeds,</td> 
-						    <td>Deaths, of remarkable individuals.</td>
-						  </tr>
-						</table>
-					</div><!--close col-md-4-->
-				</div><!--close "col-md-12"-->
-			</div><!--close row-->
 
 			
 			<div class="col-md-4"> <!--column for colorPalette and event list-->
@@ -142,34 +113,12 @@
 					      </div>
 					    </div>
 					  </div>
-					  <div class="panel panel-default">
-					    <div class="panel-heading" role="tab" id="headingThree">
-					      <h4 class="panel-title">
-					        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-					          Make your own
-					        </a>
-					      </h4>
-					    </div>
-					    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-					      <div class="panel-body">
-					      	<form id="customEventsForm">
-						        <p id="instructionsOrTitle">Type or paste your own list of events.</p> 
-						        <div id="customEventsContainer"><textarea id="userEventsInput" value=""></textarea></div>
-						        <div id="titleInstruct"><p id="giveTitle">Give your events a title:</p></div>
-								<input type="text" id="userTitleInput" value="">
-								<p id="eventsList"></p><!--where the events go once added -->
-								<!--either the "add" button or the "edit button" or the "update button"-->
-								<div id="buttonContainer"><button type = "button" id="addEvents" >Add</button></div>
-							</form>
-					      </div>
-					    </div>
-					  </div>
-
+					  
 					  <div class="panel panel-default">
 					    <div class="panel-heading" role="tab" id="headingThree">
 					      <h4 class="panel-title editable">
 					        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-					          Testing TinyMCE
+					          Make your own
 					        </a>
 					      </h4>
 					    </div>
@@ -177,22 +126,13 @@
 					      <div class="panel-body editable" id="rar">
 					      	<p>body</p>
 					      </div>
+					      <form>
+							Enter start year: <input type="text" id="startYrInput">
+							<input type="button" value="Submit" id="submitYrBtn">
+						  </form>
 					    </div>
 					  </div>
-					<!--   <div class="panel panel-default">
-					    <div class="panel-heading" role="tab" id="timelineGen">
-					      <h4 class="panel-title">
-					        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#timeline" aria-expanded="false" aria-controls="timeline">
-					          Generate Events Timeline
-					        </a>
-					      </h4>
-					    </div>
-					    <div id="timeline" class="panel-collapse collapse" role="tabpanel" aria-labelledby="timelineGen">
-					      <div class="panel-body">
 
-					      </div>
-					    </div>
-					  </div> -->
 					</div>
 				</div><!--close col-md-4-->
 				<!--container--> 
@@ -200,11 +140,8 @@
 
 		<div class="col-md-8"> <!--column to hold chart and timeline-->
 			<div id="gridContainer" class="row">
-					<h2 id="chartTitle">Chart: Chronological List of the 16th Century</h2>
-					<form>
-						Enter start year: <input type="text" id="startYrInput">
-						<input type="button" value="Submit" id="submitYrBtn">
-					</form>
+				<h2 id="chartTitle" class="editable">Chart: Chronological List of the 16th Century</h2>
+
 				<!--row for chart-->
 			</div>
 			<div class="row"><!--row with timeline-->
