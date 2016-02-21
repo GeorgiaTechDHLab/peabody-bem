@@ -1,4 +1,3 @@
-//TODO: make list into timeline
 $( document ).ready(function() { //had to use jquery because document.getElementByID was being called before the ID in the document was created
   Number.prototype.between = function (min, max) {
     return this >= min && this < max;
@@ -31,6 +30,7 @@ $( document ).ready(function() { //had to use jquery because document.getElement
 
     showTypeKey();
     addTypeKeyLabels();
+
   })
 
 
@@ -110,27 +110,21 @@ $( document ).ready(function() { //had to use jquery because document.getElement
 /*creates a list of events based on a "text" attribute of objects in an array*/
   function fillEventList(dataArr){
     dataArr.forEach(function (e, i, a){
-      var eventList = document.getElementById("sampleList").innerHTML;                      //this math sets text id equal to year id, e.g. year0 and text0
-      document.getElementById('sampleList').innerHTML = eventList + '<li id= text'+parseInt((e.year%100)-1)+'>' + e.text + '</li>';
-    })
-
-    for(var i=0; i<99; i++){
-      var textEl = document.getElementById("text"+i);
-
-      //if there is a text element with the ID (null check)
-      if(textEl){
-        console.log(textEl);
-        textEl.addEventListener( //adds event listener to each yearBox
-        "mouseover",
-        function(e){
-            {
-              highlightItem(e.target); //e.target is the rect object, where id="type#year#" and class="typeSquare", OR the HTMLLIElement (list element)
-            }
-        },
-         false);
-      }
+      var eventLi = document.getElementById('type'+e.eventType+'text'+parseInt((e.year%100)-1));
+      var eventList = document.getElementById("sampleList").innerHTML; 
+      if(eventLi == null)                     //this math sets list element's id equal to type#text+year, e.g. type0text0
+        document.getElementById('sampleList').innerHTML = eventList + '<li id= type'+e.eventType + 'text'+parseInt((e.year%100)-1) + '>' + e.text + '</li>';
+      else //else, the event is a triangle
+        document.getElementById('sampleList').innerHTML = eventList + '<li id= tritype'+e.eventType + 'text'+parseInt((e.year%100)-1) + '>' + e.text + '</li>';
       
-
+      // eventLi.addEventListener(
+      //   "click",
+      //   function(e){
+      //     console.log("here");
+      //     highlightItem(e.target);
+      //   },
+      //   false);
+    })
 
     }
     // d3.select("sampleList").selectAll("li")
@@ -138,7 +132,7 @@ $( document ).ready(function() { //had to use jquery because document.getElement
     //   .enter()
     //   .append("li")
     //   .text("test");
-  }
+ 
 
   /**dynamic color palette to size according to number of colors*/
   var makeColorPalette = function(numColors){
@@ -161,7 +155,6 @@ $( document ).ready(function() { //had to use jquery because document.getElement
       colorBox.setAttribute("transform", ["translate("  + (160*i), 5  + ")"]); //5, (60*i) for vertical stacking of color blocks
       colorBox.setAttribute("id", "colorBox" + i); //colorbox1, colorbox2, etc
       colorBox.setAttribute("fill", arrayColors[i]);
-      console.log(colorBox.getAttribute("id"));
 
       /*tutorial: http://www.kirupa.com/html5/handling_events_for_many_elements.htm*/
       var colorPalette = document.querySelector("#colorPalette");
@@ -231,17 +224,18 @@ $( document ).ready(function() { //had to use jquery because document.getElement
             yearBox.setAttribute("id", "year" + currYearID);
             currYearID = currYearID + 1;
             maing.appendChild(yearBox);
-
-            //maybe add this code...
-
-            yearBox.addEventListener( //adds event listener to each yearBox
+            yearBox.addEventListener( //event listener for hover
             "mouseover",
             function(e){
-                {
                     highlightItem(e.target); //e.target is the rect object, where id="type#year#" and class="typeSquare"
-                }
             },
              false);
+            yearBox.addEventListener( //event listener for hover
+              'mouseout',
+              function(e){
+                removeHighlight(e.target);
+              },
+              false);
 
           for(var numType = 0; numType < 9; numType++){ //for 9 times, create a type square and append to current year box
 
@@ -291,13 +285,11 @@ $( document ).ready(function() { //had to use jquery because document.getElement
     for(var i=0; i<years2Label.length; i++){
       var yearBox = document.getElementById("year"+years2Label[i]);
       var year2Label = years2Label[i];
-      console.log(years2Label[i]);
       var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       text.setAttribute('id', 'yearLabel'+i);
       text.setAttribute('x', '35');
       text.setAttribute('y', '55');
       var temp = parseInt(year2Label) + 1;
-      console.log(temp);
       if(temp<10){ //add a 0 
         text.textContent = '150'+temp; //specific for example
       }else if(temp == 100){ //make it next century
@@ -308,7 +300,6 @@ $( document ).ready(function() { //had to use jquery because document.getElement
       yearBox.appendChild(text);
     }
   }
-
 
 
 function addTypeKeyLabels(){
@@ -343,19 +334,16 @@ function addTypeKeyLabels(){
   }
 
 
-
+//function to display the event type key
   function showTypeKey(){
-    //hold year ID of key
-    var keyID = 100;
+    var keyID = 100; //the event type key's id is year box 100
 
-    //loop through ID to add event listener for showing associated text 
+    //loop through type squares within event type key to add event listener for showing associated text 
     for(var i=0; i<9; i++){
-      document.getElementById("type" + i +"year" + keyID).addEventListener( //adds event listener to each yearBox
+      document.getElementById("type" + i +"year" + keyID).addEventListener(
             "mouseover",
             function(e){
                 {
-                  console.log(eventTypes[i]);
-                  
                   //get 5th character of the id of the element triggering the event
                   //can't use i b/o scope
                   var eventTypeNum = this.getAttribute('id').charAt(4);
@@ -364,39 +352,56 @@ function addTypeKeyLabels(){
                 }
             },
              false);
+      document.getElementById("type" + i +"year" + keyID).addEventListener(
+            "mouseout",
+            function(e){
+                {
+                  var eventTypeNum = this.getAttribute('id').charAt(4);
+                  document.getElementById('eventKeyID').innerHTML = "";
+                }
+            },
+             false);
     }
   }
 
 
-  function highlightItem(element){ //element is either text in list or typesquare rectangle 
-    console.log("hovering over this: " + element);
-    console.log(element.getAttribute("id"));
-    // console.log(element.eventType);
-
-
-    //if it's a text in list element
-      //highlight the text and the square 
-
-    //if it's a typesquare rectangle
-      //highlight the square and text (same thing as above)
-
-    //if it's a text in list element or if it's a typesquare rectangle
-      //highlight the square and text 
-
-
+  function highlightItem(element){ //element is either text in list or typesquare or tritype 
     var id = element.getAttribute("id");
-    console.log(id);
 
-    if(id.includes("text")){
-      var textHID = id; 
-      console.log(textHID.substring(4)); //gets the year
-      document.getElementById(textHID).setAttribute("class","highlight"); 
-      document.getElementById("type7year"+textHID.substring(4)).setAttribute("class","highlightSquare");
-
+    if(id.includes("text")){ //if hovering over text
+      element.setAttribute("class","highlight"); 
+      //type#text# turns to type#year# for the squares
+      document.getElementById(id.replace('text','year')).setAttribute("class","highlightSquare");
     }
-
-
+    else if(id.includes("year") && id.includes('type') && element.getAttribute('fill') != 'white'){ //if hovering over rect or tritype
+      element.setAttribute("class","highlightSquare"); 
+      document.getElementById(id.replace('year','text')).setAttribute("class","highlight");
+    }
   }
+
+
+  function removeHighlight(element){ 
+    var id = element.getAttribute("id");
+
+    if(id.includes("text")){ //if hovering over text
+      element.removeAttribute("class","highlight"); 
+      //type#text# turns to type#year# for the squares
+      document.getElementById(id.replace('text','year')).removeAttribute("class","highlightSquare");
+    }
+    else if(id.includes("year") && element.getAttribute('fill') != 'white'){ //if hovering over rect or tritype
+      element.removeAttribute("class","highlightSquare"); 
+      document.getElementById(id.replace('year','text')).removeAttribute("class","highlight");
+    }
+  }
+
+  //event listener for hovering over a list element
+  $('ul').on('mouseover', 'li', function(e){
+          highlightItem(e.target);
+    })
+
+  $('ul').on('mouseout', 'li', function(e){
+          removeHighlight(e.target);
+    })
 
 
 });
