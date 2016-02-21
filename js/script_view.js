@@ -291,23 +291,24 @@ $( document ).ready(function() { //had to use jquery because document.getElement
     for(var i=0; i<years2Label.length; i++){
       var yearBox = document.getElementById("year"+years2Label[i]);
       var year2Label = years2Label[i];
+      console.log(years2Label[i]);
       var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
       text.setAttribute('id', 'yearLabel'+i);
       text.setAttribute('x', '35');
       text.setAttribute('y', '55');
       var temp = parseInt(year2Label) + 1;
+      console.log(temp);
       if(temp<10){ //add a 0 
-        text.textContent = '160'+temp; //specific for example
+        text.textContent = '150'+temp; //specific for example
       }else if(temp == 100){ //make it next century
-        text.textContent = '1700'; //specific for example
+        text.textContent = '1600'; //specific for example
       }else{
-        text.textContent = '16'+temp; //specific for example
+        text.textContent = '15'+temp; //specific for example
       }
-      if(yearBox){
-        yearBox.appendChild(text);
-      }
+      yearBox.appendChild(text);
     }
   }
+
 
 
 function addTypeKeyLabels(){
@@ -388,8 +389,9 @@ function addTypeKeyLabels(){
 
     if(id.includes("text")){
       var textHID = id; 
-      console.log(textHID);
-      // document.getElementById("textHID").setAttribute("class","highlight"); 
+      console.log(textHID.substring(4)); //gets the year
+      document.getElementById(textHID).setAttribute("class","highlight"); 
+      document.getElementById("type7year"+textHID.substring(4)).setAttribute("class","highlightSquare");
 
     }
 
