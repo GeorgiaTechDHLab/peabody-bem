@@ -626,6 +626,9 @@ $( document ).ready(function() { //had to use jquery because my
   function clearAll(){
     //remove data points from timeline
     d3.select('#timelineViz').selectAll("rect").remove();
+
+    removeYearLabels();
+
     //iterate through all squares and set their states to 0 and fill to white.
     //remove all triangles
     var yearID = 0;
@@ -818,9 +821,25 @@ $( document ).ready(function() { //had to use jquery because my
     }
   }
 
+  //remove old year labels before adding new, assumes 100 year labels 
+  function removeYearLabels(){
+    
+    for(var i=0; i<100; i++){
+
+      var yearLabels = document.getElementsByClassName("yearLabel");
+
+      //should probably do null check here
+      for(var j=0; j<yearLabels.length; j++){
+        var temp = yearLabels[j].parentNode;
+        temp.removeChild(yearLabels[j]);
+      }
+    }
+
+  }
+
   function addCustomYearLabels(){
 
-    console.log(startYear);
+    console.log("startYear: " + startYear);
     // startYear; //input from user
 
     // var centuryYY = startYear%100; //extract the century from the year
@@ -828,35 +847,32 @@ $( document ).ready(function() { //had to use jquery because my
     var centuryYY = startYear.toString();
     var newStr = centuryYY.slice(0,2);
     // centuryYY = parseInt(centuryYY);
-    console.log(newStr);
+    console.log("newStr: " + newStr);
 
 
     //remove old year labels before adding new
+    removeYearLabels();
+
+
     for(var i=0; i<100; i++){
-
-      var yearLabels = document.getElementsByClassName("yearLabel");
-
-      for(var j=0; j<yearLabels.length; j++){
-        var temp = yearLabels[j].parentNode;
-        temp.removeChild(yearLabels[j]);
-      }
 
       var yearBox = document.getElementById("year"+i);
 
 
       var text = document.createElementNS('http://www.w3.org/2000/svg', 'text'); //create svg text element for label
       text.setAttribute('id', 'yearLabel'+i); //give ID
+      text.setAttribute('class', 'yearLabel');
       text.setAttribute('x', '35'); //position
       text.setAttribute('y', '55'); //position
 
       var temp = i+1;
       //text.textContent = i+1; //shows the id number plus one, generic template
       if(temp<10){ //add a 0 
-        text.textContent = centuryYY+temp;
+        text.textContent = newStr +'0'+temp;
       }else if(temp == 100){ //make it next century
         text.textContent = startYear+100;
       }else{
-        text.textContent = centuryYY+temp; 
+        text.textContent = newStr+temp; 
       }
       yearBox.appendChild(text);
     }
