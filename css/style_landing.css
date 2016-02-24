@@ -1,10 +1,24 @@
 body{
-	background-color: #EBE8C9;
-	font-family: 'Alegreya', serif;
+	background-color: #FDFDFD;
+	font-family: 'open sans', sans-serif;
 	font-size: 16px;
-	color: #4A2B26;
+	font-weight: bold;
+}
+
+.title{
+	text-align: center;
+}
+
+.titlebox{
+	/*background-color: black;
+	color: white;*/
+	border: 5px solid black;
 }
 
 .img{
-	border: 1px black;
+	border: 2px solid black;
+}
+
+a.subtitle{
+	color: black;
 }
