@@ -214,7 +214,6 @@ $( document ).ready(function() { //had to use jquery because document.getElement
     //the bg belong to the maing
     maing.appendChild(bg);
 
-
     for(var i = 0; i < boxesPerSide; i++) {
         for(var j = 0; j < boxesPerSide; j++) {
           var numYear = boxesPerSide * i + j; //which number year box we're on
@@ -367,27 +366,45 @@ function addTypeKeyLabels(){
 
   function highlightItem(element){ //element is either text in list or typesquare or tritype 
     var id = element.getAttribute("id");
+    var offsets = null;
 
     if(id.includes("text")){ //if hovering over text
       element.setAttribute("class","highlight"); 
-      //type#text# turns to type#year# for the squares
-      document.getElementById(id.replace('text','year')).setAttribute("class","highlightSquare");
+      //the text's id type#text# turns to a square's id type#year#
+      var typeSquare = document.getElementById(id.replace('text','year'));
+      typeSquare.setAttribute("class","highlightSquare");
+      offsets = $('#'+id.replace('text','year')).offset(); //have to use jquery to use its offset() method
     }
     else if(id.includes("year") && id.includes('type') && element.getAttribute('fill') != 'white'){ //if hovering over rect or tritype
       element.setAttribute("class","highlightSquare"); 
-      document.getElementById(id.replace('year','text')).setAttribute("class","highlight");
+      var text = document.getElementById(id.replace('year','text'))
+      text.setAttribute("class","highlight");
+      offsets = $('#'+id.replace('year','text')).offset();
     }
+    //draw line connecting the two elements
+    var aLine = document.createSvg('line');
+    aLine.setAttribute('x1', offsets.left);
+    aLine.setAttribute('y1', offsets.top-50);
+    aLine.setAttribute('x2', $('#'+element.getAttribute("id")).offset().left);
+    aLine.setAttribute('y2', $('#'+element.getAttribute("id")).offset().top-50);
+    aLine.setAttribute('stroke', 'black');
+    aLine.setAttribute('stroke-width', '1');
+    aLine.setAttribute('stroke-dasharray',"10,10");
+    aLine.setAttribute('id', 'aLine');
+    //add line to page
+    document.getElementById('maing').appendChild(aLine);
   }
 
 
   function removeHighlight(element){ 
     var id = element.getAttribute("id");
+    document.getElementById('maing').removeChild(document.getElementById('aLine')); //remove line
 
     if(id.includes("text")){ //if hovering over text
       element.removeAttribute("class","highlight"); 
       //type#text# turns to type#year# for the squares
-      document.getElementById(id.replace('text','year')).removeAttribute("class","highlightSquare");
-    }
+      document.getElementById(id.replace('text','year')).removeAttribute("class","highlightSquare");      
+  }
     else if(id.includes("year") && element.getAttribute('fill') != 'white'){ //if hovering over rect or tritype
       element.removeAttribute("class","highlightSquare"); 
       document.getElementById(id.replace('year','text')).removeAttribute("class","highlight");
