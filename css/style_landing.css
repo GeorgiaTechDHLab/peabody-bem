@@ -1,18 +1,43 @@
 body{
 	background-color: #FDFDFD;
-	font-family: 'open sans', sans-serif;
+	font-family: 'Source Sans Pro', sans-serif;
 	font-size: 16px;
-	font-weight: bold;
+	padding-top: 2%;
 }
 
 .title{
 	text-align: center;
+	color: #333333;
+	font-weight: 900;
+}
+
+h3.title{
+	font-weight: 400;
 }
 
 .titlebox{
-	/*background-color: black;
-	color: white;*/
+	background-color: black;
+	color: white;
 	border: 5px solid black;
+}
+
+.subtitle{
+	color: white;
+	background-color: #333333;
+	padding-left: 2%;
+	padding-right: 2%;
+	padding-top, padding-bottom: 1%;
+
+}
+
+.center{
+    display: block;
+    margin-left: auto;
+    margin-right: auto
+}
+
+.row.space{
+	padding-top: 5%;
 }
 
 .img{
@@ -20,5 +45,5 @@ body{
 }
 
 a.subtitle{
-	color: black;
+	color: white;
 }
