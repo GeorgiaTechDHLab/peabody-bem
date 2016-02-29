@@ -1,5 +1,45 @@
 body{
-	font-family: 'Alegreya', serif;
+	font-family: 'Source Sans Pro', sans-serif;
+}
+
+.container{
+	margin-left: 4%;
+	margin-right: 4%;
+}
+
+
+/*aligns right navbar to event text ... and actually we probably want it standard across all...*/
+.navbar-nav.navbar-right:last-child{
+	margin-right: -160px;
+}
+
+h2{
+	font-weight: 700;
+}
+
+.myoffset{
+	margin-left: 4%;
+}
+
+.navbar-default{
+	background-color: #6EA3A4;
+    border-color: #e7e7e7;
+    color: white;
+    font-weight: 700;
+}
+
+.navbar-default .navbar-brand{
+
+	color: white;
+}
+
+.navbar-default .navbar-nav>li>a{
+	color: white;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus{
+	background-color: white;
+	color: #6EA3A4;
 }
 
 .typeSquare:hover{
