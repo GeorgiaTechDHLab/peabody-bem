@@ -11,6 +11,8 @@ h1.container{
   text-align: center;
 }
 
+
+
 nav ul a,
 nav .brand-logo {
   color: #444;
@@ -25,7 +27,7 @@ p {
 }
 
 .parallax-container {
-  min-height: 380px;
+  min-height: 310px; /*changed from 380px*/
   line-height: 0;
   height: auto;
   color: rgba(255,255,255,.9);
@@ -63,3 +65,20 @@ footer.page-footer {
   background-color: black;
   margin: 0;
 }
+
+
+
+
+/*added for parallax_2*/
+h2.question{
+  text-align: center;
+}
+
+.parallax-container { /*not working*/
+  height: 300px;
+}
+
+@import url("//netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-glyphicons.css");
+
+
+
