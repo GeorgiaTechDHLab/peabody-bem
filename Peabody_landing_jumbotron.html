@@ -26,36 +26,85 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
   </head>
 
   <body>
 
+    <!-- Static navbar -->
+<!--     <nav class="navbar navbar-default navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button> 
+          <a class="navbar-brand" href="#">Peabody</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li role="separator" class="divider"></li>
+                <li class="dropdown-header">Nav header</li>
+                <li><a href="#">Separated link</a></li>
+                <li><a href="#">One more separated link</a></li>
+              </ul>
+            </li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="active"><a href="Peabody_view.html">View <span class="sr-only">(current)</span></a></li>
+            <li><a href="Peabody_build.html">Build</a></li>
+            <li><a href="Peabody_compare.html">Compare</a></li>
+          </ul>
+        </div>--><!--/.nav-collapse -->
+<!--       </div>
+    </nav>   -->
+
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="jumbotron jumbotron-special">
       <div class="container">
-        <h1>Elizabeth Peabody</h1>
-        <p class="intro">What is the story we tell about the “invention” of modern data visualization techniques? How would that story change if we looked outside the standard set of actors, and what alternate visual forms might we envision if we did?</p>
-        <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>
+        <div class="col-md-8 col-md-offset-2">
+          <img src="img/logo-12.png" width="10%" class="center" alt="grid of 100 squares, each subdivided into 9 squares, some colored" class="centered"></img>
+          <h1>Elizabeth Peabody</h1>
+          <p class="intro">What is the story we tell about the “invention” of modern data visualization techniques? How would that story change if we looked outside the standard set of actors, and what alternate visual forms might we envision if we did?</p>
+          <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>
+        </div>
       </div>
     </div>
 
     <div class="container">
       <!-- Example row of columns -->
       <div class="row">
-        <div class="col-md-4">
-          <a href="peabody_view.html" target="_blank"><img src="http://placehold.it/350x350"></img></a>
+        <div class="col-md-4 center" id="view">
+<!--           <a href="peabody_view.html" target="_blank"><img src="http://placehold.it/350x350"></img></a>
+ -->          
+          <a href="peabody_view.html" class="subtitle" target="_blank"><img src="img/icon_eye_blue.png"   width="15%"></img></a>
           <h2>View</h2>
           <p>Explore Peabody's visualization using the modern affordances of the Web.</p>
           <p><a class="btn btn-default" href="#" role="button">View &raquo;</a></p>
         </div>
-        <div class="col-md-4">
-          <a href="peabody_build.html" target="_blank"><img src="http://placehold.it/350x350"></img></img></a>
-          <h2>Build</h2>
+        <div class="col-md-4 center" id="build">
+<!--           <a href="peabody_build.html" target="_blank"><img src="http://placehold.it/350x350"></img></img></a>
+ -->      
+          <a href="peabody_build.html" class="subtitle" target="_blank"><img src="img/icon_hammer_vert_orange.png" width="25%"></img></a>
+          <h2 class>Build</h2>
           <p>Build your own representation using Peabody's framework.</p>
           <p><a class="btn btn-default" href="#" role="button">Build &raquo;</a></p>
        </div>
-        <div class="col-md-4">
-          <a href="peabody_compare.html" target="_blank"><img src="http://placehold.it/350x350"></img></img></a>
+        <div class="col-md-4 center" id="compare">
+<!--           <a href="peabody_compare.html" target="_blank"><img src="http://placehold.it/350x350"></img></img></a>
+ -->      
+          <a href="peabody_compare.html" class="subtitle" target="_blank"><img src="img/icon_compare_purple.png" width="15%"></img></a>  
           <h2>Compare</h2>
           <p>Compare different representations of data used to construct Peabody's visualization.</p>
           <p><a class="btn btn-default" href="#" role="button">Compare &raquo;</a></p>

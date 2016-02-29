@@ -6,18 +6,73 @@ body{
 
 
 
+.myoffset{
+	margin-left: 4%;
+}
+
+.navbar{
+	margin-bottom: 0;
+}
+
+.navbar-default{
+	background-color: black; /*very dark*/
+/*	background-color: white;
+*//*	background-color: #D78320;
+*/    border-color: black;
+    color: white;
+    font-weight: 700;
+}
+
+.navbar-default .navbar-brand{
+	color: black;
+	color: white;
+}
+
+.navbar-default .navbar-nav>li>a{
+	color: black;
+	color: white;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus{
+	background-color: white;
+	color: #6EA3A4;
+}
+
+
 .jumbotron h1, .jumbotron .h1{
 	font-weight: 900;
 	color: white;
+/*	color: black;
+*/
+/*	background-color: #D78320;
+*/
+/*	background-color: #721344;
+*/
 }
 
 h1.container{
 	text-align: center;
 }
 
+h2{
+	font-weight: 700;
+}
+
 p.intro{
-	font-weight: 400;
+	font-weight: 700;
 	color: white;
+/*	color: #60806B;
+*//*	color: black;
+*/
+
+/*	background-color: #D78320;
+*/
+/*	background-color: #721344;
+*/
+}
+
+p{
+	font-size: larger;
 }
 
 .img{
@@ -29,8 +84,8 @@ p.intro{
     background: linear-gradient(
       rgba(0, 0, 0, 0.5),
       rgba(0, 0, 0, 0.5)
-    ), url("http://192.168.16.127:8080/img/peabody_original.jpg") center center;
-/*    background: url("http://192.168.16.127:8080/img/peabody_original.jpg") center center;
+    ), url("http://143.215.60.27:8080/img/peabody_original.jpg") center center;
+/*    background: url("http://143.215.60.27:8080/img/peabody_original.jpg") center center;
 */
     width: 100%;
     height: 100%;
@@ -42,8 +97,95 @@ p.intro{
 }
 
 .btn-primary{
-	color: #333;
+	/*white background black text*/
+/*	color: #333;
 	background-color: #fff;
-	border-color: #fff;
+	border-color: #fff;*/
+
+/*	color: white;
+	background-color: #D78320;
+	border-color: #D78320;
+*/
+
+
+/*	color: #D78320;
+*/	
+
+	color: black;
+	background-color: white;
+	border-color: white;
 
 }
+
+.center{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+
+#view{
+
+/*for each section, background color with white text*/
+/*	background-color: #6EA3A4;
+	color: white;
+	border: 5px solid black;
+	height: 350px;
+	position: relative;*/
+
+
+	color: #6EA3A4;
+}
+
+#build{
+/*	background-color: #BA3B26;
+	color: white;
+	border-top: 5px solid black;
+	border-bottom: 5px solid black;
+	height: 350px;*/
+
+	color: #BA3B26;
+
+}
+
+
+#compare{
+/*
+	background-color: #721344;
+	color: white;
+	border: 5px solid black;
+	height: 350px;
+*/
+	color: #721344;
+}
+
+/*colored buttons for white background*/
+#view .btn-default{
+	color: white;
+	background-color: #6EA3A4;
+	border-color: #6EA3A4;
+}
+
+#build .btn-default{
+	color: white;
+	background-color: #BA3B26;
+	border-color: #BA3B26;
+}
+
+#compare .btn-default{
+	color: white;
+	background-color: #721344;
+	border-color: #721344;
+}
+
+
+/*attempt to center when background color unique for each of the 3 sections*/
+.vcenter{
+	position: absolute;
+	top: 50%;
+	transform: translate(0,-50%);
+}
+
+
+
