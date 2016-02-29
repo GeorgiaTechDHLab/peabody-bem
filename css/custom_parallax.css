@@ -48,7 +48,25 @@ a.subtitle{
 };
 
 
-
 .ftr{
   background-color: black;
 }
+
+
+
+
+
+/*added for parallax_2*/
+h2.question{
+  text-align: center;
+}
+
+.parallax-container { /*not working*/
+  height: 300px;
+}
+
+.bottomborder{
+	border-bottom: 1px solid black;
+}
+
+
