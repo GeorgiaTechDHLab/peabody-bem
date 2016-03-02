@@ -140,7 +140,7 @@ $( document ).ready(function() { //had to use jquery because document.getElement
     var svgNS = "http://www.w3.org/2000/svg";
     var svg = document.createElementNS(svgNS, "svg"); //and this line, they both work 
     svg.setAttribute("width", "100%");
-    svg.setAttribute("height", numColors*60);
+    svg.setAttribute("height", 60);
     svg.setAttribute("id","colorPaletteSVG");
 
 
@@ -164,7 +164,7 @@ $( document ).ready(function() { //had to use jquery because document.getElement
       colorLabel.textContent = countryNames[i];
       colorLabel.setAttribute("x","55");
       colorLabel.setAttribute("y","30");
-      colorLabel.setAttribute("font-family", "Alegreya");
+      // colorLabel.setAttribute("font-family", "Alegreya");
       colorLabel.setAttribute("font-size", "20");
       colorLabel.setAttribute("transform", ["translate("  + (160*i), 5 + ")"]);
       colorLabel.setAttribute("textAlign","center");
