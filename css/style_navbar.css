@@ -1,27 +1,24 @@
-/*body{
+body{
 	font-family: 'Source Sans Pro', sans-serif;
 }
 
 .container{
 	margin-left: 4%;
 	margin-right: 4%;
-}*/
+}
 
 
-/*aligns right navbar to event text ... and actually we probably want it standard across all...*/
-/*.navbar-nav.navbar-right:last-child{
-	margin-right: -160px;
-}*/
-
-/*h2{
+h2{
 	font-weight: 700;
 }
 
-.myoffset{
-	margin-left: 4%;
-}*/
-/*
+/*aligns right navbar to event text ... and actually we probably want it standard across all...*/
+.navbar-nav.navbar-right:last-child{
+	margin-right: -160px;
+}
+
 .navbar-default{
+	/*background-color: #6EA3A4;*/
 	background-color: black;
     border-color: #e7e7e7;
     color: white;
@@ -36,46 +33,21 @@
 	color: white;
 }
 
+/*selected tab*/
 .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:hover, .navbar-default .navbar-nav>.active>a:focus{
 	background-color: white;
 	color:black;
+	/*color: #6EA3A4;*/ /*blue*/
 }
 
 .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
 	color: lightgray;
-}*/
-
-.typeSquare:hover{
-	outline: 1px solid lightblue;
 }
 
-.highlightSquare{
-	outline: 1px solid blue;
-}
-
-ul#sampleList{
-	list-style: none;
-	padding-left: 0;
-	font-size: smaller;
-}
-
-/*.col-md-12 #colorPalette{
-	padding-bottom: 0;
-	margin-bottom: 0;
-}*/
-
-#colorPalette{
-	margin-top: 13%;
-}
-
-.bottomalign{
-	float: none;
-	display: table-cell;
-	vertical-align: bottom;
-	padding-left: 0;
-}
-
-.highlight{
-	background-color: yellow;
+h2{
 	font-weight: 700;
+}
+
+.myoffset{
+	margin-left: 4%;
 }

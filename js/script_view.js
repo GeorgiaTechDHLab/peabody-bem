@@ -140,7 +140,7 @@ $( document ).ready(function() { //had to use jquery because document.getElement
     var svgNS = "http://www.w3.org/2000/svg";
     var svg = document.createElementNS(svgNS, "svg"); //and this line, they both work 
     svg.setAttribute("width", "100%");
-    svg.setAttribute("height", 60);
+    svg.setAttribute("height", 40);
     svg.setAttribute("id","colorPaletteSVG");
 
 
@@ -150,9 +150,9 @@ $( document ).ready(function() { //had to use jquery because document.getElement
       colorGroup = document.createSvg("g");
 
       var colorBox = document.createSvg("rect");
-      colorBox.setAttribute("width", "50px");
-      colorBox.setAttribute("height", "50px");
-      colorBox.setAttribute("transform", ["translate("  + (160*i), 5  + ")"]); //5, (60*i) for vertical stacking of color blocks
+      colorBox.setAttribute("width", "20px");
+      colorBox.setAttribute("height", "20px");
+      colorBox.setAttribute("transform", ["translate("  + (150*i), 5  + ")"]); //5, (60*i) for vertical stacking of color blocks
       colorBox.setAttribute("id", "colorBox" + i); //colorbox1, colorbox2, etc
       colorBox.setAttribute("fill", arrayColors[i]);
 
@@ -163,15 +163,15 @@ $( document ).ready(function() { //had to use jquery because document.getElement
       var colorLabel = document.createSvg("text");
       colorLabel.textContent = countryNames[i];
       colorLabel.setAttribute("x","55");
-      colorLabel.setAttribute("y","30");
-      // colorLabel.setAttribute("font-family", "Alegreya");
-      colorLabel.setAttribute("font-size", "20");
+      colorLabel.setAttribute("y","15");
+      colorLabel.setAttribute("font-size", "15");
       colorLabel.setAttribute("transform", ["translate("  + (160*i), 5 + ")"]);
-      colorLabel.setAttribute("textAlign","center");
+      // colorLabel.setAttribute("textAlign","center");
+      colorLabel.setAttribute("font-weight","700");
 
 
       colorGroup.setAttribute("id", "colorGroup" + i);
-      colorGroup.setAttribute("width", "250px");
+      // colorGroup.setAttribute("width", "250px");
 
       colorGroup.appendChild(colorBox);
       colorGroup.appendChild(colorLabel);
@@ -383,7 +383,7 @@ function addTypeKeyLabels(){
     }
     //draw line connecting the two elements
     var aLine = document.createSvg('line');
-    aLine.setAttribute('x1', offsets.left);
+    aLine.setAttribute('x1', offsets.left); //causing null error
     aLine.setAttribute('y1', offsets.top-50);
     aLine.setAttribute('x2', $('#'+element.getAttribute("id")).offset().left);
     aLine.setAttribute('y2', $('#'+element.getAttribute("id")).offset().top-50);
@@ -398,7 +398,7 @@ function addTypeKeyLabels(){
 
   function removeHighlight(element){ 
     var id = element.getAttribute("id");
-    document.getElementById('maing').removeChild(document.getElementById('aLine')); //remove line
+    document.getElementById('maing').removeChild(document.getElementById('aLine')); //remove line, causing Node error
 
     if(id.includes("text")){ //if hovering over text
       element.removeAttribute("class","highlight"); 
