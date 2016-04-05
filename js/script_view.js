@@ -373,7 +373,7 @@ function addTypeKeyLabels(){
       //the text's id type#text# turns to a square's id type#year#
       var typeSquare = document.getElementById(id.replace('text','year'));
       typeSquare.setAttribute("class","highlightSquare");
-      offsets = $('#'+id.replace('text','year')).offset(); //have to use jquery to use its offset() method
+      offsets = $('#'+id.replace('text','year')).offset(); //have to use jquery to use its offset() method which accounts for scrolling offsets
     }
     else if(id.includes("year") && id.includes('type') && element.getAttribute('fill') != 'white'){ //if hovering over rect or tritype
       element.setAttribute("class","highlightSquare"); 
@@ -383,10 +383,12 @@ function addTypeKeyLabels(){
     }
     //draw line connecting the two elements
     var aLine = document.createSvg('line');
-    aLine.setAttribute('x1', offsets.left); //causing null error
-    aLine.setAttribute('y1', offsets.top-50);
-    aLine.setAttribute('x2', $('#'+element.getAttribute("id")).offset().left);
-    aLine.setAttribute('y2', $('#'+element.getAttribute("id")).offset().top-50);
+
+    aLine.setAttribute('x1', offsets.left-60);
+    aLine.setAttribute('y1', offsets.top-120);
+    aLine.setAttribute('x2', $('#'+element.getAttribute("id")).offset().left-60);
+    aLine.setAttribute('y2', $('#'+element.getAttribute("id")).offset().top-120);
+
     aLine.setAttribute('stroke', 'black');
     aLine.setAttribute('stroke-width', '1');
     aLine.setAttribute('stroke-dasharray',"10,10");
