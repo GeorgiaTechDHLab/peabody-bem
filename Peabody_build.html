@@ -65,7 +65,23 @@
 		<!--using bootstrap to organize elements on page, so container/row/col-md-12 etc come from Bootstrap files--> 
 	    <div class = "container">
 
-			
+			<div class="col-md-8"> <!--column to hold chart and timeline-->
+				<div class="row"><!--row with timeline-->
+					<div id="timelineContainer">
+						<h2>Timeline</h2>
+						<button type="button" id="timelineGen">Generate Timeline</button>
+						<div id="timelineViz"></div>
+						<button type="button" id="clearBtn">Clear All</button>
+					</div>			
+				</div><!--close row-->
+				<div id="gridContainer" class="row">
+					<h2 id="chartTitle" class="editable">Chart: Chronological List of the 16th Century</h2>
+
+					<!--row for chart-->
+				</div>
+
+			</div> <!--close column holding chart and timeline-->
+				
 			<div class="col-md-4"> <!--column for colorPalette and event list-->
 				<div id="colorPalette">
 					<h2>Color Palette</h2>
@@ -169,23 +185,6 @@
 				</div><!--close col-md-4-->
 				<!--container--> 
 			</div> <!--close event list row-->
-
-		<div class="col-md-8"> <!--column to hold chart and timeline-->
-			<div id="gridContainer" class="row">
-				<h2 id="chartTitle" class="editable">Chart: Chronological List of the 16th Century</h2>
-
-				<!--row for chart-->
-			</div>
-			<div class="row"><!--row with timeline-->
-				<div id="timelineContainer">
-					<h2>Timeline</h2>
-					<button type="button" id="timelineGen">Generate Timeline</button>
-					<div id="timelineViz"></div>
-					<button type="button" id="clearBtn">Clear All</button>
-				</div>			
-			</div><!--close row-->
-		</div> <!--close column holding chart and timeline-->
-
 
 		<!--close container--> 
 		</div>
